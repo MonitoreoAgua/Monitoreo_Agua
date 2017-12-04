@@ -10,6 +10,9 @@
             <h3>
                 Gráficos guardados
             </h3>
+            <h5>
+                <a href="nuevoGrafico.php" style="color:black">Crear nuevo gráfico</a>
+            </h5>
             <hr class="my-3">
                 <div class="list-group" id="listaGraficos">
                     <script>listarGraficos();</script>

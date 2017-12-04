@@ -20,6 +20,7 @@ var contentCalcularDiferencia= "<div><button class='btn btn-primary' style='widt
 //variable que se inicializa al cargar el init map, indican la ventana de información a ser cargada.
 var infowindowVerMas;
 var infowindowCalcularDiferencia;
+var rectangle;
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -48,6 +49,7 @@ function initMap() {
 	 //inserción de todos los marcadores presentes en la BD
 	 insertMarker();
 
+
 	  //evento para limpiar el mapa.
 	  map.addListener('click', function(e) {
       //mayor a cero indica que hay algun marcador seleccionado.
@@ -68,6 +70,33 @@ function initMap() {
         contadorClicks=0;
       }   
   });
+    //rectangulo de seleccion
+    var bounds = {
+          north: 9.949835778560997,
+          south: 9.916332528326867,
+          east: -84.08193743896476,
+          west: -84.12855075073242
+        };
+    rectangle = new google.maps.Rectangle ({
+          bounds: bounds,
+          editable: true,
+          draggable: true
+        });
+
+        rectangle.setMap(map);
+        rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
+
+}
+
+function revisarLimitesRectangulo() {
+  var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
+  for (var key in markers) { 
+    if (rectangle.getBounds().contains(markers[key].getPosition())) {
+      markers[key].setIcon("data/Templatic-map-icons/default.png")
+    } else {
+      markers[key].setIcon(markers[key].oldIcon)
+    }
+  }
 }
 
 //------------------------------------------MOSTRAR LOS MARCADORES EN EL MAPA---------------------------------------------------------------//
@@ -92,7 +121,8 @@ function pintar(jsonData){
 	    position:jsonDatosBD[i].location,
 	    title: 'Calidad del agua: '+jsonDatosBD[i].color,
 	    icon:"data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
-	    id:i//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
+	    id:i,
+      oldIcon: "data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
 	  });
 
       //se hace una asociación indice color.
