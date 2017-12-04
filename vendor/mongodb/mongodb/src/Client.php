@@ -1,13 +1,31 @@
 <?php
+/*
+ * Copyright 2015-2017 MongoDB, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace MongoDB;
 
-use MongoDB\Driver\Command;
-use MongoDB\Driver\Cursor;
 use MongoDB\Driver\Manager;
+use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\Driver\Exception\InvalidArgumentException as DriverInvalidArgumentException;
 use MongoDB\Exception\InvalidArgumentException;
+use MongoDB\Exception\UnexpectedValueException;
+use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\DatabaseInfoIterator;
 use MongoDB\Operation\DropDatabase;
 use MongoDB\Operation\ListDatabases;
@@ -19,10 +37,12 @@ class Client
         'document' => 'MongoDB\Model\BSONDocument',
         'root' => 'MongoDB\Model\BSONDocument',
     ];
+    private static $wireVersionForWritableCommandWriteConcern = 5;
 
     private $manager;
     private $uri;
     private $typeMap;
+    private $writeConcern;
 
     /**
      * Constructs a new Client instance.
@@ -43,9 +63,11 @@ class Client
      * @param string $uri           MongoDB connection string
      * @param array  $uriOptions    Additional connection string options
      * @param array  $driverOptions Driver-specific options
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverInvalidArgumentException for parameter/option parsing errors in the driver
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function __construct($uri = 'mongodb://localhost:27017', array $uriOptions = [], array $driverOptions = [])
+    public function __construct($uri = 'mongodb://127.0.0.1/', array $uriOptions = [], array $driverOptions = [])
     {
         $driverOptions += ['typeMap' => self::$defaultTypeMap];
 
@@ -59,6 +81,7 @@ class Client
         unset($driverOptions['typeMap']);
 
         $this->manager = new Manager($uri, $uriOptions, $driverOptions);
+        $this->writeConcern = $this->manager->getWriteConcern();
     }
 
     /**
@@ -73,6 +96,7 @@ class Client
             'manager' => $this->manager,
             'uri' => $this->uri,
             'typeMap' => $this->typeMap,
+            'writeConcern' => $this->writeConcern,
         ];
     }
 
@@ -110,6 +134,9 @@ class Client
      * @param string $databaseName Database name
      * @param array  $options      Additional options
      * @return array|object Command result document
+     * @throws UnsupportedException if options are unsupported on the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function dropDatabase($databaseName, array $options = [])
     {
@@ -117,10 +144,67 @@ class Client
             $options['typeMap'] = $this->typeMap;
         }
 
-        $operation = new DropDatabase($databaseName, $options);
         $server = $this->manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
 
+        if ( ! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
+            $options['writeConcern'] = $this->writeConcern;
+        }
+
+        $operation = new DropDatabase($databaseName, $options);
+
         return $operation->execute($server);
+    }
+
+    /**
+     * Return the Manager.
+     *
+     * @return Manager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * Return the read concern for this client.
+     *
+     * @see http://php.net/manual/en/mongodb-driver-readconcern.isdefault.php
+     * @return ReadConcern
+     */
+    public function getReadConcern()
+    {
+        return $this->manager->getReadConcern();
+    }
+
+    /**
+     * Return the read preference for this client.
+     *
+     * @return ReadPreference
+     */
+    public function getReadPreference()
+    {
+        return $this->manager->getReadPreference();
+    }
+
+    /**
+     * Return the type map for this client.
+     *
+     * @return array
+     */
+    public function getTypeMap()
+    {
+        return $this->typeMap;
+    }
+
+    /**
+     * Return the write concern for this client.
+     *
+     * @see http://php.net/manual/en/mongodb-driver-writeconcern.isdefault.php
+     * @return WriteConcern
+     */
+    public function getWriteConcern()
+    {
+        return $this->writeConcern;
     }
 
     /**
@@ -128,6 +212,9 @@ class Client
      *
      * @see ListDatabases::__construct() for supported options
      * @return DatabaseInfoIterator
+     * @throws UnexpectedValueException if the command response was malformed
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function listDatabases(array $options = [])
     {
@@ -145,6 +232,7 @@ class Client
      * @param string $collectionName Name of the collection to select
      * @param array  $options        Collection constructor options
      * @return Collection
+     * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function selectCollection($databaseName, $collectionName, array $options = [])
     {
@@ -160,6 +248,7 @@ class Client
      * @param string $databaseName Name of the database to select
      * @param array  $options      Database constructor options
      * @return Database
+     * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function selectDatabase($databaseName, array $options = [])
     {

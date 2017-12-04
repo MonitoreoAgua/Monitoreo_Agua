@@ -78,101 +78,80 @@ class Mongui
       $cursor = $collection->find($query, $options);
       return ($cursor);
     }
-    
-    //$idUsr,$nombreGrafico,$descripcion,$tipoConsulta,null,null,$puntoMuestreo,$tipoGrafico,$primerPar,null
-    public static function insertarGrafico($idUsr,$nombreGrafico,$descripcion,$tipoConsulta,$fechaInicio,$fechaFinal,$puntoMuestreo,$tipoGrafico,$primerPar,$segundoPar){
-      $myfile = fopen("Prueba.txt", "w");
-      fwrite($myfile, "Iniciando");
-      $documento = array();
-      
-      $documento["usuario"] = $idUsr;
-      fwrite($myfile, "Saco ID");
-      $documento["nombreGrafico"] = $nombreGrafico;
-      fwrite($myfile, "Saco NombreGrafico");
-      $documento["descripcion"] = $descripcion;
-      fwrite($myfile, "Descripcion");
-      $documento["tipoConsulta"] = $tipoConsulta;
-      fwrite($myfile, "tipo");
-      if(!is_null($fechaInicio)){
-        $fechaInicio = new MongoDB\BSON\UTCDateTime($fechaInicio->getTimeStamp()*1000);
-        fwrite($myfile, "Cambie Fecha1");
-      }
-      fwrite($myfile, "No Cambie Fecha1");
-      if(!is_null($fechaFinal)){
-        $fechaFinal = new MongoDB\BSON\UTCDateTime($fechaFinal->getTimeStamp()*1000);
-        fwrite($myfile, "Cambie Fecha2");
-      }
-      fwrite($myfile, "No Cambie Fecha2");
-      $documento["fechaInicio"] = $fechaInicio;
-      fwrite($myfile, "Fecha1");
-      $documento["fechaFinal"] = $fechaFinal;
-      fwrite($myfile, "Fecha2");
-      $documento["puntoMuestreo"] = $puntoMuestreo;
-      fwrite($myfile, "Punto");
-      $documento["tipoGrafico"] = $tipoGrafico;
-      fwrite($myfile, "Tipo Grafico");
-      $documento["primerPar"] = $primerPar;
-      fwrite($myfile, "Primer par");
-      $documento["segundoPar"] = $segundoPar;
-      fwrite($myfile, "Segundo par");
-      
+
+    //Método para insertar un documento de datos de gráfico a MongoDB
+    public static function insertarDocumentoGrafico($datos)
+    {
       $response = array();
       $response["success"] = false;
       try {
               $cliente = connectDatabaseClient('MonitoreoAgua',1);
-              fwrite($myfile, "Se conecto");
               
               $insRec = new MongoDB\Driver\BulkWrite;
-              fwrite($myfile, "BulkWrite");
-  
-              $_id = $insRec->insert($documento);
-              fwrite($myfile, "_id");
-              $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
-              fwrite($myfile, "writeConcern");
-              $result = $cliente->executeBulkWrite('MonitoreoAgua.graficosUsuario', $insRec, $writeConcern);
-              fwrite($myfile, "Realizó consulta");
+
+              $_id = $insRec->insert($datos);
+
+              $result = $cliente->executeBulkWrite('MonitoreoAgua.graficos', $insRec);
+               
           if (!is_null($result)) {
               $response["success"] = true;
-              fclose($myfile);
           } else {
               $response["mensaje"] = "El registro falló. result = null";
-              fclose($myfile);
           }
       } catch (MongoCursorException $e) {
           $response["mensaje"] = "El registro falló. MongoCursorException";
-          fclose($myfile);
       } catch (MongoException $e) {
           $response["mensaje"] = "El registro falló. MongoException";
-          fclose($myfile);
       } catch (MongoConnectionException $e) {
           $response["mensaje"] = "La conexión falló. MongoConnectionException";
-          fclose($myfile);
       }
-  
+
       return $response;
-      
-      
-      
-      
+    }
+
+    public static function actualizarDocumentoGrafico($datos,$_id)
+    {
+      $response = array();
+      $response["success"] = false;
+      try {
+            $cliente = connectDatabaseClient('MonitoreoAgua',1);
+            $updRec = new MongoDB\Driver\BulkWrite;
+            $obj_id = new MongoDB\BSON\ObjectId($_id);
+
+            $updRec->update(['_id' => $obj_id], ['$set' => $datos], ['multi' => false, 'upsert' => false]);
+            $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+            $result = $cliente->executeBulkWrite('MonitoreoAgua.graficos', $updRec, $writeConcern);             
+               
+          if (!is_null($result)) {
+              $response["success"] = true;
+          } else {
+              $response["mensaje"] = "El registro falló. result = null";
+          }
+      } catch (MongoCursorException $e) {
+          $response["mensaje"] = "El registro falló. MongoCursorException";
+      } catch (MongoException $e) {
+          $response["mensaje"] = "El registro falló. MongoException";
+      } catch (MongoConnectionException $e) {
+          $response["mensaje"] = "La conexión falló. MongoConnectionException";
+      }
+
+      return $response;
     }
     
+    
     public static function getGraficosPorIDUsuario($idUsuario){
-      $collection=connectDatabaseCollection('MonitoreoAgua','graficosUsuario',0);
+      $collection=connectDatabaseCollection('MonitoreoAgua','graficos',0);
       
-      $parte3 = array('usuario' => $idUsuario);
+      $query = array('correoUsuario' => $idUsuario);
       
-      $query = $parte3;
-      
-      $options = ['sort' => ['_id' => 1]];
+      $cursor = $collection->find($query);
 
-      $cursor = $collection->find($query, $options);
-      return ($cursor);
-      
+      return ($cursor->toArray());      
     }
     
     public static function getGraficoPorID($idGrafico){
-      $collection=connectDatabaseCollection('MonitoreoAgua','graficosUsuario',0);
-      $dato = new MongoDB\BSON\ObjectID($id);
+      $collection=connectDatabaseCollection('MonitoreoAgua','graficos',0);
+      $dato = new MongoDB\BSON\ObjectID($idGrafico);
       $parte3 = array('_id' => $dato);
       
       $query = $parte3;
@@ -180,7 +159,7 @@ class Mongui
       $options = ['sort' => ['_id' => 1]];
 
       $cursor = $collection->find($query, $options);
-      return ($cursor);
+      return ($cursor->toArray());
       
     }
     
@@ -197,7 +176,7 @@ class Mongui
       
       $delRec->delete(['_id' =>$dato], ['limit' => 1]);
       $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
-      $result = $client->executeBulkWrite('MonitoreoAgua.graficosUsuario', $delRec, $writeConcern);
+      $result = $client->executeBulkWrite('MonitoreoAgua.graficos', $delRec, $writeConcern);
       
       if($result->getDeletedCount()){
       $response["success"] = true;

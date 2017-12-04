@@ -2,13 +2,32 @@
 
 namespace MongoDB\Tests\Operation;
 
-use MongoDB\Driver\Server;
 use MongoDB\Operation\DropCollection;
 use MongoDB\Operation\InsertOne;
 use MongoDB\Operation\ListCollections;
+use MongoDB\Tests\CommandObserver;
+use stdClass;
 
 class DropCollectionFunctionalTest extends FunctionalTestCase
 {
+    public function testDefaultWriteConcernIsOmitted()
+    {
+        (new CommandObserver)->observe(
+            function() {
+                $operation = new DropCollection(
+                    $this->getDatabaseName(),
+                    $this->getCollectionName(),
+                    ['writeConcern' => $this->createDefaultWriteConcern()]
+                );
+
+                $operation->execute($this->getPrimaryServer());
+            },
+            function(stdClass $command) {
+                $this->assertObjectNotHasAttribute('writeConcern', $command);
+            }
+        );
+    }
+
     public function testDropExistingCollection()
     {
         $server = $this->getPrimaryServer();
@@ -20,7 +39,7 @@ class DropCollectionFunctionalTest extends FunctionalTestCase
         $operation = new DropCollection($this->getDatabaseName(), $this->getCollectionName());
         $operation->execute($server);
 
-        $this->assertCollectionDoesNotExist($server, $this->getDatabaseName(), $this->getCollectionName());
+        $this->assertCollectionDoesNotExist($this->getCollectionName());
     }
 
     /**
@@ -28,26 +47,22 @@ class DropCollectionFunctionalTest extends FunctionalTestCase
      */
     public function testDropNonexistentCollection()
     {
-        $server = $this->getPrimaryServer();
-
-        $this->assertCollectionDoesNotExist($server, $this->getDatabaseName(), $this->getCollectionName());
+        $this->assertCollectionDoesNotExist($this->getCollectionName());
 
         $operation = new DropCollection($this->getDatabaseName(), $this->getCollectionName());
-        $operation->execute($server);
+        $operation->execute($this->getPrimaryServer());
     }
 
     /**
      * Asserts that a collection with the given name does not exist on the
      * server.
      *
-     * @param Server $server
-     * @param string $databaseName
      * @param string $collectionName
      */
-    private function assertCollectionDoesNotExist(Server $server, $databaseName, $collectionName)
+    private function assertCollectionDoesNotExist($collectionName)
     {
-        $operation = new ListCollections($databaseName);
-        $collections = $operation->execute($server);
+        $operation = new ListCollections($this->getDatabaseName());
+        $collections = $operation->execute($this->getPrimaryServer());
 
         $foundCollection = null;
 
@@ -58,6 +73,6 @@ class DropCollectionFunctionalTest extends FunctionalTestCase
             }
         }
 
-        $this->assertNull($foundCollection, sprintf('Collection %s exists on the server', $collectionName));
+        $this->assertNull($foundCollection, sprintf('Collection %s exists', $collectionName));
     }
 }
