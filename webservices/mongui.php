@@ -60,14 +60,18 @@ class Mongui
     * @param nombre del punto a buscar
     * @return MongoCursor con el resultado de la consulta
     **/
-    public static function getPorNombre($nombre,$par1)
+    public static function getPorNombre($nombres,$par1)
     {
       //$collection = Database::getInstance()->getDb()->sitiosMuestreo;
       $collection=connectDatabaseCollection('MonitoreoAgua','puntosMuestreo',0);
       
       $parte1 = array( '$or' => array( array('Muestra.obligatorios.$par1' => ['$ne' =>"ND"]), array('Muestra.opcionales.$par1' => ['$ne' =>"ND"]) ) );
-      //array( '$and' => array( array('Muestra.usuario' => $correo), array('Muestra.fecha' => ['$gte' =>  $mongo_date, '$lte'=> $mongo_date_today]) ) );
-      $parte3 = array('POI.nombre_estacion' => $nombre);
+      $parte2 = [];
+      for ($i=0; $i < count($nombres); $i++) { 
+        $tmp = array('POI.nombre_estacion' => $nombres[$i] );
+        array_push($parte2, $tmp);
+      }
+      $parte3 = array('$or' => $parte2);
       
       $query = array( '$and' => array( $parte3, array( '$and' => array( $parte1 ))  ) );
       

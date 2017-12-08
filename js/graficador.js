@@ -13,7 +13,7 @@ var datasets = [];
 var graficoGenerado = false;
 var graficoNombre = false;
 var graficoNuevo = true;
-var myTimer;
+var arrayOfObjects = [];
 
 /**
 *
@@ -133,6 +133,23 @@ function cambiarScrollFecha(objeto) {
 	}
 }
 
+function obtenerDatos(puntosMuestreo) {
+	var puntosM = puntosMuestreo.split(",");
+	var parametro = document.getElementById("parametro").value;
+	$.ajax({
+		url:"webservices/buscarPorNombre.php",
+	    type:"GET",
+	    data:{puntos:puntosM, par1: parametro},
+	    success:function(data){
+			arrayOfObjects = data;
+			graficar("nombres");
+		},
+		error:function(err) {
+			console.log(err);
+		}
+	});
+}
+
 /**
 * Crea una lista con todas las fechas de la consulta para el gráfico de burbuja
 **/
@@ -149,16 +166,6 @@ function llenarScrollFechas() {
 	document.getElementById('scrollFechas').style.display = 'block'; //Se hace visible
 	document.getElementById('scrollFechas').innerHTML = elHtml;
 	document.getElementById('fecha'+indFechaAct).className = 'liFechasSelected';
-}
-
-function avanzarBurbuja() {
-	if (indFechaAct <=fechasN.length) {
-		indFechaAct++;
-		elGrafico.config.data = datosBurbuja[indFechaAct];
-		elGrafico.update();
-	} else {
-		window.clearInterval(myTimer);
-	}
 }
 
 /**
@@ -183,7 +190,7 @@ function graficar(tConsulta) {
 	var ctx = document.getElementById('myChart').getContext('2d');
 	ctx.canvas.width = 1200;
 	ctx.canvas.height = 400;
-	var arrayOfObjects = [];
+	
 	if (tConsulta == "Fechas") graficoNombre = false;
 	else if (tConsulta == "Nombres") graficoNombre = true;
 
@@ -201,29 +208,30 @@ function graficar(tConsulta) {
 	* Realizar consulta con Mongo para obtener los datos
 	* Se guarda en arrayOfObjects
 	**/
-	if (graficoNombre) {
-		//Si se quiere graficar por punto de muestreo
-		var lugar = document.getElementById("punto").value;
-		$.ajax({
-			url: "webservices/buscarPorNombre.php?nombre=" + lugar + "&par1=" + parametro,
-			async: false,
-			dataType: 'json',
-			success: function(data) {
-				arrayOfObjects = data;
-			}
-		});
-	} else {
-		//Si se quiere graficar por rango de fechas
-		$.ajax({
-			url: "webservices/buscarPorFechas.php?fechaIni=" + fechaIni + "&fechaFin=" + fechaFin + "&par1=" + parametro,
-			async: false,
-			dataType: 'json',
-			success: function(data) {
-				arrayOfObjects = data;
-			}
-		});
+	if (arrayOfObjects != []) {
+		if (graficoNombre) {
+			//Si se quiere graficar por punto de muestreo
+			var lugar = document.getElementById("punto").value;
+			$.ajax({
+				url: "webservices/buscarPorNombre.php?nombre=" + lugar + "&par1=" + parametro,
+				async: false,
+				dataType: 'json',
+				success: function(data) {
+					arrayOfObjects = data;
+				}
+			});
+		} else {
+			//Si se quiere graficar por rango de fechas
+			$.ajax({
+				url: "webservices/buscarPorFechas.php?fechaIni=" + fechaIni + "&fechaFin=" + fechaFin + "&par1=" + parametro,
+				async: false,
+				dataType: 'json',
+				success: function(data) {
+					arrayOfObjects = data;
+				}
+			});
+		}		
 	}
-	// console.log(arrayOfObjects);
 
 	/**
 	* Llena los arreglos con los valores según los parámetros elegidos
@@ -306,7 +314,6 @@ function graficar(tConsulta) {
 				}
 			}]
 		}};
-		myTimer = setInterval(avanzarBurbuja, 1000);
 	} else if (tipoGrafico != 'bubble' || graficoNombre) {
 		//Si el gráfico no es de burbuja o si es por nombre mostrar normalmente
 		var opciones = {
@@ -346,7 +353,6 @@ function graficar(tConsulta) {
                     easing: 'easeOutElastic'
                 }
 		};
-		myTimer = setInterval(avanzarBurbuja, 1000);
 	}
 
 	/** Crear el gráfico **/
@@ -357,14 +363,6 @@ function graficar(tConsulta) {
 	});
 
 	/** Mostrar y Ocultar elementos según el tipo de consulta realizada **/
-	//Desactivar el botón del tipo de consulta realizada
-	if (graficoNombre) {
-		document.getElementById('btnGraficoFecha').disabled = false;
-		document.getElementById('btnGraficoNombre').disabled = true;
-	} else {
-		document.getElementById('btnGraficoFecha').disabled = true;
-		document.getElementById('btnGraficoNombre').disabled = false;
-	}
 	//Mostar el textbox para el nombre y los botones para guardar
 	document.getElementById('infoGrafico').style.display = 'block';
 	document.getElementById('botonesGuardar').style.display = 'block';

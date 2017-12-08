@@ -5,6 +5,18 @@
   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 <script src="js/llenarComboPuntos.js"></script>
+<script>
+  function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+}
+</script>
 
 <!-- Contenedor principal -->
 <div class="container mt-4" style="margin-top: 10px; margin-bottom: 10px;">
@@ -13,14 +25,10 @@
   <div class="row">
     <div class="col-md-6">
       <form action="/action_page.php">
-        <div id="comboPuntos"></div>
-        <script>llenarPuntos();</script><br>
         Fecha Inicial: <input type="date" id="fechaI" onchange="if(graficoGenerado && !graficoNombre) graficar('Fechas');"><br>
         Fecha Final: <input type="date" id="fechaF"onchange="if(graficoGenerado && !graficoNombre) graficar('Nombres');"><br>
       </form>
       <script src="js/graficador.js"></script>
-      <button class="button btn btn-primary mt-4" id="btnGraficoFecha" onclick="graficar('Fechas');">Consulta por Fechas</button>
-      <button class="button btn btn-primary mt-4" id="btnGraficoNombre" onclick="graficar('Nombres');">Consulta por Punto de Muestreo</button>
       <br>
       <br>
     </div>
@@ -64,6 +72,7 @@
       </script>
       <script src="js/grafiMySQL.js"></script>
       <button onclick="guardarGrafi()" id="btnGuardarGraf" class="button btn btn-primary mt-4">Guardar Gr&aacutefico</button>
+      <script type="text/javascript">var puntosMuestreo = findGetParameter("puntosMuestreo"); if (puntosMuestreo!=null) obtenerDatos(puntosMuestreo);</script>
     </div>
   </div>
 

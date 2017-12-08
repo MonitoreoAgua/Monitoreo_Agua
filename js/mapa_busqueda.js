@@ -21,6 +21,7 @@ var contentCalcularDiferencia= "<div><button class='btn btn-primary' style='widt
 var infowindowVerMas;
 var infowindowCalcularDiferencia;
 var rectangle;
+var puntosMuestreo = [];
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -89,10 +90,13 @@ function initMap() {
 }
 
 function revisarLimitesRectangulo() {
+  puntosMuestreo = [];
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
+  var hilera = "";
   for (var key in markers) { 
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
       markers[key].setIcon("data/Templatic-map-icons/default.png")
+      puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
     } else {
       markers[key].setIcon(markers[key].oldIcon)
     }
@@ -121,8 +125,8 @@ function pintar(jsonData){
 	    position:jsonDatosBD[i].location,
 	    title: 'Calidad del agua: '+jsonDatosBD[i].color,
 	    icon:"data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
-	    id:i,
-      oldIcon: "data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
+	    id:i,//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
+      oldIcon: "data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
 	  });
 
       //se hace una asociación indice color.
@@ -425,6 +429,10 @@ document.getElementById("reset").onclick = function(){
   for(var i=0;i<markers.length;i++){
     markers[i].setVisible(true);
   } 
+}
+
+function graficar() {
+  window.location = "nuevoGrafico.php?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
