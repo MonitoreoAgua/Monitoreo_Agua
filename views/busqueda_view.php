@@ -22,7 +22,7 @@
                                         <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
                                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
                                         <button class="btn btnFiltrarArPOI"><i class="fa fa-map-marker"></i>-<i class="fa fa-map-marker"></i></button>
-                                        <button class="btn" onclick="graficar();"><i class="fa fa-area-chart"></i></button>
+                                        <button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
                                     </div>
 
                                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->

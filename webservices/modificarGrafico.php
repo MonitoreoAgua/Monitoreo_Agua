@@ -10,28 +10,20 @@ $descripcion = $_POST['descripcion'];
 $tipoGrafico = $_POST['tipoGrafico'];
 $parametro = $_POST['parametro'];
 $fechaCreado = new DateTime();
-$tipoConsulta = $_POST['tipoConsulta'];
+$puntosMuestreo = $_POST['puntosMuestreo'];
+$fechaInicio = $_POST['fechaInicio'];
+$fechaFinal = $_POST['fechaFinal'];
 
 $documento = array();
-$documento['tipoConsulta'] = $tipoConsulta;
+$documento['puntosMuestreo'] = $puntosMuestreo;
 $documento['correoUsuario'] = $correo;
 $documento['nombreGrafico'] = $nombreGrafico;
 $documento['descripcion'] = $descripcion;
 $documento['tipoGrafico'] = $tipoGrafico;
 $documento['parametro'] = $parametro;
 $documento['fechaCreado'] = $fechaCreado;
-
-if ($tipoConsulta == "Fechas") {
-    $fechaInicio = $_POST['fechaInicio'];
-    $fechaFinal = $_POST['fechaFinal'];
-
-    $documento['fechaInicio'] = $fechaInicio;
-    $documento['fechaFinal'] = $fechaFinal;
-} else {
-    $puntoMuestreo = $_POST['puntoMuestreo'];
-
-    $documento['puntoMuestreo'] = $puntoMuestreo;
-}
+$documento['fechaInicio'] = $fechaInicio;
+$documento['fechaFinal'] = $fechaFinal;
 
 $response = array();
 $response = Mongui::actualizarDocumentoGrafico($documento,$_id);

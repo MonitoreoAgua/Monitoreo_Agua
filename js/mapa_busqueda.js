@@ -69,6 +69,8 @@ function initMap() {
           infowindowCalcularDiferencia.close();
         }
         contadorClicks=0;
+        document.getElementById("btnChart").disabled = true;
+        puntosMuestreo = [];
       }   
   });
     //rectangulo de seleccion
@@ -101,6 +103,12 @@ function revisarLimitesRectangulo() {
       markers[key].setIcon(markers[key].oldIcon)
     }
   }
+  if (puntosMuestreo.length > 0) {
+    document.getElementById("btnChart").disabled = false;
+  }
+  else {
+    document.getElementById("btnChart").disabled = true;
+  }
 }
 
 //------------------------------------------MOSTRAR LOS MARCADORES EN EL MAPA---------------------------------------------------------------//
@@ -108,11 +116,11 @@ function revisarLimitesRectangulo() {
 function  insertMarker(){
 //peticion ajax al servidor
   $.ajax({
-      async:true,
-      url: "webservices/getMarkers_busqueda.php",//devuelve un json con los marcadores que están en la base de datos.
-      dataType: "json",
-      success:pintar
-      });
+    async:true,
+    url: "webservices/getMarkers_busqueda.php",//devuelve un json con los marcadores que están en la base de datos.
+    dataType: "json",
+    success:pintar
+  });
 }
 
 
@@ -130,7 +138,7 @@ function pintar(jsonData){
 	  });
 
       //se hace una asociación indice color.
-	  niveles[i]=jsonDatosBD[i].color;
+	    niveles[i]=jsonDatosBD[i].color;
       //se asocia un evento a cada marcador.
       google.maps.event.addListener(markers[i], 'click', function() {
       	aritmeticaPOIS(this);
@@ -148,10 +156,13 @@ function aritmeticaPOIS(marcador) {
             marcador.setIcon(iconColor);
             //se abre la ventana de informacion para ver más
             infowindowVerMas.setContent(contentVerMas);                              
-            infowindowVerMas.open(map, marcador); 
+            infowindowVerMas.open(map, marcador);
+            document.getElementById("btnChart").disabled = false;
+            puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
             contadorClicks++;
         }else{//==1
             if(!(marcador.id==first.id)){//se debe dar clic sobre uno distinto.
+                puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
                 second=marcador;
                 marcador.setIcon(iconColor);
                 //se cierra el marcador de ver más

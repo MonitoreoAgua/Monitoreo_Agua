@@ -105,33 +105,6 @@ function datosXYF() {
 			datasets: datasets};
 }
 
-/**
-* Cambia los datos mostrados en el gráfico de burbuja, según la fecha elegida
-* @param objeto de la fecha a la que se le hizo clic
-**/
-function cambiarScrollFecha(objeto) {
-	var idObjeto = objeto.id;
-	/**Obtener índice de la fecha elegida**/
-	var encontrado = false;
-	var i = 0;
-	while (!encontrado) {
-		if (idObjeto == "fecha" + i) {
-			encontrado = true;
-		} else {
-			i++;
-		}
-	}
-	if (indFechaAct != i) {
-		//Si no está marcado ya al que se le dio clic
-		document.getElementById("fecha"+indFechaAct).className = 'liFechas'; //Desmarcar el que estaba seleccionado
-		document.getElementById(idObjeto).className = 'liFechasSelected'; //Marcar el nuevo seleccionado
-		indFechaAct = i;
-
-		/**Cambiar el dataset del gráfico**/
-		elGrafico.config.data = datosBurbuja[indFechaAct];
-		elGrafico.update();
-	}
-}
 
 function obtenerDatos(puntosMuestreo) {
 	var puntosM = puntosMuestreo.split(",");
@@ -150,29 +123,11 @@ function obtenerDatos(puntosMuestreo) {
 	});
 }
 
-/**
-* Crea una lista con todas las fechas de la consulta para el gráfico de burbuja
-**/
-function llenarScrollFechas() {
-	/** Crear el HTML con las fechas **/
-	var elHtml = "<ul class=\"ulFechas\">\n";
-	for (var i = 0 ; i < fechasN.length ; i++) {
-		var laFecha = new Date(Number(fechasN[i]));
-		laFecha.setHours(laFecha.getHours()+24);
-		elHtml += "<li class=\"liFechas\" id=\"fecha" + i + "\" onclick=\"cambiarScrollFecha(this)\">" + laFecha.toDateString() + "</li>\n";
-	}
-	elHtml += "</ul>";
-	/** Aplicar el HTML y estilos al contenedor **/
-	document.getElementById('scrollFechas').style.display = 'block'; //Se hace visible
-	document.getElementById('scrollFechas').innerHTML = elHtml;
-	document.getElementById('fecha'+indFechaAct).className = 'liFechasSelected';
-}
 
 /**
 * Crea un gráfico según el tipo de consulta realizada y sus respectivos parámetros
 **/
-function graficar(tConsulta) {
-	document.getElementById('scrollFechas').style.display = 'none'; //Ocultar scroll de fechas
+function graficar(tConsulta) {	
 	if (graficoNuevo) {
 		document.getElementById("btnGuardarGraf").disabled = false;		
 	}
