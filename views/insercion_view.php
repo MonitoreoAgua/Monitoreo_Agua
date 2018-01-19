@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- Se cargar los encabezados de la página -->
-<?php require 'views/inc/header.php';?>
+<head>
+    <?php require 'views/inc/header.php';?> 
+    <link rel="stylesheet" type="text/css" href="css/estilo_insercion.css">
+</head>
     <!-- El header contiene los generales mediante js se cargan los propios de la sección -->
 
     <body>
@@ -326,13 +329,6 @@
                         document.body.style.marginTop = document.getElementById('mainNav').clientHeight + 10 + "px";
                     };
                 </script>
-				<script type="text/javascript">
-					$(document).ready(
-						function(){
-							$('head').append('<link rel="stylesheet" type="text/css" href="css/estilo_insercion.css">');
-						}
-				)
-				</script>
     </body>
 
 </html>

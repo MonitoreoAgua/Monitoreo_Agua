@@ -459,3 +459,39 @@ Stack trace:
 [10-Nov-2017 05:07:51 UTC] PHP Fatal error:  require(): Failed opening required 'views/menu_view.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/views/busqueda_view1.php on line 28
 [10-Nov-2017 05:07:51 UTC] PHP Stack trace:
 [10-Nov-2017 05:07:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/views/busqueda_view1.php:0
+[17-Nov-2017 02:26:00 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection closed calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:341
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(341): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 341
+[17-Nov-2017 02:26:00 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection closed calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:185
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(185): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(12): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 185
+[17-Nov-2017 02:26:17 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection closed calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:341
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(341): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 341
+[17-Nov-2017 02:26:17 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection closed calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:185
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(185): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(12): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 185
+[17-Nov-2017 02:26:20 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection closed calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:341
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(341): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 341
+[17-Nov-2017 02:26:20 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection closed calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:185
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(185): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(12): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 185

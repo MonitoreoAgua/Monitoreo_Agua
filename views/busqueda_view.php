@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Se cargar los encabezados de la página -->
-<?php require 'views/inc/header.php';?>
+<head>
+    <!-- Se cargar los encabezados de la página -->
+    <?php require 'views/inc/header.php';?> 
+    <!--Estilos propios-->
+    <link rel="stylesheet" type="text/css" href="css/estilo_busqueda.css">
+</head>
     <!-- El header contiene los generales mediante js se cargan los propios de la sección -->
 
     <body>
@@ -18,16 +22,9 @@
                                 <div class="main">
                                     <!-- SubMenu para el mapa, principalmente para anidar consultas -->
                                     <div class="anidar">
-                                        <h3 class="wo-line-height bold">Calidad del agua:</h3>
-                                        <button class="btn" value=0 id="calidad1" style="background: blue"></button>
-                                        <button class="btn" value=0 id="calidad2" style="background: green"></button>
-                                        <button class="btn" value=0 id="calidad3" style="background: yellow"></button>
-                                        <button class="btn" value=0 id="calidad4" style="background: orange"></button>
-                                        <button class="btn" value=0 id="calidad5" style="background: red"></button>
                                         <input type="number" min="1" id="inputFilterRadio" placeholder="Radio">
                                         <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
                                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
-                                        <button class="btn btnFiltrarArPOI"><i class="fa fa-map-marker"></i>-<i class="fa fa-map-marker"></i></button>
                                     </div>
 
                                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->
@@ -74,14 +71,6 @@
                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                     <script type="text/javascript" src="js/mapa_busqueda.js"></script>
                     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc&signed_in=true&callback=initMap"></script>
-
-                    <script type="text/javascript">
-                        $(document).ready(
-                            function() {
-                                $('head').append('<link rel="stylesheet" type="text/css" href="css/estilo_busqueda.css">');
-                            }
-                        )
-                    </script>
     </body>
 
 </html>
