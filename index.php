@@ -1,5 +1,5 @@
 <?php
-	header('Location: busqueda.php');
+	header('Location: Controllers/busqueda.php');
 /*$_SESSION['correo']='johan';
 if (isset($_SESSION['correo'])) {
 	header('Location: busqueda.php');

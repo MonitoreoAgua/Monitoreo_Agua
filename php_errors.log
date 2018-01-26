@@ -495,3 +495,25 @@ Stack trace:
 #1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(12): MongoDB\Collection->aggregate(Array)
 #2 {main}
   thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 185
+[26-Jan-2018 05:31:03 UTC] PHP Warning:  require(Views/busqueda_view.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/Controllers/busqueda.php on line 3
+[26-Jan-2018 05:31:03 UTC] PHP Stack trace:
+[26-Jan-2018 05:31:03 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 05:31:03 UTC] PHP Fatal error:  require(): Failed opening required 'Views/busqueda_view.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/Controllers/busqueda.php on line 3
+[26-Jan-2018 05:31:03 UTC] PHP Stack trace:
+[26-Jan-2018 05:31:03 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 05:32:34 UTC] PHP Warning:  require(Views/inc/header.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/Views/busqueda_view.php on line 6
+[26-Jan-2018 05:32:34 UTC] PHP Stack trace:
+[26-Jan-2018 05:32:34 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 05:32:34 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3
+[26-Jan-2018 05:32:34 UTC] PHP Fatal error:  require(): Failed opening required 'Views/inc/header.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/Views/busqueda_view.php on line 6
+[26-Jan-2018 05:32:34 UTC] PHP Stack trace:
+[26-Jan-2018 05:32:34 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 05:32:34 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3
+[26-Jan-2018 05:33:25 UTC] PHP Warning:  require(Views/inc/login_cover.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/Views/busqueda_view.php on line 14
+[26-Jan-2018 05:33:25 UTC] PHP Stack trace:
+[26-Jan-2018 05:33:25 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 05:33:25 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3
+[26-Jan-2018 05:33:25 UTC] PHP Fatal error:  require(): Failed opening required 'Views/inc/login_cover.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/Views/busqueda_view.php on line 14
+[26-Jan-2018 05:33:25 UTC] PHP Stack trace:
+[26-Jan-2018 05:33:25 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 05:33:25 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3
