@@ -32,7 +32,7 @@
                 <span class="navbar-toggler-icon">
                 </span>
             </button>
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="../index.php">
                 <img alt="" class="d-inline-block align-top" height="30" src="img/logo-white.svg" width="30">
                     Aguas
                 </img>

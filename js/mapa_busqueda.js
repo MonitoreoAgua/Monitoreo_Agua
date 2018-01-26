@@ -33,7 +33,7 @@ function initMap() {
       suppressInfoWindows: true,
       gestureHandling: 'cooperative'
 	  });
-   map.data.loadGeoJson('data/Rios_de_Costa_Rica.json');
+   //map.data.loadGeoJson('data/Rios_de_Costa_Rica.json');
    map.data.addListener('click', function(event) {
      console.log(event.feature.getProperty('NOMBRE'));
 
