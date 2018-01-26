@@ -1,10 +1,26 @@
 <?php
+/*
+ * Copyright 2016-2017 MongoDB, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
 use ArrayObject;
+use JsonSerializable;
 
 /**
  * Model class for a BSON document.
@@ -14,7 +30,7 @@ use ArrayObject;
  *
  * @api
  */
-class BSONDocument extends ArrayObject implements Serializable, Unserializable
+class BSONDocument extends ArrayObject implements JsonSerializable, Serializable, Unserializable
 {
     /**
      * Constructor.
@@ -65,5 +81,16 @@ class BSONDocument extends ArrayObject implements Serializable, Unserializable
     public function bsonUnserialize(array $data)
     {
         parent::__construct($data, ArrayObject::ARRAY_AS_PROPS);
+    }
+
+    /**
+     * Serialize the array to JSON.
+     *
+     * @see http://php.net/jsonserializable.jsonserialize
+     * @return object
+     */
+    public function jsonSerialize()
+    {
+        return (object) $this->getArrayCopy();
     }
 }

@@ -8,15 +8,6 @@ class AggregateTest extends TestCase
 {
     /**
      * @expectedException MongoDB\Exception\InvalidArgumentException
-     * @expectedExceptionMessage $pipeline is empty
-     */
-    public function testConstructorPipelineArgumentMustNotBeEmpty()
-    {
-        new Aggregate($this->getDatabaseName(), $this->getCollectionName(), []);
-    }
-
-    /**
-     * @expectedException MongoDB\Exception\InvalidArgumentException
      * @expectedExceptionMessage $pipeline is not a list (unexpected index: "1")
      */
     public function testConstructorPipelineArgumentMustBeAList()
@@ -49,6 +40,10 @@ class AggregateTest extends TestCase
             $options[][] = ['bypassDocumentValidation' => $value];
         }
 
+        foreach ($this->getInvalidDocumentValues() as $value) {
+            $options[][] = ['collation' => $value];
+        }
+
         foreach ($this->getInvalidIntegerValues() as $value) {
             $options[][] = ['maxTimeMS' => $value];
         }
@@ -67,6 +62,10 @@ class AggregateTest extends TestCase
 
         foreach ($this->getInvalidBooleanValues() as $value) {
             $options[][] = ['useCursor' => $value];
+        }
+
+        foreach ($this->getInvalidWriteConcernValues() as $value) {
+            $options[][] = ['writeConcern' => $value];
         }
 
         return $options;

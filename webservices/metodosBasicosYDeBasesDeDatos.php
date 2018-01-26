@@ -237,7 +237,6 @@ function insertarDocumento($documento, $fotos, $palabras_clave, $indice, $valor_
 }
 
 
-
 function modificarDocumento($_id, $documento, $fotos, $palabras_clave, $indice, $valor_ind, $color)
 {
     $response = array();

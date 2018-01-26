@@ -20,6 +20,8 @@ var contentCalcularDiferencia= "<div><button class='btn btn-primary' style='widt
 //variable que se inicializa al cargar el init map, indican la ventana de información a ser cargada.
 var infowindowVerMas;
 var infowindowCalcularDiferencia;
+var rectangle;
+var puntosMuestreo = [];
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -63,6 +65,7 @@ function initMap() {
 	 //inserción de todos los marcadores presentes en la BD
 	 insertMarker();
 
+
 	  //evento para limpiar el mapa.
 	  map.addListener('click', function(e) {
       //mayor a cero indica que hay algun marcador seleccionado.
@@ -81,8 +84,46 @@ function initMap() {
           infowindowCalcularDiferencia.close();
         }
         contadorClicks=0;
+        document.getElementById("btnChart").disabled = true;
+        puntosMuestreo = [];
       }   
   });
+    //rectangulo de seleccion
+    var bounds = {
+          north: 9.949835778560997,
+          south: 9.916332528326867,
+          east: -84.08193743896476,
+          west: -84.12855075073242
+        };
+    rectangle = new google.maps.Rectangle ({
+          bounds: bounds,
+          editable: true,
+          draggable: true
+        });
+
+        rectangle.setMap(map);
+        rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
+
+}
+
+function revisarLimitesRectangulo() {
+  puntosMuestreo = [];
+  var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
+  var hilera = "";
+  for (var key in markers) { 
+    if (rectangle.getBounds().contains(markers[key].getPosition())) {
+      markers[key].setIcon("data/Templatic-map-icons/default.png")
+      puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
+    } else {
+      markers[key].setIcon(markers[key].oldIcon)
+    }
+  }
+  if (puntosMuestreo.length > 0) {
+    document.getElementById("btnChart").disabled = false;
+  }
+  else {
+    document.getElementById("btnChart").disabled = true;
+  }
 }
 
 //------------------------------------------MOSTRAR LOS MARCADORES EN EL MAPA---------------------------------------------------------------//
@@ -90,11 +131,11 @@ function initMap() {
 function  insertMarker(){
 //peticion ajax al servidor
   $.ajax({
-      async:true,
-      url: "webservices/getMarkers_busqueda.php",//devuelve un json con los marcadores que están en la base de datos.
-      dataType: "json",
-      success:pintar
-      });
+    async:true,
+    url: "webservices/getMarkers_busqueda.php",//devuelve un json con los marcadores que están en la base de datos.
+    dataType: "json",
+    success:pintar
+  });
 }
 
 
@@ -107,11 +148,12 @@ function pintar(jsonData){
 	    position:jsonDatosBD[i].location,
 	    title: 'Calidad del agua: '+jsonDatosBD[i].color,
 	    icon:"data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
-	    id:i//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
+	    id:i,//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
+      oldIcon: "data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
 	  });
 
       //se hace una asociación indice color.
-	  niveles[i]=jsonDatosBD[i].color;
+	    niveles[i]=jsonDatosBD[i].color;
       //se asocia un evento a cada marcador.
       google.maps.event.addListener(markers[i], 'click', function() {
       	aritmeticaPOIS(this);
@@ -129,10 +171,13 @@ function aritmeticaPOIS(marcador) {
             marcador.setIcon(iconColor);
             //se abre la ventana de informacion para ver más
             infowindowVerMas.setContent(contentVerMas);                              
-            infowindowVerMas.open(map, marcador); 
+            infowindowVerMas.open(map, marcador);
+            document.getElementById("btnChart").disabled = false;
+            puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
             contadorClicks++;
         }else{//==1
             if(!(marcador.id==first.id)){//se debe dar clic sobre uno distinto.
+                puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
                 second=marcador;
                 marcador.setIcon(iconColor);
                 //se cierra el marcador de ver más
@@ -313,6 +358,10 @@ document.getElementById("reset").onclick = function(){
   for(var i=0;i<markers.length;i++){
     markers[i].setVisible(true);
   } 
+}
+
+function graficar() {
+  window.location = "nuevoGrafico.php?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//

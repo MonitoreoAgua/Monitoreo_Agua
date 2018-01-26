@@ -1,4 +1,19 @@
 <?php
+/*
+ * Copyright 2015-2017 MongoDB, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace MongoDB;
 
@@ -8,7 +23,10 @@ use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
+use MongoDB\Exception\UnsupportedException;
+use MongoDB\GridFS\Bucket;
 use MongoDB\Model\CollectionInfoIterator;
 use MongoDB\Operation\CreateCollection;
 use MongoDB\Operation\DatabaseCommand;
@@ -23,6 +41,7 @@ class Database
         'document' => 'MongoDB\Model\BSONDocument',
         'root' => 'MongoDB\Model\BSONDocument',
     ];
+    private static $wireVersionForWritableCommandWriteConcern = 5;
 
     private $databaseName;
     private $manager;
@@ -56,7 +75,7 @@ class Database
      * @param Manager $manager      Manager instance from the driver
      * @param string  $databaseName Database name
      * @param array   $options      Database options
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function __construct(Manager $manager, $databaseName, array $options = [])
     {
@@ -140,7 +159,8 @@ class Database
      * @param array|object $command Command document
      * @param array        $options Options for command execution
      * @return Cursor
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function command($command, array $options = [])
     {
@@ -165,6 +185,9 @@ class Database
      * @param string $collectionName
      * @param array  $options
      * @return array|object Command result document
+     * @throws UnsupportedException if options are not supported by the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function createCollection($collectionName, array $options = [])
     {
@@ -172,8 +195,13 @@ class Database
             $options['typeMap'] = $this->typeMap;
         }
 
-        $operation = new CreateCollection($this->databaseName, $collectionName, $options);
         $server = $this->manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
+
+        if ( ! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
+            $options['writeConcern'] = $this->writeConcern;
+        }
+
+        $operation = new CreateCollection($this->databaseName, $collectionName, $options);
 
         return $operation->execute($server);
     }
@@ -184,6 +212,9 @@ class Database
      * @see DropDatabase::__construct() for supported options
      * @param array $options Additional options
      * @return array|object Command result document
+     * @throws UnsupportedException if options are unsupported on the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function drop(array $options = [])
     {
@@ -191,8 +222,13 @@ class Database
             $options['typeMap'] = $this->typeMap;
         }
 
-        $operation = new DropDatabase($this->databaseName, $options);
         $server = $this->manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
+
+        if ( ! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
+            $options['writeConcern'] = $this->writeConcern;
+        }
+
+        $operation = new DropDatabase($this->databaseName, $options);
 
         return $operation->execute($server);
     }
@@ -204,6 +240,9 @@ class Database
      * @param string $collectionName Collection name
      * @param array  $options        Additional options
      * @return array|object Command result document
+     * @throws UnsupportedException if options are unsupported on the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function dropCollection($collectionName, array $options = [])
     {
@@ -211,8 +250,13 @@ class Database
             $options['typeMap'] = $this->typeMap;
         }
 
-        $operation = new DropCollection($this->databaseName, $collectionName, $options);
         $server = $this->manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
+
+        if ( ! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
+            $options['writeConcern'] = $this->writeConcern;
+        }
+
+        $operation = new DropCollection($this->databaseName, $collectionName, $options);
 
         return $operation->execute($server);
     }
@@ -228,11 +272,65 @@ class Database
     }
 
     /**
+     * Return the Manager.
+     *
+     * @return Manager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * Return the read concern for this database.
+     *
+     * @see http://php.net/manual/en/mongodb-driver-readconcern.isdefault.php
+     * @return ReadConcern
+     */
+    public function getReadConcern()
+    {
+        return $this->readConcern;
+    }
+
+    /**
+     * Return the read preference for this database.
+     *
+     * @return ReadPreference
+     */
+    public function getReadPreference()
+    {
+        return $this->readPreference;
+    }
+
+    /**
+     * Return the type map for this database.
+     *
+     * @return array
+     */
+    public function getTypeMap()
+    {
+        return $this->typeMap;
+    }
+
+    /**
+     * Return the write concern for this database.
+     *
+     * @see http://php.net/manual/en/mongodb-driver-writeconcern.isdefault.php
+     * @return WriteConcern
+     */
+    public function getWriteConcern()
+    {
+        return $this->writeConcern;
+    }
+
+    /**
      * Returns information for all collections in this database.
      *
      * @see ListCollections::__construct() for supported options
      * @param array $options
      * @return CollectionInfoIterator
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function listCollections(array $options = [])
     {
@@ -249,6 +347,7 @@ class Database
      * @param string $collectionName Name of the collection to select
      * @param array  $options        Collection constructor options
      * @return Collection
+     * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function selectCollection($collectionName, array $options = [])
     {
@@ -263,11 +362,32 @@ class Database
     }
 
     /**
+     * Select a GridFS bucket within this database.
+     *
+     * @see Bucket::__construct() for supported options
+     * @param array $options Bucket constructor options
+     * @return Bucket
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     */
+    public function selectGridFSBucket(array $options = [])
+    {
+        $options += [
+            'readConcern' => $this->readConcern,
+            'readPreference' => $this->readPreference,
+            'typeMap' => $this->typeMap,
+            'writeConcern' => $this->writeConcern,
+        ];
+
+        return new Bucket($this->manager, $this->databaseName, $options);
+    }
+
+    /**
      * Get a clone of this database with different options.
      *
      * @see Database::__construct() for supported options
      * @param array $options Database constructor options
      * @return Database
+     * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function withOptions(array $options = [])
     {

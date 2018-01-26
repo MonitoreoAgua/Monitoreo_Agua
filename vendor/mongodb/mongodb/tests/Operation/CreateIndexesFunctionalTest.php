@@ -6,7 +6,9 @@ use MongoDB\Model\IndexInfo;
 use MongoDB\Operation\CreateIndexes;
 use MongoDB\Operation\DropIndexes;
 use MongoDB\Operation\ListIndexes;
+use MongoDB\Tests\CommandObserver;
 use InvalidArgumentException;
+use stdClass;
 
 class CreateIndexesFunctionalTest extends FunctionalTestCase
 {
@@ -157,6 +159,32 @@ class CreateIndexesFunctionalTest extends FunctionalTestCase
         });
     }
 
+    public function testDefaultWriteConcernIsOmitted()
+    {
+        /* Earlier server versions do not support the createIndexes command. Per
+         * the Index Management specification, inserts on system.indexes must
+         * use the write concern {w:1}. */
+        if ( ! \MongoDB\server_supports_feature($this->getPrimaryServer(), self::$wireVersionForCommand)) {
+            $this->markTestSkipped('createIndexes command is not supported');
+        }
+
+        (new CommandObserver)->observe(
+            function() {
+                $operation = new CreateIndexes(
+                    $this->getDatabaseName(),
+                    $this->getCollectionName(),
+                    [['key' => ['x' => 1]]],
+                    ['writeConcern' => $this->createDefaultWriteConcern()]
+                );
+
+                $operation->execute($this->getPrimaryServer());
+            },
+            function(stdClass $command) {
+                $this->assertObjectNotHasAttribute('writeConcern', $command);
+            }
+        );
+    }
+
     /**
      * Asserts that an index with the given name exists for the collection.
      *
@@ -165,6 +193,7 @@ class CreateIndexesFunctionalTest extends FunctionalTestCase
      * given name is found, it will be passed to the callback, which may perform
      * additional assertions.
      *
+     * @param string   $indexName
      * @param callable $callback
      */
     private function assertIndexExists($indexName, $callback = null)
@@ -185,7 +214,7 @@ class CreateIndexesFunctionalTest extends FunctionalTestCase
             }
         }
 
-        $this->assertNotNull($foundIndex, sprintf('Found %s index for the collection', $indexName));
+        $this->assertNotNull($foundIndex, sprintf('Index %s does not exist', $indexName));
 
         if ($callback !== null) {
             call_user_func($callback, $foundIndex);

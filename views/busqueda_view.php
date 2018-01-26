@@ -60,6 +60,23 @@
                                             <div class="contenidoArPOIShort"></div>
                                         </div>
                                     </div>
+
+                                    <!-- Contenedor utilizado para mostrar la simbología usada en el mapa -->
+                                    <div class="anidar">
+                                        <h3 class="wo-line-height bold">Calidad del agua:</h3>
+                                        <img value=5 id="calidad0" src="data/Templatic-map-icons/Gris.png"></img>
+                                            <h7>Contaminación Neutral</h7>
+                                        <img value=0 id="calidad1" src="data/Templatic-map-icons/Azul.png"></img>
+                                            <h7>Sin Contaminación</h7>
+                                        <img value=1 id="calidad2" src="data/Templatic-map-icons/Verde.png"></img>
+                                            <h7>Contaminación Incipiente</h7>
+                                        <img value=2 id="calidad3" src="data/Templatic-map-icons/Amarillo.png"></img>
+                                            <h7>Contaminación Moderada</h7>
+                                        <img value=3 id="calidad4" src="data/Templatic-map-icons/Anaranjado.png"></img>
+                                            <h7>Contaminación Severa</h7>
+                                        <img value=4 id="calidad5" src="data/Templatic-map-icons/Rojo.png"></img>
+                                            <h7>Contaminación Muy Severa</h7>
+                                    </div>
                                 </div>
                             </div>
                         </div>

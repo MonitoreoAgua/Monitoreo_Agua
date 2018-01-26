@@ -1,4 +1,19 @@
 <?php
+/*
+ * Copyright 2015-2017 MongoDB, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace MongoDB\Operation;
 
@@ -6,18 +21,21 @@ use MongoDB\Driver\Command;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
+use MongoDB\Exception\UnsupportedException;
 
 /**
  * Operation for the count command.
  *
  * @api
- * @see MongoDB\Collection::count()
+ * @see \MongoDB\Collection::count()
  * @see http://docs.mongodb.org/manual/reference/command/count/
  */
 class Count implements Executable
 {
+    private static $wireVersionForCollation = 5;
     private static $wireVersionForReadConcern = 4;
 
     private $databaseName;
@@ -30,8 +48,14 @@ class Count implements Executable
      *
      * Supported options:
      *
-     *  * hint (string|document): The index to use. If a document, it will be
-     *    interpretted as an index specification and a name will be generated.
+     *  * collation (document): Collation specification.
+     *
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
+     *
+     *  * hint (string|document): The index to use. Specify either the index
+     *    name as a string or the index key pattern as a document. If specified,
+     *    then the query system will only consider plans using the hinted index.
      *
      *  * limit (integer): The maximum number of documents to count.
      *
@@ -40,8 +64,8 @@ class Count implements Executable
      *
      *  * readConcern (MongoDB\Driver\ReadConcern): Read concern.
      *
-     *    For servers < 3.2, this option is ignored as read concern is not
-     *    available.
+     *    This is not supported for server versions < 3.2 and will result in an
+     *    exception at execution time if used.
      *
      *  * readPreference (MongoDB\Driver\ReadPreference): Read preference.
      *
@@ -52,7 +76,7 @@ class Count implements Executable
      * @param string       $collectionName Collection name
      * @param array|object $filter         Query by which to filter documents
      * @param array        $options        Command options
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function __construct($databaseName, $collectionName, $filter = [], array $options = [])
     {
@@ -60,14 +84,12 @@ class Count implements Executable
             throw InvalidArgumentException::invalidType('$filter', $filter, 'array or object');
         }
 
-        if (isset($options['hint'])) {
-            if (is_array($options['hint']) || is_object($options['hint'])) {
-                $options['hint'] = \MongoDB\generate_index_name($options['hint']);
-            }
+        if (isset($options['collation']) && ! is_array($options['collation']) && ! is_object($options['collation'])) {
+            throw InvalidArgumentException::invalidType('"collation" option', $options['collation'], 'array or object');
+        }
 
-            if ( ! is_string($options['hint'])) {
-                throw InvalidArgumentException::invalidType('"hint" option', $options['hint'], 'string or array or object');
-            }
+        if (isset($options['hint']) && ! is_string($options['hint']) && ! is_array($options['hint']) && ! is_object($options['hint'])) {
+            throw InvalidArgumentException::invalidType('"hint" option', $options['hint'], 'string or array or object');
         }
 
         if (isset($options['limit']) && ! is_integer($options['limit'])) {
@@ -90,6 +112,10 @@ class Count implements Executable
             throw InvalidArgumentException::invalidType('"skip" option', $options['skip'], 'integer');
         }
 
+        if (isset($options['readConcern']) && $options['readConcern']->isDefault()) {
+            unset($options['readConcern']);
+        }
+
         $this->databaseName = (string) $databaseName;
         $this->collectionName = (string) $collectionName;
         $this->filter = $filter;
@@ -103,12 +129,22 @@ class Count implements Executable
      * @param Server $server
      * @return integer
      * @throws UnexpectedValueException if the command response was malformed
+     * @throws UnsupportedException if collation or read concern is used and unsupported
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function execute(Server $server)
     {
+        if (isset($this->options['collation']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForCollation)) {
+            throw UnsupportedException::collationNotSupported();
+        }
+
+        if (isset($this->options['readConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
+            throw UnsupportedException::readConcernNotSupported();
+        }
+
         $readPreference = isset($this->options['readPreference']) ? $this->options['readPreference'] : null;
 
-        $cursor = $server->executeCommand($this->databaseName, $this->createCommand($server), $readPreference);
+        $cursor = $server->executeCommand($this->databaseName, $this->createCommand(), $readPreference);
         $result = current($cursor->toArray());
 
         // Older server versions may return a float
@@ -122,10 +158,9 @@ class Count implements Executable
     /**
      * Create the count command.
      *
-     * @param Server $server
      * @return Command
      */
-    private function createCommand(Server $server)
+    private function createCommand()
     {
         $cmd = ['count' => $this->collectionName];
 
@@ -133,13 +168,21 @@ class Count implements Executable
             $cmd['query'] = (object) $this->filter;
         }
 
-        foreach (['hint', 'limit', 'maxTimeMS', 'skip'] as $option) {
+        if (isset($this->options['collation'])) {
+            $cmd['collation'] = (object) $this->options['collation'];
+        }
+
+        if (isset($this->options['hint'])) {
+            $cmd['hint'] = is_array($this->options['hint']) ? (object) $this->options['hint'] : $this->options['hint'];
+        }
+
+        foreach (['limit', 'maxTimeMS', 'skip'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
 
-        if (isset($this->options['readConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
+        if (isset($this->options['readConcern'])) {
             $cmd['readConcern'] = \MongoDB\read_concern_as_document($this->options['readConcern']);
         }
 

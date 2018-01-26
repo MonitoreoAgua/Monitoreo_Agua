@@ -2,11 +2,13 @@
 
 namespace MongoDB\Tests\Collection;
 
+use MongoDB\BSON\Javascript;
 use MongoDB\Collection;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Operation\MapReduce;
 
 /**
  * Functional tests for the Collection class.
@@ -73,6 +75,11 @@ class CollectionFunctionalTest extends FunctionalTestCase
         return $options;
     }
 
+    public function testGetManager()
+    {
+        $this->assertSame($this->manager, $this->collection->getManager());
+    }
+
     public function testToString()
     {
         $this->assertEquals($this->getNamespace(), (string) $this->collection);
@@ -127,7 +134,7 @@ class CollectionFunctionalTest extends FunctionalTestCase
         $this->assertSameDocument($expected, $this->collection->findOne($filter, $options));
     }
 
-    public function testWithOptionsInheritsReadPreferenceAndWriteConcern()
+    public function testWithOptionsInheritsOptions()
     {
         $collectionOptions = [
             'readConcern' => new ReadConcern(ReadConcern::LOCAL),
@@ -140,6 +147,9 @@ class CollectionFunctionalTest extends FunctionalTestCase
         $clone = $collection->withOptions();
         $debug = $clone->__debugInfo();
 
+        $this->assertSame($this->manager, $debug['manager']);
+        $this->assertSame($this->getDatabaseName(), $debug['databaseName']);
+        $this->assertSame($this->getCollectionName(), $debug['collectionName']);
         $this->assertInstanceOf('MongoDB\Driver\ReadConcern', $debug['readConcern']);
         $this->assertSame(ReadConcern::LOCAL, $debug['readConcern']->getLevel());
         $this->assertInstanceOf('MongoDB\Driver\ReadPreference', $debug['readPreference']);
@@ -150,7 +160,7 @@ class CollectionFunctionalTest extends FunctionalTestCase
         $this->assertSame(WriteConcern::MAJORITY, $debug['writeConcern']->getW());
     }
 
-    public function testWithOptionsPassesReadPreferenceAndWriteConcern()
+    public function testWithOptionsPassesOptions()
     {
         $collectionOptions = [
             'readConcern' => new ReadConcern(ReadConcern::LOCAL),
@@ -170,6 +180,28 @@ class CollectionFunctionalTest extends FunctionalTestCase
         $this->assertSame(['root' => 'array'], $debug['typeMap']);
         $this->assertInstanceOf('MongoDB\Driver\WriteConcern', $debug['writeConcern']);
         $this->assertSame(WriteConcern::MAJORITY, $debug['writeConcern']->getW());
+    }
+
+    public function testMapReduce()
+    {
+        $this->createFixtures(3);
+
+        $map = new Javascript('function() { emit(1, this.x); }');
+        $reduce = new Javascript('function(key, values) { return Array.sum(values); }');
+        $out = ['inline' => 1];
+
+        $result = $this->collection->mapReduce($map, $reduce, $out);
+
+        $this->assertInstanceOf('MongoDB\MapReduceResult', $result);
+        $expected = [
+            [ '_id' => 1.0, 'value' => 66.0 ],
+        ];
+
+        $this->assertSameDocuments($expected, $result);
+
+        $this->assertGreaterThanOrEqual(0, $result->getExecutionTimeMS());
+        $this->assertNotEmpty($result->getCounts());
+        $this->assertNotEmpty($result->getTiming());
     }
 
     /**
