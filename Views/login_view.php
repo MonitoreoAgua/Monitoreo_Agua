@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <link rel="stylesheet" href="../css/estilo_login.css">
+    <link rel="stylesheet" href="css/estilo_login.css">
 </head>
 
 <body>
@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <input class="btn btn-default btn-block m-t-md" type="submit" value="Iniciar Sesión">
                         </div>
-                        <span class='text-center'><a href="Controllers/recuperar.php" class="text-sm">No recuerdas la contraseña?</a></span>
+                        <span class='text-center'><a href="index.php/recuperar" class="text-sm">No recuerdas la contraseña?</a></span>
                         <?php if(!empty($errores)): ?>
                             <div class="alert alert-danger" role="alert">
                                 <ul id="errores">
@@ -40,7 +40,7 @@
                             <?php endif; ?>
                                 <div class="form-group">
                                     <p class="text-center m-t-xs text-sm">No tienes cuenta?</p>
-                                    <a href="Controllers/registro.php" class="btn btn-default btn-block m-t-md">Crea una cuenta</a>
+                                    <a href="index.php/registro" class="btn btn-default btn-block m-t-md">Crea una cuenta</a>
                                 </div>
                     </form>
 

@@ -9,7 +9,7 @@
 
     <!-- <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="js/validacion.js"></script> -->
-    <link rel="stylesheet" href="../css/estilo_registro.css">
+    <link rel="stylesheet" href="css/estilo_registro.css">
 </head>
 
 <body>
@@ -18,7 +18,7 @@
             <div class='col-md-3'></div>
             <div class="col-md-6">
                 <div class="login-box well">
-                    <form action="../php/validaremail_registro.php" method="POST" name="registrar" id="registro">
+                    <form action="php/validaremail_registro.php" method="POST" name="registrar" id="registro">
                         <legend>Registro</legend>
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
@@ -61,7 +61,7 @@
 
                                         <div class="form-group">
                                             <p class="text-center m-t-xs text-sm">¿Ya tienes cuenta?</p>
-                                            <a href="controllers/login.php" class="btn btn-default btn-block m-t-md">Iniciar Sesión</a>
+                                            <a href="Controllers/login.php" class="btn btn-default btn-block m-t-md">Iniciar Sesión</a>
                                         </div>
 
                     </form>

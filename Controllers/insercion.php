@@ -1,5 +1,5 @@
 <?php 
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
   $error = "";
   $color = "";
@@ -240,5 +240,5 @@ switch ($action) {
   case 'ensennarForm' :
   default:
 }
-require '../Views/insercion_view.php';
+require 'Views/insercion_view.php';
 ?>

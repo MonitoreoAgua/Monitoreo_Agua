@@ -19,7 +19,7 @@ function listarGraficos() {
   	.filter(it => it.startsWith('firebase:authUser'))[0];
 	const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
 	$.ajax({
-        url: "webservices/getGraficos.php?idUsuario=" + user.email,
+        url: "/webservices/getGraficos.php?idUsuario=" + user.email,
         async: false,
         dataType: 'json',
         success: function(data) {

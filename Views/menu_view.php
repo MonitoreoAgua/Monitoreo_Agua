@@ -2,14 +2,14 @@
 <nav class="navbar navbar-dark navbar-fixed-top bg-inverse margenNav" id="mainNav">
     <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
     <div class="collapse navbar-toggleable-md" id="navbarResponsive">
-        <a class="navbar-brand" href="index.php"><h3>Monitoreo</h3></a>
+        <a class="navbar-brand" href="index.php/busqueda"><h3>Monitoreo</h3></a>
         <div>
             <ul class="nav navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="Controllers/Insercion.php">Inserción</a>
+                    <a class="nav-link" href="index.php/Insercion">Inserción</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="Controllers/busqueda.php">Búsqueda <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="index.php/busqueda">Búsqueda <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Actualización</a>
@@ -26,7 +26,7 @@
             if (!isset($_SESSION['correo'])) {
                 ?>
 
-                <a class="form-control btn btn-outline-primary " href="Controllers/login.php">Iniciar Sesión</a>
+                <a class="form-control btn btn-outline-primary " href="index.php/login">Iniciar Sesión</a>
 
                 <?php
             }else{
@@ -34,7 +34,7 @@
 
                     <span id="id_nomb_usuario" class="nombre_usuario">Hola, <?php echo ($_SESSION['correo']) ?></span>
 
-                    <a class="form-control btn btn-outline-primary" href="Controllers/login.php">Cerrar Sesión</a>
+                    <a class="form-control btn btn-outline-primary" href="index.php/login">Cerrar Sesión</a>
 
                     <?php
             } 

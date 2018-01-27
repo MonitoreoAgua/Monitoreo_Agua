@@ -1,4 +1,4 @@
-<?php require "inc/header.php"; require "inc/menu.php";?>
+<?php require "Views/inc/header.php"; require "Views/inc/menu.php";?>
 <!-- Scripts requeridos -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -78,4 +78,4 @@
 
   </div>
 
-<?php require "inc/footer.php";?>
+<?php require "Views/inc/footer.php";?>

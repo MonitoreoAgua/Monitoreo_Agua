@@ -16,16 +16,16 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/estilo_busqueda.css">
-    <link rel="stylesheet" type="text/css" href="../css/estilo_menu.css">
-    <link rel="stylesheet" type="text/css" href="../css/estilo_footer.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo_busqueda.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo_menu.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo_footer.css">
     <title>Muestreo de Agua</title>
 </head>
 
 <body>
 
     <?php 
-    require '../Views/menu_view.php';
+    require 'Views/menu_view.php';
    ?>
         <!-- Contenedor de toda la página -->
         <div class="main">
@@ -81,7 +81,7 @@
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script type="text/javascript" src="../js/mapa_busqueda.js"></script>
+        <script type="text/javascript" src="js/mapa_busqueda.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc&signed_in=true&callback=initMap"></script>
         <!-- jQuery first, then Tether, then Bootstrap JS. -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
@@ -89,7 +89,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
 </body>
 <?php 
-    require '../Views/footer_view.php';
+    require 'Views/footer_view.php';
    ?>
 
 </html>

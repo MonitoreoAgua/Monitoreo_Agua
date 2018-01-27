@@ -517,3 +517,11 @@ Stack trace:
 [26-Jan-2018 05:33:25 UTC] PHP Stack trace:
 [26-Jan-2018 05:33:25 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
 [26-Jan-2018 05:33:25 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3
+[26-Jan-2018 17:17:05 UTC] PHP Warning:  require(Views/inc/header.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/Views/busqueda_view.php on line 6
+[26-Jan-2018 17:17:05 UTC] PHP Stack trace:
+[26-Jan-2018 17:17:05 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 17:17:05 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3
+[26-Jan-2018 17:17:05 UTC] PHP Fatal error:  require(): Failed opening required 'Views/inc/header.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/Views/busqueda_view.php on line 6
+[26-Jan-2018 17:17:05 UTC] PHP Stack trace:
+[26-Jan-2018 17:17:05 UTC] PHP   1. {main}() /home/ubuntu/workspace/Controllers/busqueda.php:0
+[26-Jan-2018 17:17:05 UTC] PHP   2. require() /home/ubuntu/workspace/Controllers/busqueda.php:3

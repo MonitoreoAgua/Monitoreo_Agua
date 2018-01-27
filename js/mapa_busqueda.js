@@ -54,7 +54,7 @@ function initMap() {
 	 filterMarker = new google.maps.Marker({
 	    map: map,
 	    draggable:true,
-	    icon: "../data/Templatic-map-icons/arts-crafts.png",
+	    icon: "/data/Templatic-map-icons/arts-crafts.png",
 	    title:"colocar en area de filtro",
 	    position:{"lat":9.928119,"lng":-84.107810}
 	  });
@@ -72,13 +72,13 @@ function initMap() {
       if(contadorClicks>0){
         if(contadorClicks==1){//solamente existe uno en seleccion
           //se agregó el cambio de marcador para el caso de gris que es el único que es un recurso externo
-          var icon1 = "../data/Templatic-map-icons/"+jsonDatosBD[first.id].color+".png";
+          var icon1 = "/data/Templatic-map-icons/"+jsonDatosBD[first.id].color+".png";
           infowindowVerMas.close();
           first.setIcon(icon1);
         }else{//ambos están selecionados
           //se agregó el cambio de marcador para el caso de gris que es el único que es un recurso externo
-          var icon1 = "../data/Templatic-map-icons/"+jsonDatosBD[first.id].color+".png";
-          var icon2 = "../data/Templatic-map-icons/"+jsonDatosBD[second.id].color+".png";
+          var icon1 = "/data/Templatic-map-icons/"+jsonDatosBD[first.id].color+".png";
+          var icon2 = "/data/Templatic-map-icons/"+jsonDatosBD[second.id].color+".png";
           first.setIcon(icon1);
           second.setIcon(icon2);
           infowindowCalcularDiferencia.close();
@@ -112,7 +112,7 @@ function revisarLimitesRectangulo() {
   var hilera = "";
   for (var key in markers) { 
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
-      markers[key].setIcon("../data/Templatic-map-icons/default.png")
+      markers[key].setIcon("/data/Templatic-map-icons/default.png")
       puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
     } else {
       markers[key].setIcon(markers[key].oldIcon)
@@ -132,7 +132,7 @@ function  insertMarker(){
 //peticion ajax al servidor
   $.ajax({
     async:true,
-    url: "../webservices/getMarkers_busqueda.php",//devuelve un json con los marcadores que están en la base de datos.
+    url: "/webservices/getMarkers_busqueda.php",//devuelve un json con los marcadores que están en la base de datos.
     dataType: "json",
     success:pintar
   });
@@ -147,9 +147,9 @@ function pintar(jsonData){
 	    map: map,
 	    position:jsonDatosBD[i].location,
 	    title: 'Calidad del agua: '+jsonDatosBD[i].color,
-	    icon:"../data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
+	    icon:"/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
 	    id:i,//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
-      oldIcon: "../data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
+      oldIcon: "/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
 	  });
 
       //se hace una asociación indice color.
@@ -164,7 +164,7 @@ function pintar(jsonData){
 //----------------------------------------ARITMETICA DE PUNTOS-----------------------------------------------------------------//
 function aritmeticaPOIS(marcador) {
     if(contadorClicks<2){//Se puede seleccionar otro
-        var iconColor = "../data/Templatic-map-icons/default.png";
+        var iconColor = "/data/Templatic-map-icons/default.png";
         if(contadorClicks==0){//es el primer marcador en ser seleccionado.
             first=marcador;
             //se cambia el color del marcador
@@ -195,8 +195,8 @@ function aritmeticaPOIS(marcador) {
         infowindowCalcularDiferencia.close();
         contadorClicks=0;
         //se agregó el cambio de marcador para el caso de gris que es el único que es un recurso externo
-        var icon1 = "../data/Templatic-map-icons/"+jsonDatosBD[first.id].color+".png";
-        var icon2 = "../data/Templatic-map-icons/"+jsonDatosBD[second.id].color+".png";
+        var icon1 = "/data/Templatic-map-icons/"+jsonDatosBD[first.id].color+".png";
+        var icon2 = "/data/Templatic-map-icons/"+jsonDatosBD[second.id].color+".png";
 
         first.setIcon(icon1);
         second.setIcon(icon2);
@@ -223,7 +223,7 @@ function mostrarAritmetica() {
                 async:true,
                 data:  parametros,
                 dataType:"json",
-                url:   '../webservices/datosArPOI_busqueda.php',
+                url:   '/webservices/datosArPOI_busqueda.php',
                 success:  calcularDiferencia
         });
 	}else{//no se permite
@@ -303,7 +303,7 @@ function mostrarVerMas() {
           async:true,
           data:  parametros,
           dataType:"json",
-          url: "../webservices/datosMarker_busqueda.php",
+          url: "/webservices/datosMarker_busqueda.php",
           success:  calcularVerMas
   });
 }
@@ -361,7 +361,7 @@ document.getElementById("reset").onclick = function(){
 }
 
 function graficar() {
-  window.location = "nuevoGrafico.php?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
+  window.location = "index.php/nuevoGrafico?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
@@ -405,7 +405,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 $.ajax({
         async:true,
         dataType:"json",
-        url:   'php/completadoFiltro_busqueda.php',
+        url:   '/php/completadoFiltro_busqueda.php',
         success:  completar
 });
 

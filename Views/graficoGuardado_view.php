@@ -8,14 +8,14 @@
 ?>
 
 <!-- Scripts requeridos -->
-<?php require "inc/header.php"; require "inc/menu.php";?>
+<?php require "Views/inc/header.php"; require "Views/inc/menu.php";?>
 <script src="http://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-<script src="js/llenarComboPuntos.js"></script>
-<script src="js/grafiMySQL.js"></script>
-<script src="js/graficador.js"></script>
+<script src="/js/llenarComboPuntos.js"></script>
+<script src="/js/grafiMySQL.js"></script>
+<script src="/js/graficador.js"></script>
 <script> graficoNuevo = false; </script>
 
 <!-- Contenedor principal -->
@@ -81,4 +81,4 @@
   <!-- Graficar el gráfico cargado -->
   <script>cargarGrafi();</script>
 
-<?php require "inc/footer.php";?>
+<?php require "Views/inc/footer.php";?>

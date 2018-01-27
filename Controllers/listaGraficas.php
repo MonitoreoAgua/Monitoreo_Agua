@@ -1,3 +1,3 @@
 <?php 
-	require '../Views/graficos_view.php'
+	require 'Views/graficos_view.php'
 ?>

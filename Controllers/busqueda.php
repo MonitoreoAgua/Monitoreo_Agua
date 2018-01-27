@@ -1,3 +1,3 @@
 <?php 
-	require '../Views/busqueda_view.php'
+	require $ROOT.'Views/busqueda_view.php'
 ?>

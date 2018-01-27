@@ -1,5 +1,5 @@
 <?php 
-require '../webservices/databaseConnection.php';
+require 'webservices/databaseConnection.php';
 	if($_SERVER["REQUEST_METHOD"]=="GET"){
 		$objId=$_GET['objid'];
 		$collection=connectDatabaseCollection('MonitoreoAgua','puntosMuestreo',0);
@@ -13,7 +13,7 @@ require '../webservices/databaseConnection.php';
 		$estacion =$item["POI"]['nombre_estacion'];
 		$institucion=$item["POI"]['nombre_institucion'];
 		$author=$item["Muestra"]['usuario'];
-		require '../Views/author_view.php';
+		require 'Views/author_view.php';
 	}
 
  ?>

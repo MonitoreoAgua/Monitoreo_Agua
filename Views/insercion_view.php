@@ -2,16 +2,16 @@
 <html lang="en">
 <!-- Se cargar los encabezados de la página -->
 <head>
-    <?php require '../Views/inc/header.php';?> 
-    <link rel="stylesheet" type="text/css" href="../css/estilo_insercion.css">
+    <?php require 'Views/inc/header.php';?> 
+    <link rel="stylesheet" type="text/css" href="css/estilo_insercion.css">
 </head>
     <!-- El header contiene los generales mediante js se cargan los propios de la sección -->
 
     <body>
         <!-- Se carga el cover para control de login mediante firebase -->
-        <?php require '../Views/inc/login_cover.php';?>
+        <?php require 'Views/inc/login_cover.php';?>
             <!-- Carga del menú del sitio web -->
-            <?php require '../Views/inc/menu.php'; ?>
+            <?php require 'Views/inc/menu.php'; ?>
                 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                     <main class="mdl-layout__content">
                         <div class="page-content">
@@ -318,11 +318,11 @@
                                                 </div>
                                                 <?php endif; ?>
                             </div>
-                            <?php require '../Views/inc/footer.php';?>
+                            <?php require 'Views/inc/footer.php';?>
                         </div>
                     </main>
                 </div>
-                <?php require '../Views/inc/firebase.php';?>
+                <?php require 'Views/inc/firebase.php';?>
                 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                 <script type="text/javascript">
                     window.onload = function() {

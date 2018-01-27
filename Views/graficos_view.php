@@ -1,9 +1,9 @@
-<?php require "inc/header.php"; require "inc/menu.php";?>
+<?php require "Views/inc/header.php"; require "Views/inc/menu.php";?>
 <!-- Scripts requeridos -->
-<script src="http://code.jquery.com/jquery-3.2.1.min.js"
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
-<script src="js/saved.js"></script>
+<script src="/js/saved.js"></script>
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
@@ -18,4 +18,4 @@
         </div>
     </div>
 </div>
-<?php require "inc/footer.php";?>
+<?php require "Views/inc/footer.php";?>

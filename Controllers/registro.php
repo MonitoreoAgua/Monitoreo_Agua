@@ -1,7 +1,7 @@
 <?php session_start();
 //require '../vendor/autoload.php';
 if (isset($_SESSION['correo'])) {
-	header('Location: busqueda.php');
+	header('Location: index.php/busqueda');
 }
 /*$errores= '';
 $mensaje= '';
@@ -89,6 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 }*/
 
-	require '../Views/registro_view.php';
+	require 'Views/registro_view.php';
 
  ?>

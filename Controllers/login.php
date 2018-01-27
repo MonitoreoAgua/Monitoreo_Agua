@@ -1,7 +1,7 @@
 <?php session_start();
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 if (isset($_SESSION['correo'])) {
-    header('Location: busqueda.php');
+    header('Location: index.php/busqueda');
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }else{
             if($datos['validado'] == true){
                 $_SESSION['correo'] = $correo;
-                header('Location: index.php');
+                header('Location: index.php/busqueda');
             }else{
                 $errores .= '<li>La cuenta no ha sido validada aún.</li>';
             }
@@ -39,5 +39,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 }
 
-    require '../Views/login_view.php';
+    require 'Views/login_view.php';
  ?>

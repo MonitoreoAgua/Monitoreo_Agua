@@ -1,8 +1,8 @@
 <?php session_start();
 //require '../vendor/autoload.php';
 if (isset($_SESSION['correo'])) {
-    header('Location: busqueda.php');
+    header('Location: index.php/busqueda');
 }
 
-    require '../Views/recuperar_view.php';
+    require 'Views/recuperar_view.php';
  ?>

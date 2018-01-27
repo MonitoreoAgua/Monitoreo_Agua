@@ -1,5 +1,5 @@
 <?php
-	require '../vendor/autoload.php'; // include Composer goodies
+	require 'vendor/autoload.php'; // include Composer goodies
 
 	//indica los campos de filtro, se obtienen por medio del metodo GET y se agregan a la consulta solamente los campos que se enviaron
 	//El punto que indica a cual documento pertenece se representa con una coma ya que no se puede enviar punto. 

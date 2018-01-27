@@ -3,6 +3,6 @@
 	session_destroy();
 	$_SESSION = array();
 
-	header('Location: login.php');
+	header('Location: index.php/login');
 
  ?>
