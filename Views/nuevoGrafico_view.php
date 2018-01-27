@@ -4,7 +4,7 @@
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-<script src="js/llenarComboPuntos.js"></script>
+<script src="/js/llenarComboPuntos.js"></script>
 <script>
   function findGetParameter(parameterName) {
     var result = null,
@@ -28,7 +28,7 @@
         Fecha Inicial: <input type="date" id="fechaI" onchange="if(graficoGenerado && !graficoNombre) graficar('Fechas');"><br>
         Fecha Final: <input type="date" id="fechaF"onchange="if(graficoGenerado && !graficoNombre) graficar('Nombres');"><br>
       </form>
-      <script src="js/graficador.js"></script>
+      <script src="/js/graficador.js"></script>
       <br>
       <br>
     </div>
@@ -70,7 +70,7 @@
         win.document.write("<b>" + document.getElementById("nombreGrafico").value + "</b><br><img src='"+myChart.toDataURL("image/jpge")+"'/>");
       }
       </script>
-      <script src="js/grafiMySQL.js"></script>
+      <script src="/js/grafiMySQL.js"></script>
       <button onclick="guardarGrafi()" id="btnGuardarGraf" class="button btn btn-primary mt-4">Guardar Gr&aacutefico</button>
       <script type="text/javascript">var puntosMuestreo = findGetParameter("puntosMuestreo"); if (puntosMuestreo!=null) obtenerDatos(puntosMuestreo);</script>
     </div>

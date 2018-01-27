@@ -32,22 +32,8 @@ function initMap() {
 	    zoom: 11,
 	    center: {"lat":9.876711,"lng":-84.104376},
 	    radius:19,
-      suppressInfoWindows: true,
       gestureHandling: 'cooperative'
 	  });
-   //map.data.loadGeoJson('data/Rios_de_Costa_Rica.json');
-   map.data.addListener('click', function(event) {
-     console.log(event.feature.getProperty('NOMBRE'));
-
-  });
-/*    var ctaLayer = new google.maps.KmlLayer({
-      url: 'http://monitoreoagua-javiervasquez.c9users.io/data/Rios_de_Costa_Rica.kml',
-      map: map
-    });
-
-    ctaLayer.addListener('click', function(kmlEvent) {
-    console.log(kmlEvent.featureData);
-  });*/
 
 
 	//marcador draggable para aplicar filtro
@@ -61,7 +47,6 @@ function initMap() {
 	  //se inicializan las ventanas de información
   infowindowVerMas = new google.maps.InfoWindow();
   infowindowCalcularDiferencia = new google.maps.InfoWindow();
-	 
 	 //inserción de todos los marcadores presentes en la BD
 	 insertMarker();
 
@@ -354,6 +339,103 @@ function calcularVerMas(datos){
 
 
 //---------------------------------------EVENTOS DE LOS BOTONES DENTRO DE LA PÁGINA------------------------------------------------------------------//
+
+//eventos de los botones de calidades de agua
+document.getElementById("calidad1").onclick = function(){
+  if(document.getElementById("calidad1").value==0){    
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Azul"){
+      markers[i].setVisible(false);     
+      }
+    }
+    document.getElementById("calidad1").value=1;    
+  }else{
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Azul"){
+       markers[i].setVisible(true);     
+      }
+    } 
+    document.getElementById("calidad1").value=0;
+  }
+}
+
+
+document.getElementById("calidad2").onclick = function(){
+  if(document.getElementById("calidad2").value==0){    
+  	for(var i=0;i<niveles.length;i++){
+  		if(niveles[i]=="Verde"){
+  		markers[i].setVisible(false);  		
+  		}
+  	}
+    document.getElementById("calidad2").value=1; 	  
+  }else{
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Verde"){
+       markers[i].setVisible(true);     
+      }
+    } 
+    document.getElementById("calidad2").value=0;
+  }
+}
+
+
+document.getElementById("calidad3").onclick = function(){
+  if(document.getElementById("calidad3").value==0){    
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Amarillo"){
+      markers[i].setVisible(false);     
+      }
+    }
+    document.getElementById("calidad3").value=1;    
+  }else{
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Amarillo"){
+       markers[i].setVisible(true);     
+      }
+    } 
+    document.getElementById("calidad3").value=0;
+  }
+}
+
+
+document.getElementById("calidad4").onclick = function(){
+  if(document.getElementById("calidad4").value==0){    
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Anaranjado"){
+      markers[i].setVisible(false);     
+      }
+    }
+    document.getElementById("calidad4").value=1;    
+  }else{
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Anaranjado"){
+       markers[i].setVisible(true);     
+      }
+    } 
+    document.getElementById("calidad4").value=0;
+  }
+}
+
+
+document.getElementById("calidad5").onclick = function(){
+  if(document.getElementById("calidad5").value==0){    
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Rojo"){
+      markers[i].setVisible(false);     
+      }
+    }
+    document.getElementById("calidad5").value=1;    
+  }else{
+    for(var i=0;i<niveles.length;i++){
+      if(niveles[i]=="Rojo"){
+       markers[i].setVisible(true);     
+      }
+    } 
+    document.getElementById("calidad5").value=0;
+  }
+}
+
+
 document.getElementById("reset").onclick = function(){
   for(var i=0;i<markers.length;i++){
     markers[i].setVisible(true);
