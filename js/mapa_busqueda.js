@@ -443,7 +443,7 @@ document.getElementById("reset").onclick = function(){
 }
 
 function graficar() {
-  window.location = "nuevoGrafico?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
+  window.location = "/index.php/nuevoGrafico?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//

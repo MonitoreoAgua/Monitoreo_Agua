@@ -11,7 +11,7 @@
 	if($url[0]==''){
 	 	//verificar que tiene index.php
 		//Caso 1, dirección root
-		header('Location: index.php');
+		header('Location: index.php/busqueda');
 	 }
 	
 	
