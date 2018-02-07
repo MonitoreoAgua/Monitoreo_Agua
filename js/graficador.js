@@ -110,7 +110,7 @@ function obtenerDatos(puntosMuestreo) {
 	var puntosM = puntosMuestreo.split(",");
 	var parametro = document.getElementById("parametro").value;
 	$.ajax({
-		url:"webservices/buscarPorNombre.php",
+		url:"/webservices/buscarPorNombre.php",
 	    type:"GET",
 	    data:{puntos:puntosM, par1: parametro},
 	    success:function(data){
@@ -168,7 +168,7 @@ function graficar(tConsulta) {
 			//Si se quiere graficar por punto de muestreo
 			var lugar = document.getElementById("punto").value;
 			$.ajax({
-				url: "webservices/buscarPorNombre.php?nombre=" + lugar + "&par1=" + parametro,
+				url: "/webservices/buscarPorNombre.php?nombre=" + lugar + "&par1=" + parametro,
 				async: false,
 				dataType: 'json',
 				success: function(data) {
@@ -178,7 +178,7 @@ function graficar(tConsulta) {
 		} else {
 			//Si se quiere graficar por rango de fechas
 			$.ajax({
-				url: "webservices/buscarPorFechas.php?fechaIni=" + fechaIni + "&fechaFin=" + fechaFin + "&par1=" + parametro,
+				url: "/webservices/buscarPorFechas.php?fechaIni=" + fechaIni + "&fechaFin=" + fechaFin + "&par1=" + parametro,
 				async: false,
 				dataType: 'json',
 				success: function(data) {

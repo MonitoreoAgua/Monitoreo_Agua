@@ -74,7 +74,7 @@ function llenarPuntos() {
 	
 	$.ajax({
       async:true,
-      url: "webservices/getPuntos.php",//devuelve un json con los marcadores que están en la base de datos.
+      url: "/webservices/getPuntos.php",//devuelve un json con los marcadores que están en la base de datos.
       dataType: "json",
       success:pintar,
       error: function (er) {
@@ -99,7 +99,7 @@ function llenarParametros() {
 	/** Obtener los datos de la base de MongoDB **/
 	var json = {};
 	$.ajax({
-		url: "webservices/getPuntos.php",
+		url: "/webservices/getPuntos.php",
 		async: false,
 		dataType: 'json',
 		success: function(data) {
