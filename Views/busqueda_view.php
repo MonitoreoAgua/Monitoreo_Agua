@@ -27,6 +27,9 @@
                                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
                                         <button class="btn btnFiltrarArPOI"><i class="fa fa-map-marker"></i>-<i class="fa fa-map-marker"></i></button>
                                         <button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
+                                        <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><i class="fa fa-plus"></i></button>
+                                        <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><i class="fa fa-eye-slash" id="toggleMitigacion">Mi</i></button>
+                                        <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><i class="fa fa-eye-slash" id="toggleMuestreo">Mu</i></button>
                                     </div>
 
                                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->
@@ -88,6 +91,7 @@
                 </div>
                 <?php require 'Views/inc/firebase.php';?>
                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    <<script src="/js/contentNuevoMarcador.js"></script>
                     <script type="text/javascript" src="/js/mapa_busqueda.js"></script>
                     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc&signed_in=true&callback=initMap"></script>
     </body>

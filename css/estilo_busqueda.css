@@ -68,6 +68,23 @@ left: 58.8%;
 top: 17.5%; */
 }
 
+.btnMitigacion {
+	background-color: buttonface;
+}
+
+.btnMitigacion_Pressed {
+	background-color: #C1C1C1;
+}
+
+.entrada {
+	margin-bottom: 5px;
+}		
+
+.entrada label {
+	float: left;
+	width: 200px;
+}
+
 
 
 

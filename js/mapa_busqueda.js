@@ -15,13 +15,22 @@ var second;//Respaldo para mantener el marcador en ser presionado segundo.
 /*para indexar datos traídos de la BD*/ 
 //var parametrosObligatorios=["% O2","DBO","pts DBO","NH4","pts NH4"];//no utilizado
 //var parametrosOpcionales=["CF","DQO","EC","PO4","GYA","Ph","SD", "Ssed", "SST","SAAM","T","Aforo","ST","pts PSO"];//no utilizado
-var contentVerMas="<div><button class='btn btn-primary' style='width:200px' onclick='mostrarVerMas()'>Ver muestra</button></div>";
-var contentCalcularDiferencia= "<div><button class='btn btn-primary' style='width:200px'onclick='mostrarVerMas()'>Ver muestra</button><br><button class='btn btn-success' style='width:200px' onclick='mostrarAritmetica()'>Calcular diferencia</button></div>";
+var contentVerMas="<div><button class='btn btn-primary' style='width:200px' onclick='mostrarVerMas()' id='btnVerMuestra'>Ver muestra</button></div>";
+var contentCalcularDiferencia= "<div><button class='btn btn-primary' style='width:200px'onclick='mostrarVerMas()' id='btnVerMuestra'>Ver muestra</button><br><button class='btn btn-success' style='width:200px' onclick='mostrarAritmetica()'>Calcular diferencia</button></div>";
 //variable que se inicializa al cargar el init map, indican la ventana de información a ser cargada.
 var infowindowVerMas;
 var infowindowCalcularDiferencia;
+//variable que representa el rectángulo de selección en el mapa
 var rectangle;
+//array que contiene los puntos de muestreo seleccionados actualmente en el mapa
 var puntosMuestreo = [];
+//flags que determinan si los puntos de muestreo y de mitigación se visualizan o no en el mapa
+var verMitigacion = true;
+var verMuestreo = true;
+//variables utilizadas para la inserción de un nuevo marcador en el mapa
+var nuevoPunto = false;
+var nMarcador;
+var infowindowNuevoMarcador;
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -47,6 +56,7 @@ function initMap() {
 	  //se inicializan las ventanas de información
   infowindowVerMas = new google.maps.InfoWindow();
   infowindowCalcularDiferencia = new google.maps.InfoWindow();
+  infowindowNuevoMarcador = new google.maps.InfoWindow();
 	 //inserción de todos los marcadores presentes en la BD
 	 insertMarker();
 
@@ -72,6 +82,8 @@ function initMap() {
         document.getElementById("btnChart").disabled = true;
         puntosMuestreo = [];
       }   
+      if (nuevoPunto)
+        placeMarker(e.latLng, map); 
   });
     //rectangulo de seleccion
     var bounds = {
@@ -128,10 +140,17 @@ function pintar(jsonData){
   jsonDatosBD=jsonData;//temporal; es solo para que aparezcan los marcadores.
 //se insertan en el mapa los marcadores elegidos
   for (var i = 0; i < jsonDatosBD.length; i++) {
+      var titulo = "";
+      if (jsonDatosBD[i].color == "Mitigacion") {
+        titulo = jsonDatosBD[i]._id;
+      }
+      else {
+        titulo = "Calidad del agua: " + jsonDatosBD[i].color;
+      }
 	    markers[i] = new google.maps.Marker({
 	    map: map,
 	    position:jsonDatosBD[i].location,
-	    title: 'Calidad del agua: '+jsonDatosBD[i].color,
+	    title: titulo,
 	    icon:"/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
 	    id:i,//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
       oldIcon: "/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
@@ -146,17 +165,52 @@ function pintar(jsonData){
   }
 }
 
+function placeMarker(position, map) {
+    nMarcador = new google.maps.Marker({
+        position: position,
+        map: map,        
+        draggable:true,
+        icon: "/data/Templatic-map-icons/Mitigacion.png",
+        title: "Acción de Mitigacion",
+        oldIcon: "/data/Templatic-map-icons/Mitigacion.png",
+        id: markers.length
+    });
+    google.maps.event.addListener(nMarcador, 'click', function() {
+        aritmeticaPOIS(this);
+      });
+    map.panTo(position);
+    document.getElementById("btnMitigacion").className = "btnMitigacion btn";
+    google.maps.event.addListener(infowindowNuevoMarcador, 'closeclick', function() {  
+      //Si no se guardaron los cambios
+      nMarcador.setMap(null);
+      nuevoPunto = !nuevoPunto;
+    });  
+    infowindowNuevoMarcador.setContent(contentNuevoMarcador);                              
+    infowindowNuevoMarcador.open(map, nMarcador);
+}
+
 //----------------------------------------ARITMETICA DE PUNTOS-----------------------------------------------------------------//
 function aritmeticaPOIS(marcador) {
     if(contadorClicks<2){//Se puede seleccionar otro
         var iconColor = "/data/Templatic-map-icons/default.png";
+        var flagColor = "/data/Templatic-map-icons/Mitigacion-Selected.png";
         if(contadorClicks==0){//es el primer marcador en ser seleccionado.
             first=marcador;
             //se cambia el color del marcador
             marcador.setIcon(iconColor);
+
             //se abre la ventana de informacion para ver más
             infowindowVerMas.setContent(contentVerMas);                              
             infowindowVerMas.open(map, marcador);
+
+            //se cambia el color del marcador
+            if (jsonDatosBD[marcador.id].color == "Mitigacion") {
+              marcador.setIcon(flagColor);
+              document.getElementById("btnVerMuestra").innerHTML = "Ver detalles";
+            }
+            else
+              marcador.setIcon(iconColor);
+
             document.getElementById("btnChart").disabled = false;
             puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
             contadorClicks++;
@@ -164,13 +218,20 @@ function aritmeticaPOIS(marcador) {
             if(!(marcador.id==first.id)){//se debe dar clic sobre uno distinto.
                 puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
                 second=marcador;
-                marcador.setIcon(iconColor);
+                
                 //se cierra el marcador de ver más
                 infowindowVerMas.close();
                 infowindowCalcularDiferencia.setContent(contentCalcularDiferencia);                              
                 infowindowCalcularDiferencia.open(map, marcador);                 
+
+                if (jsonDatosBD[marcador.id].color == "Mitigacion"){
+                  marcador.setIcon(flagColor);
+                  document.getElementById("btnVerMuestra").innerHTML = "Ver detalles";
+                }
+                else
+                  marcador.setIcon(iconColor);
                 contadorClicks++;
-            }else{//se retorna seleccionar otro ya que se dio clic sonbre el mismo, además no se aumenta el contador
+            } else {//se retorna seleccionar otro ya que se dio clic sonbre el mismo, además no se aumenta el contador
                 //btnWindows.setText(String.valueOf(getString(R.string.seleccionar_otro)));
             }
         }
@@ -280,17 +341,31 @@ function calcularDiferencia(datos){
 
 //=================Función utilizada para mostrar los datos asociados a un marcador======
 function mostrarVerMas() {
-  var identificador = contadorClicks==2?jsonDatosBD[second.id].id:jsonDatosBD[first.id].id;
-  var parametros = {
-  	"id1" : identificador
-  };
-  $.ajax({
-          async:true,
-          data:  parametros,
-          dataType:"json",
-          url: "/webservices/datosMarker_busqueda.php",
-          success:  calcularVerMas
-  });
+  var identificador = "";
+  var colorMarcador = "";
+  if (contadorClicks==2) {
+    identificador = jsonDatosBD[second.id].id;
+    colorMarcador = jsonDatosBD[second.id].color;
+  }
+  else {
+    identificador = jsonDatosBD[first.id].id;
+    colorMarcador = jsonDatosBD[first.id].color;
+  }
+  if (colorMarcador == "Mitigacion") {
+    getDatosMitigacion(identificador);
+  } 
+  else {
+    var parametros = {
+      "id1" : identificador
+    };
+    $.ajax({
+      async:true,
+      data:  parametros,
+      dataType:"json",
+      url: "webservices/datosMarker_busqueda.php",
+      success:  calcularVerMas
+    });
+  }
 }
 
 
@@ -336,7 +411,170 @@ function calcularVerMas(datos){
   $(".arPOIBig").css("display","block");
 }
 
+//----------------------------------------INSERCION Y MODIFICACION DE PUNTO DE MITIGACION-----------------------------------------------------------------//
+function nuevoPuntoMitigacion(element) {
+  if (nuevoPunto) {
+    document.getElementById(element.id).className = "btnMitigacion btn";
+  }
+  else {
+   document.getElementById(element.id).className = "btnMitigacion_Pressed btn"; 
+  }
 
+  nuevoPunto = !nuevoPunto;
+}
+
+function agregarNuevoPunto() {
+  var fecha_inicio = document.getElementById('fechaI').value;
+  var fecha_fin = document.getElementById('fechaF').value;
+  var tipo_actividad = document.getElementById('tipoAct').value;
+  var responsable = document.getElementById('responsable').value;
+  var email = document.getElementById('email').value;
+  var institucion_promotora = document.getElementById('institucion').value;
+  var fotos = "No";
+  var descripcion = document.getElementById('descripcion').value;
+  var cantidad_participantes = document.getElementById('nParticipantes').value;
+  var ponderacion_resultados = document.getElementById('ponderacionRes').value;
+
+  var urlPHP = 'fecha_inicio=' + fecha_inicio +
+      '&fecha_fin=' + fecha_fin +
+      '&tipo_actividad=' + tipo_actividad +
+      '&responsable=' + responsable +
+      '&email=' + email + 
+      '&institucion_promotora=' + institucion_promotora +
+      '&fotos=' + fotos +
+      '&descripcion=' + descripcion +
+      '&cantidad_participantes=' + cantidad_participantes +
+      '&ponderacion_resultados=' + ponderacion_resultados;
+
+  /** Llamar al PHP con los parámetros obtenidos **/
+  if (nuevoPunto) {
+    var longitud = nMarcador.getPosition().lng();
+    var latitud = nMarcador.getPosition().lat();
+    urlPHP += '&longitud=' + longitud +
+              '&latitud=' + latitud;
+    $.ajax({
+      type: 'POST',
+      url: '/webservices/Mitigacion/insertarMitigacion.php',
+      cache: false,
+      data: urlPHP,
+      success: function( data ) {
+        if (!data.success) {
+          console.log("Hubo un problema al guardar el punto de mitigación.\nMensaje: " + data.mensaje);
+        } else {
+          jsonDatosBD.push({
+            "_id": tipo_actividad,
+            "color": "Mitigacion",
+            "location": {
+              "lat": latitud,
+              "lng": longitud
+            },
+            "id": data.elID
+          })
+        }
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+    nMarcador.setDraggable(false);
+    markers.push(nMarcador);
+
+    infowindowNuevoMarcador.close();
+    nuevoPunto = !nuevoPunto; 
+  }
+  else {
+    var idAccion = "";
+    if (contadorClicks==2)  {
+      idAccion = jsonDatosBD[second.id].id;
+      var latitud = second.getPosition().lat();
+      var longitud = second.getPosition().lng();
+    }
+    else {
+      idAccion = jsonDatosBD[first.id].id;
+      var latitud = first.getPosition().lat();
+      var longitud = first.getPosition().lng();
+    }
+
+    urlPHP += '&longitud=' + longitud +
+              '&latitud=' + latitud +
+              '&idAccion=' + idAccion;
+    $.ajax({
+      type: 'POST',
+      url: '/webservices/Mitigacion/modificarMitigacion.php',
+      cache: false,
+      data: urlPHP,
+      success: function( data ) {
+        if (!data.success) {
+          console.log("Hubo un problema al guardar los cambios en el punto de mitigación.\nMensaje: " + data.mensaje);
+        }
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+    infowindowVerMas.close();
+  }
+}
+
+function getDatosMitigacion(idAccion) {
+  var datos = [];
+  if (contadorClicks == 2) {
+    infowindowCalcularDiferencia.setContent(contentNuevoMarcador);  
+    second.setDraggable(true);
+  }
+  else {
+    infowindowVerMas.setContent(contentNuevoMarcador);
+    first.setDraggable(true) ;  
+  }  
+  document.getElementById("btnAccionMitigacion").innerHTML = "Guardar cambios";
+  document.getElementById("btnBorrarPunto").style.display = "block";
+  $.ajax({
+      url: "/webservices/mitigacion/getMitigacionID.php?idAccion=" + idAccion,
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+          datos = data;
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        console.log(XMLHttpRequest);
+    }   
+  });
+  document.getElementById("fechaI").valueAsDate = new Date(datos.fecha_inicio.date);
+  document.getElementById("fechaF").valueAsDate = new Date(datos.fecha_fin.date);
+  document.getElementById("tipoAct").value = datos.tipo_actividad;
+  document.getElementById("responsable").value = datos.responsable;
+  document.getElementById("email").value = datos.email;
+  document.getElementById("institucion").value = datos.institucion_promotora;
+  document.getElementById("descripcion").value = datos.descripcion;
+  document.getElementById("nParticipantes").value = datos.cantidad_participantes;
+  document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
+}
+
+function eliminarDatosMitigacion() {
+  var elMarcador = null;
+    if (contadorClicks==2)  {
+      elMarcador = second;
+    }
+    else {
+      elMarcador = first;
+    }
+    $.ajax({
+      type: 'POST',
+      url: '/webservices/Mitigacion/eliminarMitigacion.php',
+      cache: false,
+      data: 'idAccion=' +  jsonDatosBD[elMarcador.id].id,
+      success: function( res ) {
+        if (!res.success) {
+          console.log("Hubo un problema al borrar el punto de mitigación.\nMensaje: " + res.mensaje);
+        }
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+    elMarcador.setMap(null);
+    contadorClicks = 0;
+}
 
 //---------------------------------------EVENTOS DE LOS BOTONES DENTRO DE LA PÁGINA------------------------------------------------------------------//
 
@@ -444,6 +682,48 @@ document.getElementById("reset").onclick = function(){
 
 function graficar() {
   window.location = "/index.php/nuevoGrafico?puntosMuestreo=" + encodeURIComponent(puntosMuestreo);
+}
+
+//=================Función utilizada para ocultar o mostrar los puntos de mitigación en el mapa======
+function toggleMitigacion() {
+  verMitigacion = !verMitigacion;
+  if (!verMitigacion) {
+    for (var key in markers) { 
+      if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
+        markers[key].setMap(null);
+      }
+    }
+    document.getElementById("toggleMitigacion").className = "fa fa-eye";
+  }
+  else {
+   for (var key in markers) { 
+      if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
+        markers[key].setMap(map);
+      }
+    } 
+    document.getElementById("toggleMitigacion").className = "fa fa-eye-slash";
+  }
+}
+
+//=================Función utilizada para ocultar o mostrar los puntos de muestreo en el mapa======
+function toggleMuestreo() {
+  verMuestreo = !verMuestreo;
+  if (!verMuestreo) {
+    for (var key in markers) { 
+      if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
+        markers[key].setMap(null);
+      }
+    }
+    document.getElementById("toggleMuestreo").className = "fa fa-eye";
+  }
+  else {
+   for (var key in markers) { 
+      if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
+        markers[key].setMap(map);
+      }
+    } 
+    document.getElementById("toggleMuestreo").className = "fa fa-eye-slash";
+  }
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
