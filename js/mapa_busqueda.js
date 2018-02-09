@@ -484,15 +484,19 @@ function agregarNuevoPunto() {
   }
   else {
     var idAccion = "";
+    var ventanaAbierta = null;
+
     if (contadorClicks==2)  {
       idAccion = jsonDatosBD[second.id].id;
       var latitud = second.getPosition().lat();
       var longitud = second.getPosition().lng();
+      ventanaAbierta = infowindowCalcularDiferencia;
     }
     else {
       idAccion = jsonDatosBD[first.id].id;
       var latitud = first.getPosition().lat();
       var longitud = first.getPosition().lng();
+      ventanaAbierta = infowindowVerMas;
     }
 
     urlPHP += '&longitud=' + longitud +
@@ -512,20 +516,18 @@ function agregarNuevoPunto() {
         console.log(err);
       }
     });
-    infowindowVerMas.close();
+    ventanaAbierta.close();
   }
 }
 
 function getDatosMitigacion(idAccion) {
   var datos = [];
-  if (contadorClicks == 2) {
-    infowindowCalcularDiferencia.setContent(contentNuevoMarcador);  
-    second.setDraggable(true);
-  }
-  else {
+
+  if (contadorClicks == 2) 
+    infowindowCalcularDiferencia.setContent(contentNuevoMarcador);
+  else
     infowindowVerMas.setContent(contentNuevoMarcador);
-    first.setDraggable(true) ;  
-  }  
+
   document.getElementById("btnAccionMitigacion").innerHTML = "Guardar cambios";
   document.getElementById("btnBorrarPunto").style.display = "block";
   $.ajax({
