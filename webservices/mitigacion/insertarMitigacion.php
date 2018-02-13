@@ -14,6 +14,8 @@ $fotos = $_POST['fotos'];
 $descripcion = $_POST['descripcion'];
 $cantidad_participantes = $_POST['cantidad_participantes'];
 $ponderacion_resultados = $_POST['ponderacion_resultados'];
+$idUsuario = $_POST['idUsuario'];
+$timestampAhora = new MongoDB\BSON\UTCDateTime();
 
 $documento = array();
 $location = array();
@@ -31,6 +33,8 @@ $documento['descripcion'] = $descripcion;
 $documento['cantidad_participantes'] = intval($cantidad_participantes);
 $documento['ponderacion_resultados'] = floatval($ponderacion_resultados);
 $documento['color'] = 'Mitigacion';
+$documento['idUsuario'] = $idUsuario;
+$documento['fechaCreacion'] = $timestampAhora;
 
 $response = array();
 $response = Mitigacion::insertarDocumentoMitigacion($documento);

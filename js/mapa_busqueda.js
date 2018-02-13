@@ -83,7 +83,7 @@ function initMap() {
         puntosMuestreo = [];
       }   
       if (nuevoPunto)
-        placeMarker(e.latLng, map); 
+        placeMarker(e.latLng, map);
   });
     //rectangulo de seleccion
     var bounds = {
@@ -166,6 +166,7 @@ function pintar(jsonData){
 }
 
 function placeMarker(position, map) {
+  if (checkContadorBanderasUsuario()) {
     nMarcador = new google.maps.Marker({
         position: position,
         map: map,        
@@ -186,7 +187,13 @@ function placeMarker(position, map) {
       nuevoPunto = !nuevoPunto;
     });  
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);                              
-    infowindowNuevoMarcador.open(map, nMarcador);
+    infowindowNuevoMarcador.open(map, nMarcador);    
+  }
+  else {
+    window.alert("Ha excedido el límite de banderas por año");
+    document.getElementById("btnMitigacion").className = "btnMitigacion btn";
+    nuevoPunto = !nuevoPunto;
+  }
 }
 
 //----------------------------------------ARITMETICA DE PUNTOS-----------------------------------------------------------------//
@@ -435,6 +442,10 @@ function agregarNuevoPunto() {
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
 
+  const userKey = Object.keys(window.localStorage)
+    .filter(it => it.startsWith('firebase:authUser'))[0];
+  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+
   var urlPHP = 'fecha_inicio=' + fecha_inicio +
       '&fecha_fin=' + fecha_fin +
       '&tipo_actividad=' + tipo_actividad +
@@ -444,7 +455,8 @@ function agregarNuevoPunto() {
       '&fotos=' + fotos +
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
-      '&ponderacion_resultados=' + ponderacion_resultados;
+      '&ponderacion_resultados=' + ponderacion_resultados +
+      '&idUsuario=' + idUsuario.uid;
 
   /** Llamar al PHP con los parámetros obtenidos **/
   if (nuevoPunto) {
@@ -481,6 +493,7 @@ function agregarNuevoPunto() {
 
     infowindowNuevoMarcador.close();
     nuevoPunto = !nuevoPunto; 
+    actualizarContadorBanderasUsuario(1);
   }
   else {
     var idAccion = "";
@@ -521,6 +534,10 @@ function agregarNuevoPunto() {
 }
 
 function getDatosMitigacion(idAccion) {
+  const userKey = Object.keys(window.localStorage)
+    .filter(it => it.startsWith('firebase:authUser'))[0];
+  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+
   var datos = [];
 
   if (contadorClicks == 2) 
@@ -528,8 +545,6 @@ function getDatosMitigacion(idAccion) {
   else
     infowindowVerMas.setContent(contentNuevoMarcador);
 
-  document.getElementById("btnAccionMitigacion").innerHTML = "Guardar cambios";
-  document.getElementById("btnBorrarPunto").style.display = "block";
   $.ajax({
       url: "/webservices/mitigacion/getMitigacionID.php?idAccion=" + idAccion,
       async: false,
@@ -541,6 +556,15 @@ function getDatosMitigacion(idAccion) {
         console.log(XMLHttpRequest);
     }   
   });
+
+  if (datos.idUsuario === idUsuario.uid) {
+    document.getElementById("btnAccionMitigacion").innerHTML = "Guardar cambios";
+    document.getElementById("btnBorrarPunto").style.display = "block";    
+  }
+  else {
+    document.getElementById("btnAccionMitigacion").style.display = "none";
+  }
+
   document.getElementById("fechaI").valueAsDate = new Date(datos.fecha_inicio.date);
   document.getElementById("fechaF").valueAsDate = new Date(datos.fecha_fin.date);
   document.getElementById("tipoAct").value = datos.tipo_actividad;
@@ -576,6 +600,88 @@ function eliminarDatosMitigacion() {
     });
     elMarcador.setMap(null);
     contadorClicks = 0;
+    actualizarContadorBanderasUsuario(-1);
+}
+
+function checkContadorBanderasUsuario(idDocumento) {
+  var puedeInsertar = true;
+  idContadorBanderas = "";
+  const userKey = Object.keys(window.localStorage)
+    .filter(it => it.startsWith('firebase:authUser'))[0];
+  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+  var contadorUsuario = [];
+  $.ajax({
+      url: "/webservices/mitigacion/getContadorBanderas.php?idUsuario=" + idUsuario.uid,
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+          contadorUsuario = data;
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        console.log(XMLHttpRequest);
+    }   
+  });
+
+  if (contadorUsuario != null) {
+    idContadorBanderas = contadorUsuario._id.$oid;
+    if (contadorUsuario.cantidadBanderas >= 10 && contadorUsuario.anioActual == String(new Date().getFullYear())) {
+      puedeInsertar = false;
+    }    
+  }
+
+  return puedeInsertar;
+}
+
+function actualizarContadorBanderasUsuario(operacion) {
+  var contadorUsuario = [];
+  var anioActual = new Date().getFullYear();
+  var cantidadBanderas = 1;
+  var _id = "";
+  const userKey = Object.keys(window.localStorage)
+    .filter(it => it.startsWith('firebase:authUser'))[0];
+  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+
+  $.ajax({
+      url: "/webservices/mitigacion/getContadorBanderas.php?idUsuario=" + idUsuario.uid,
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+          contadorUsuario = data;
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        console.log(XMLHttpRequest);
+    }   
+  });
+
+  if (contadorUsuario != null) {
+    if (contadorUsuario.anioActual == String(anioActual)) {
+      cantidadBanderas = contadorUsuario.cantidadBanderas;
+      cantidadBanderas += 1*operacion;
+    }
+    _id = contadorUsuario._id.$oid;
+  }
+
+  var urlPHP = '&idUsuario=' + idUsuario.uid +
+              '&anioActual=' + anioActual + 
+              '&cantidadBanderas=' + cantidadBanderas;
+  if (_id != "") {
+    urlPHP += '&idDocumento=' + _id;
+  }
+
+  $.ajax({
+    type: 'POST',
+    url: '/webservices/Mitigacion/actualizarContadorBanderas.php',
+    cache: false,
+    data: urlPHP,
+    success: function( data ) {
+      if (!data.success) {
+        console.log("Hubo un problema al actualizar el contador de banderas.\nMensaje: " + data.mensaje);
+      }
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
 }
 
 //---------------------------------------EVENTOS DE LOS BOTONES DENTRO DE LA PÁGINA------------------------------------------------------------------//

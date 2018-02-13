@@ -89,6 +89,22 @@ class Mitigacion
     }
 
     /**
+    * Retorna el documento de la colección "banderasUsuario" cuyo id de usuario sea [_id]
+    * @param $_id El id del usuario del documento a consultar
+    * @return MongoCursor con el resultado de la consulta
+    **/
+    public static function getContadorBanderasUsuario($_id)
+    {
+      $collection=connectDatabaseCollection('MonitoreoAgua','banderasUsuario',0);
+      
+      $query = array('idUsuario' => $_id);
+      
+      $cursor = $collection->findOne($query);
+
+      return ($cursor);
+    }
+
+    /**
     * Método para insertar un documento de datos de acción de mitigación a MongoDB,
     * @param $datos Datos a insertar
     * @return La respuesta del server
@@ -109,6 +125,75 @@ class Mitigacion
           if (!is_null($result)) {
               $response["success"] = true;
               $response["elID"] = (string)$_id;
+          } else {
+              $response["mensaje"] = "El registro falló. result = null";
+          }
+      } catch (MongoCursorException $e) {
+          $response["mensaje"] = "El registro falló. MongoCursorException";
+      } catch (MongoException $e) {
+          $response["mensaje"] = "El registro falló. MongoException";
+      } catch (MongoConnectionException $e) {
+          $response["mensaje"] = "La conexión falló. MongoConnectionException";
+      }
+
+      return $response;
+    }
+
+    /**
+    * Método para insertar un documento de contador de banderas por usuario en MongoDB
+    * @param $datos Datos a insertar
+    * @return La respuesta del server
+    */
+    public static function insertarContadorBanderas($datos)
+    {
+      $response = array();
+      $response["success"] = false;
+      try {
+              $cliente = connectDatabaseClient('MonitoreoAgua',1);
+              
+              $insRec = new MongoDB\Driver\BulkWrite;
+
+              $_id = $insRec->insert($datos);
+
+              $result = $cliente->executeBulkWrite('MonitoreoAgua.banderasUsuario', $insRec);
+               
+          if (!is_null($result)) {
+              $response["success"] = true;
+              $response["elID"] = (string)$_id;
+          } else {
+              $response["mensaje"] = "El registro falló. result = null";
+          }
+      } catch (MongoCursorException $e) {
+          $response["mensaje"] = "El registro falló. MongoCursorException";
+      } catch (MongoException $e) {
+          $response["mensaje"] = "El registro falló. MongoException";
+      } catch (MongoConnectionException $e) {
+          $response["mensaje"] = "La conexión falló. MongoConnectionException";
+      }
+
+      return $response;
+    }
+
+    /**
+    * Método para actualizar un documento de contador de banderas por usuario en MongoDB
+    * @param $datos Datos a actualizar
+    * @return La respuesta del server
+    */
+    public static function actualizarContadorBanderas($datos, $_id)
+    {
+      $response = array();
+      $response["success"] = false;
+      try {
+            $cliente = connectDatabaseClient('MonitoreoAgua',1);
+            $updRec = new MongoDB\Driver\BulkWrite;
+            $obj_id = new MongoDB\BSON\ObjectId($_id);
+
+            $updRec->update(['_id' => $obj_id], ['$set' => $datos], ['multi' => false, 'upsert' => false]);
+            $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+            $result = $cliente->executeBulkWrite('MonitoreoAgua.banderasUsuario', $updRec, $writeConcern);             
+               
+          if (!is_null($result)) {
+              $response["success"] = true;
           } else {
               $response["mensaje"] = "El registro falló. result = null";
           }
