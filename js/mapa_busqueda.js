@@ -187,7 +187,8 @@ function placeMarker(position, map) {
       nuevoPunto = !nuevoPunto;
     });  
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);                              
-    infowindowNuevoMarcador.open(map, nMarcador);    
+    infowindowNuevoMarcador.open(map, nMarcador);
+    llenarTipos();
   }
   else {
     window.alert("Ha excedido el límite de banderas por año");
@@ -433,7 +434,10 @@ function nuevoPuntoMitigacion(element) {
 function agregarNuevoPunto() {
   var fecha_inicio = document.getElementById('fechaI').value;
   var fecha_fin = document.getElementById('fechaF').value;
-  var tipo_actividad = document.getElementById('tipoAct').value;
+  if (document.getElementById('divTipoAct').style.display == "block")
+    var tipo_actividad = document.getElementById('tipoAct').value
+  else
+    var tipo_actividad = document.getElementById('otroTipoAct').value;
   var responsable = document.getElementById('responsable').value;
   var email = document.getElementById('email').value;
   var institucion_promotora = document.getElementById('institucion').value;
@@ -458,8 +462,13 @@ function agregarNuevoPunto() {
       '&ponderacion_resultados=' + ponderacion_resultados +
       '&idUsuario=' + idUsuario.uid;
 
-  /** Llamar al PHP con los parámetros obtenidos **/
-  if (nuevoPunto) {
+    //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
+  var lasFotos = document.getElementById('fotos');
+  if (lasFotos.files.length > 4) {
+    document.getElementById('errorFotos').innerHTML = "Por favor seleccione solo 4 fotos";
+  }
+  else {
+    var idDocumento = "";
     var longitud = nMarcador.getPosition().lng();
     var latitud = nMarcador.getPosition().lat();
     urlPHP += '&longitud=' + longitud +
@@ -481,7 +490,29 @@ function agregarNuevoPunto() {
               "lng": longitud
             },
             "id": data.elID
-          })
+          });
+          idDocumento = data.elID;
+
+          //Guardar fotos
+          var formData = new FormData();
+          formData.append("idDocumento",data.elID);
+          for (var i = 0 ; i < lasFotos.files.length ; i++) {
+            formData.append("fotos[]", lasFotos.files[i]);
+          }
+          
+          $.ajax({
+            type: 'POST',
+            processData: false,
+            url: '/webservices/Mitigacion/subirFotos.php',
+            contentType: false,
+            data: formData,
+            success: function( data ) {
+              console.log(data);
+            },
+            error: function(err) {
+              console.log(err);
+            }
+          });  
         }
       },
       error: function(err) {
@@ -493,44 +524,54 @@ function agregarNuevoPunto() {
 
     infowindowNuevoMarcador.close();
     nuevoPunto = !nuevoPunto; 
-    actualizarContadorBanderasUsuario(1);
+    actualizarContadorBanderasUsuario(1);      
+  }
+}
+
+function modificarPunto() {
+  var fecha_inicio = document.getElementById('fechaI').value;
+  var fecha_fin = document.getElementById('fechaF').value;
+  var tipo_actividad = document.getElementById('tipoAct').value;
+  var responsable = document.getElementById('responsable').value;
+  var email = document.getElementById('email').value;
+  var institucion_promotora = document.getElementById('institucion').value;
+  var descripcion = document.getElementById('descripcion').value;
+  var cantidad_participantes = document.getElementById('nParticipantes').value;
+  var ponderacion_resultados = document.getElementById('ponderacionRes').value;
+  var idAccion = "";
+  var ventanaAbierta = null;
+
+  if (contadorClicks==2)  {
+    idAccion = jsonDatosBD[second.id].id;
+    var latitud = second.getPosition().lat();
+    var longitud = second.getPosition().lng();
+    ventanaAbierta = infowindowCalcularDiferencia;
   }
   else {
-    var idAccion = "";
-    var ventanaAbierta = null;
-
-    if (contadorClicks==2)  {
-      idAccion = jsonDatosBD[second.id].id;
-      var latitud = second.getPosition().lat();
-      var longitud = second.getPosition().lng();
-      ventanaAbierta = infowindowCalcularDiferencia;
-    }
-    else {
-      idAccion = jsonDatosBD[first.id].id;
-      var latitud = first.getPosition().lat();
-      var longitud = first.getPosition().lng();
-      ventanaAbierta = infowindowVerMas;
-    }
-
-    urlPHP += '&longitud=' + longitud +
-              '&latitud=' + latitud +
-              '&idAccion=' + idAccion;
-    $.ajax({
-      type: 'POST',
-      url: '/webservices/Mitigacion/modificarMitigacion.php',
-      cache: false,
-      data: urlPHP,
-      success: function( data ) {
-        if (!data.success) {
-          console.log("Hubo un problema al guardar los cambios en el punto de mitigación.\nMensaje: " + data.mensaje);
-        }
-      },
-      error: function(err) {
-        console.log(err);
-      }
-    });
-    ventanaAbierta.close();
+    idAccion = jsonDatosBD[first.id].id;
+    var latitud = first.getPosition().lat();
+    var longitud = first.getPosition().lng();
+    ventanaAbierta = infowindowVerMas;
   }
+
+  urlPHP += '&longitud=' + longitud +
+            '&latitud=' + latitud +
+            '&idAccion=' + idAccion;
+  $.ajax({
+    type: 'POST',
+    url: '/webservices/Mitigacion/modificarMitigacion.php',
+    cache: false,
+    data: urlPHP,
+    success: function( data ) {
+      if (!data.success) {
+        console.log("Hubo un problema al guardar los cambios en el punto de mitigación.\nMensaje: " + data.mensaje);
+      }
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
+  ventanaAbierta.close();
 }
 
 function getDatosMitigacion(idAccion) {
@@ -541,9 +582,9 @@ function getDatosMitigacion(idAccion) {
   var datos = [];
 
   if (contadorClicks == 2) 
-    infowindowCalcularDiferencia.setContent(contentNuevoMarcador);
+    infowindowCalcularDiferencia.setContent(contentDatosMarcador);
   else
-    infowindowVerMas.setContent(contentNuevoMarcador);
+    infowindowVerMas.setContent(contentDatosMarcador);
 
   $.ajax({
       url: "/webservices/mitigacion/getMitigacionID.php?idAccion=" + idAccion,
@@ -557,12 +598,9 @@ function getDatosMitigacion(idAccion) {
     }   
   });
 
-  if (datos.idUsuario === idUsuario.uid) {
-    document.getElementById("btnAccionMitigacion").innerHTML = "Guardar cambios";
-    document.getElementById("btnBorrarPunto").style.display = "block";    
-  }
-  else {
+  if (datos.idUsuario != idUsuario.uid) {
     document.getElementById("btnAccionMitigacion").style.display = "none";
+    document.getElementById("btnBorrarPunto").style.display = "none";
   }
 
   document.getElementById("fechaI").valueAsDate = new Date(datos.fecha_inicio.date);
@@ -574,6 +612,15 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("descripcion").value = datos.descripcion;
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
+
+  for (var i = datos.fotos.length - 1; i >= 0; i--) {
+    document.getElementById("divFotos").innerHTML +=
+      "<div class=\"gallery\">" +
+        "<a target=\"_blank\" href=\"" + datos.fotos[i] + "\">" +
+          "<img src=\"" + datos.fotos[i] + "\" width=\"100\" height=\"100\">" +
+        "</a>" +
+      "</div>";
+  }
 }
 
 function eliminarDatosMitigacion() {
@@ -798,7 +845,7 @@ function toggleMitigacion() {
   if (!verMitigacion) {
     for (var key in markers) { 
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
-        markers[key].setMap(null);
+        markers[key].setVisible(false);
       }
     }
     document.getElementById("toggleMitigacion").className = "fa fa-eye";
@@ -806,7 +853,7 @@ function toggleMitigacion() {
   else {
    for (var key in markers) { 
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
-        markers[key].setMap(map);
+        markers[key].setVisible(true);
       }
     } 
     document.getElementById("toggleMitigacion").className = "fa fa-eye-slash";
@@ -819,7 +866,7 @@ function toggleMuestreo() {
   if (!verMuestreo) {
     for (var key in markers) { 
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
-        markers[key].setMap(null);
+        markers[key].setVisible(false);
       }
     }
     document.getElementById("toggleMuestreo").className = "fa fa-eye";
@@ -827,7 +874,7 @@ function toggleMuestreo() {
   else {
    for (var key in markers) { 
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
-        markers[key].setMap(map);
+        markers[key].setVisible(true);
       }
     } 
     document.getElementById("toggleMuestreo").className = "fa fa-eye-slash";
