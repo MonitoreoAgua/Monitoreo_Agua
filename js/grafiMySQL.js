@@ -33,7 +33,7 @@ function guardarGrafi() {
 	/** Llamar al PHP con los parámetros obtenidos **/
 	$.ajax({
 		type: 'POST',
-		url: "webservices/insertarGrafico.php",
+		url: "/webservices/insertarGrafico.php",
         cache: false,
 		data: urlPHP,
 		success: function( data ) {
@@ -75,7 +75,7 @@ function cargarGrafi() {
 	/** Obtener ID del gráfico y los datos correspondientes **/
 	var datosGrafico = [];
 	$.ajax({
-        url: "webservices/cargarGrafico.php?idGrafico=" + idGrafico,
+        url: "/webservices/cargarGrafico.php?idGrafico=" + idGrafico,
         async: false,
         dataType: 'json',
         success: function(data) {
@@ -141,7 +141,7 @@ function modificarGrafi(idGrafico) {
 	/** Llamar al PHP con los parámetros obtenidos **/
 	$.ajax({
 		type: 'POST',
-		url: "webservices/modificarGrafico.php",
+		url: "/webservices/modificarGrafico.php",
         cache: false,
 		data: urlPHP,
 		success: function( data ) {
@@ -165,7 +165,7 @@ function eliminarGrafi() {
 	/** Llamar al PHP con el id del gráfico **/
 	$.ajax({
 		type: 'POST',
-		url: "webservices/borrarGrafico.php",
+		url: "/webservices/borrarGrafico.php",
         cache: false,
 		data: 'idGrafico=' + idGrafico,
 		success: function( data ) {
