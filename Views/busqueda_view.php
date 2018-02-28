@@ -3,7 +3,7 @@
 
 <head>
     <!-- Se cargar los encabezados de la página -->
-    <?php require 'Views/inc/header.php';?> 
+    <?php require 'Views/inc/header.php';?>
     <!--Estilos propios-->
     <link rel="stylesheet" type="text/css" href="/css/estilo_busqueda.css">
 </head>
@@ -21,7 +21,7 @@
                             <div class="mdl-grid">
                                 <div class="main">
                                     <!-- SubMenu para el mapa, principalmente para anidar consultas -->
-                                    <div class="anidar">                                        
+                                    <div class="anidar">
                                         <input type="number" min="1" id="inputFilterRadio" placeholder="Radio">
                                         <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
                                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
@@ -36,21 +36,21 @@
                                     <!-- <div class="buscador">
       <ul class="mainUl">
         <h4 class="title">Seleccione filtros</h4>
-        <ul class="childUl">      
+        <ul class="childUl">
           <li>
-            <h4>Fecha (inicio-fin)</h4> 
-            <input type="date" class="date">  
+            <h4>Fecha (inicio-fin)</h4>
+            <input type="date" class="date">
             <input type="date" class="date">
           </li>
           <li>
-            <h4>Institución</h4>    
+            <h4>Institución</h4>
             <select id="institucion">
 
             </select>
           </li>
               <button class="btnFiltrar"><i class="fa fa-search" style="color: blue;"></i></button>
         </ul>
-      </ul> 
+      </ul>
     </div> -->
 
                                     <!-- Contenedor del mapa, cargado desde js -->
@@ -65,6 +65,30 @@
                                             <div class="contenidoArPOIShort"></div>
                                         </div>
                                     </div>
+
+                                    <!-- Contenedor utilizado para ingresar las palabras clave pertenecientes a una fotode una acción de mitigación -->
+                                    <div id="modalKeywords" class="modal">
+
+                                      <!-- Modal content -->
+                                      <div class="modal-content">
+                                        <span class="close" id="closeModal">&times;</span>
+                                        <h4>Ingrese máximo tres palabras claves asociadas a esta imagen</h4>
+                                        <form>
+                                            <div class ="entrada">
+                                                <input type="text" id="ipKW1" style="width: 310px">
+                                            </div>
+                                            <div class ="entrada">
+                                                <input type="text" id="ipKW2" style="width: 310px">
+                                            </div>
+                                            <div class ="entrada">
+                                                <input type="text" id="ipKW3" style="width: 310px">
+                                            </div>
+                                        </form>
+                                            <div class ="entrada" style="margin-top: 15px; margin-left: 25%">
+                                                <button id="smtKW" style="width: 155px">Aceptar</button>
+                                            </div>
+                                      </div>
+
 
                                     <!-- Contenedor utilizado para mostrar la simbología usada en el mapa -->
                                     <div class="anidar">

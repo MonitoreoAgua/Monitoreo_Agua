@@ -2,17 +2,17 @@
 se crean los eventos y consultas a la BD mongoDB con ayuda de PHP.*/
 //--------------------------------------------VARIABLES GLOBALES-------------------------------------------------------------//
 var jsonDatosBD='';//variable global con la finalidad de guardar los datos de las consultas y así poder anidar consultas. Guarda los valores en formato JSON.
-var map; //mapa general 
+var map; //mapa general
 var markers=[];//marcadores indicadores de calidad del agua
 var niveles=[];//es paralelo a vector de marcadores acá se guardan las calidades del agua del marcador i, se utiliza para buscar sobre él y no sobre los marcadores
 var filterMarker;//marcador movible para indicar areas de filtro
 //var colors = ["null","blue","green","yellow","orange","red"];//colores asociados a cada calidad
 //var calidad = ["null","excelente","buena calidad","aceptable","contaminada","fuertemente contaminada"];//nombres asociados a cada calidad
 //Esta varible es muy importante ya que indica y controla los eventos de clic sobre los marcadores. Para saber en que estado está la selección.
-var contadorClicks = 0; //evento de aritmetica de POIS, lleva un conteo de los clicks porque solo deben haber dos seleccionados. 
+var contadorClicks = 0; //evento de aritmetica de POIS, lleva un conteo de los clicks porque solo deben haber dos seleccionados.
 var first;//Respaldo para mantener el marcador en ser presionado primero.
 var second;//Respaldo para mantener el marcador en ser presionado segundo.
-/*para indexar datos traídos de la BD*/ 
+/*para indexar datos traídos de la BD*/
 //var parametrosObligatorios=["% O2","DBO","pts DBO","NH4","pts NH4"];//no utilizado
 //var parametrosOpcionales=["CF","DQO","EC","PO4","GYA","Ph","SD", "Ssed", "SST","SAAM","T","Aforo","ST","pts PSO"];//no utilizado
 var contentVerMas="<div><button class='btn btn-primary' style='width:200px' onclick='mostrarVerMas()' id='btnVerMuestra'>Ver muestra</button></div>";
@@ -31,6 +31,11 @@ var verMuestreo = true;
 var nuevoPunto = false;
 var nMarcador;
 var infowindowNuevoMarcador;
+//arreglos que guardan las palabras claves asociadas a las fotos de un punto de mitigacion, así como las fotos
+var palabrasClaveMitigacion = [];
+var fotosMarcador = [];
+var formData = null;
+
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -81,7 +86,7 @@ function initMap() {
         contadorClicks=0;
         document.getElementById("btnChart").disabled = true;
         puntosMuestreo = [];
-      }   
+      }
       if (nuevoPunto)
         placeMarker(e.latLng, map);
   });
@@ -107,7 +112,7 @@ function revisarLimitesRectangulo() {
   puntosMuestreo = [];
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
-  for (var key in markers) { 
+  for (var key in markers) {
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
       markers[key].setIcon("/data/Templatic-map-icons/default.png")
       puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
@@ -153,7 +158,7 @@ function pintar(jsonData){
 	    title: titulo,
 	    icon:"/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
 	    id:i,//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
-      oldIcon: "/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
+      oldIcon: "/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"
 	  });
 
       //se hace una asociación indice color.
@@ -169,7 +174,7 @@ function placeMarker(position, map) {
   if (checkContadorBanderasUsuario()) {
     nMarcador = new google.maps.Marker({
         position: position,
-        map: map,        
+        map: map,
         draggable:true,
         icon: "/data/Templatic-map-icons/Mitigacion.png",
         title: "Acción de Mitigacion",
@@ -181,14 +186,17 @@ function placeMarker(position, map) {
       });
     map.panTo(position);
     document.getElementById("btnMitigacion").className = "btnMitigacion btn";
-    google.maps.event.addListener(infowindowNuevoMarcador, 'closeclick', function() {  
+    google.maps.event.addListener(infowindowNuevoMarcador, 'closeclick', function() {
       //Si no se guardaron los cambios
       nMarcador.setMap(null);
       nuevoPunto = !nuevoPunto;
-    });  
-    infowindowNuevoMarcador.setContent(contentNuevoMarcador);                              
+    });
+    infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
-    llenarTipos();
+    var cTipos = llenarTipos();
+		if (cTipos < 1) {
+			ocultarCombobox();
+		}
   }
   else {
     window.alert("Ha excedido el límite de banderas por año");
@@ -208,7 +216,7 @@ function aritmeticaPOIS(marcador) {
             marcador.setIcon(iconColor);
 
             //se abre la ventana de informacion para ver más
-            infowindowVerMas.setContent(contentVerMas);                              
+            infowindowVerMas.setContent(contentVerMas);
             infowindowVerMas.open(map, marcador);
 
             //se cambia el color del marcador
@@ -226,11 +234,11 @@ function aritmeticaPOIS(marcador) {
             if(!(marcador.id==first.id)){//se debe dar clic sobre uno distinto.
                 puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
                 second=marcador;
-                
+
                 //se cierra el marcador de ver más
                 infowindowVerMas.close();
-                infowindowCalcularDiferencia.setContent(contentCalcularDiferencia);                              
-                infowindowCalcularDiferencia.open(map, marcador);                 
+                infowindowCalcularDiferencia.setContent(contentCalcularDiferencia);
+                infowindowCalcularDiferencia.open(map, marcador);
 
                 if (jsonDatosBD[marcador.id].color == "Mitigacion"){
                   marcador.setIcon(flagColor);
@@ -244,7 +252,7 @@ function aritmeticaPOIS(marcador) {
             }
         }
         //return view;
-    }else{//ya se han seleccionado los dos, se resetean y se llama recursivo para seleccionar el actual. 
+    }else{//ya se han seleccionado los dos, se resetean y se llama recursivo para seleccionar el actual.
         //En este punto está abierta la ventana de información de calcular diferencia; se debe cerrar.
         infowindowCalcularDiferencia.close();
         contadorClicks=0;
@@ -318,7 +326,7 @@ function calcularDiferencia(datos){
           texto=texto+". <b>Ubicación:</b> "+datos[puntoBajo].POI.nombre_institucion;
           texto=texto+" <b>Estación:</b> "+datos[puntoBajo].POI.nombre_estacion+"</h6>";
           texto=texto+"<table class='tablaArPOI'><tr><th>Elemento</th><th>Diferencia</th><th>Diferencia porcentual</th></tr>";
-          
+
           //se obtienen los parametros obligatorios y opcionales para cada uno.
           var POIOne={};
           var POITwo={};
@@ -337,7 +345,7 @@ function calcularDiferencia(datos){
               }
             }
           }
-          
+
           texto=texto+"</table>";
 
           $(".contenidoArPOIShort").append(texto);
@@ -361,7 +369,7 @@ function mostrarVerMas() {
   }
   if (colorMarcador == "Mitigacion") {
     getDatosMitigacion(identificador);
-  } 
+  }
   else {
     var parametros = {
       "id1" : identificador
@@ -370,7 +378,7 @@ function mostrarVerMas() {
       async:true,
       data:  parametros,
       dataType:"json",
-      url: "webservices/datosMarker_busqueda.php",
+      url: "/webservices/datosMarker_busqueda.php",
       success:  calcularVerMas
     });
   }
@@ -379,7 +387,7 @@ function mostrarVerMas() {
 
 
 function calcularVerMas(datos){
-  
+
   var muestra = datos[0].Muestra;
   var POI = datos[0].POI;
   var texto="<h2>Datos asociados a la muestra seleccionada</h2><br><br>";
@@ -396,9 +404,9 @@ function calcularVerMas(datos){
             //texto=texto+"<tr><td>"+'foto'+"</td><td>"+muestra[key][pckey]+"</td></tr>";
           }
         }else{
-          texto=texto+"<tr><td>"+key+"</td><td>"+muestra[key]+"</td></tr>"; 
+          texto=texto+"<tr><td>"+key+"</td><td>"+muestra[key]+"</td></tr>";
         }
-          
+
       }/*else if(key=='obligatorios'){
         texto = texto+"<tr><th colspan='2'>Datos obligatorios</th></tr>"
         var obligatorios = muestra['obligatorios'];
@@ -410,11 +418,11 @@ function calcularVerMas(datos){
         var opcionales = muestra['obligatorios'];
         for(var key in obligatorios){
           texto=texto+"<tr><td>"+key+"</td><td>"+opcionales[key]+"</td></tr>";
-        }        
+        }
       }*/
-    }  
+    }
   texto=texto+"</table>";
-  
+
   $(".contenidoArPOIShort").append(texto);
   $(".arPOIBig").css("display","block");
 }
@@ -425,7 +433,7 @@ function nuevoPuntoMitigacion(element) {
     document.getElementById(element.id).className = "btnMitigacion btn";
   }
   else {
-   document.getElementById(element.id).className = "btnMitigacion_Pressed btn"; 
+   document.getElementById(element.id).className = "btnMitigacion_Pressed btn";
   }
 
   nuevoPunto = !nuevoPunto;
@@ -454,7 +462,7 @@ function agregarNuevoPunto() {
       '&fecha_fin=' + fecha_fin +
       '&tipo_actividad=' + tipo_actividad +
       '&responsable=' + responsable +
-      '&email=' + email + 
+      '&email=' + email +
       '&institucion_promotora=' + institucion_promotora +
       '&fotos=' + fotos +
       '&descripcion=' + descripcion +
@@ -475,7 +483,7 @@ function agregarNuevoPunto() {
               '&latitud=' + latitud;
     $.ajax({
       type: 'POST',
-      url: '/webservices/Mitigacion/insertarMitigacion.php',
+      url: '/webservices/mitigacion/insertarMitigacion.php',
       cache: false,
       data: urlPHP,
       success: function( data ) {
@@ -499,11 +507,11 @@ function agregarNuevoPunto() {
           for (var i = 0 ; i < lasFotos.files.length ; i++) {
             formData.append("fotos[]", lasFotos.files[i]);
           }
-          
+
           $.ajax({
             type: 'POST',
             processData: false,
-            url: '/webservices/Mitigacion/subirFotos.php',
+            url: '/webservices/mitigacion/subirFotos.php',
             contentType: false,
             data: formData,
             success: function( data ) {
@@ -512,7 +520,7 @@ function agregarNuevoPunto() {
             error: function(err) {
               console.log(err);
             }
-          });  
+          });
         }
       },
       error: function(err) {
@@ -523,8 +531,8 @@ function agregarNuevoPunto() {
     markers.push(nMarcador);
 
     infowindowNuevoMarcador.close();
-    nuevoPunto = !nuevoPunto; 
-    actualizarContadorBanderasUsuario(1);      
+    nuevoPunto = !nuevoPunto;
+    actualizarContadorBanderasUsuario(1);
   }
 }
 
@@ -540,6 +548,22 @@ function modificarPunto() {
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
   var idAccion = "";
   var ventanaAbierta = null;
+
+	const userKey = Object.keys(window.localStorage)
+    .filter(it => it.startsWith('firebase:authUser'))[0];
+  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+
+  var urlPHP = 'fecha_inicio=' + fecha_inicio +
+      '&fecha_fin=' + fecha_fin +
+      '&tipo_actividad=' + tipo_actividad +
+      '&responsable=' + responsable +
+      '&email=' + email +
+      '&institucion_promotora=' + institucion_promotora +
+      '&fotos=' + JSON.stringify(fotosMarcador) +
+      '&descripcion=' + descripcion +
+      '&cantidad_participantes=' + cantidad_participantes +
+      '&ponderacion_resultados=' + ponderacion_resultados +
+      '&idUsuario=' + idUsuario.uid;
 
   if (contadorClicks==2)  {
     idAccion = jsonDatosBD[second.id].id;
@@ -559,7 +583,7 @@ function modificarPunto() {
             '&idAccion=' + idAccion;
   $.ajax({
     type: 'POST',
-    url: '/webservices/Mitigacion/modificarMitigacion.php',
+    url: '/webservices/mitigacion/modificarMitigacion.php',
     cache: false,
     data: urlPHP,
     success: function( data ) {
@@ -581,7 +605,7 @@ function getDatosMitigacion(idAccion) {
 
   var datos = [];
 
-  if (contadorClicks == 2) 
+  if (contadorClicks == 2)
     infowindowCalcularDiferencia.setContent(contentDatosMarcador);
   else
     infowindowVerMas.setContent(contentDatosMarcador);
@@ -593,9 +617,9 @@ function getDatosMitigacion(idAccion) {
       success: function(data) {
           datos = data;
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(XMLHttpRequest);
-    }   
+    }
   });
 
   if (datos.idUsuario != idUsuario.uid) {
@@ -613,7 +637,9 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
 
+	fotosMarcador = [];
   for (var i = datos.fotos.length - 1; i >= 0; i--) {
+		fotosMarcador.push(datos.fotos[i]);
     document.getElementById("divFotos").innerHTML +=
       "<div class=\"gallery\">" +
         "<a target=\"_blank\" href=\"" + datos.fotos[i] + "\">" +
@@ -633,7 +659,7 @@ function eliminarDatosMitigacion() {
     }
     $.ajax({
       type: 'POST',
-      url: '/webservices/Mitigacion/eliminarMitigacion.php',
+      url: '/webservices/mitigacion/eliminarMitigacion.php',
       cache: false,
       data: 'idAccion=' +  jsonDatosBD[elMarcador.id].id,
       success: function( res ) {
@@ -664,16 +690,16 @@ function checkContadorBanderasUsuario(idDocumento) {
       success: function(data) {
           contadorUsuario = data;
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(XMLHttpRequest);
-    }   
+    }
   });
 
   if (contadorUsuario != null) {
     idContadorBanderas = contadorUsuario._id.$oid;
     if (contadorUsuario.cantidadBanderas >= 10 && contadorUsuario.anioActual == String(new Date().getFullYear())) {
       puedeInsertar = false;
-    }    
+    }
   }
 
   return puedeInsertar;
@@ -695,9 +721,9 @@ function actualizarContadorBanderasUsuario(operacion) {
       success: function(data) {
           contadorUsuario = data;
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(XMLHttpRequest);
-    }   
+    }
   });
 
   if (contadorUsuario != null) {
@@ -709,7 +735,7 @@ function actualizarContadorBanderasUsuario(operacion) {
   }
 
   var urlPHP = '&idUsuario=' + idUsuario.uid +
-              '&anioActual=' + anioActual + 
+              '&anioActual=' + anioActual +
               '&cantidadBanderas=' + cantidadBanderas;
   if (_id != "") {
     urlPHP += '&idDocumento=' + _id;
@@ -717,7 +743,7 @@ function actualizarContadorBanderasUsuario(operacion) {
 
   $.ajax({
     type: 'POST',
-    url: '/webservices/Mitigacion/actualizarContadorBanderas.php',
+    url: '/webservices/mitigacion/actualizarContadorBanderas.php',
     cache: false,
     data: urlPHP,
     success: function( data ) {
@@ -735,95 +761,95 @@ function actualizarContadorBanderasUsuario(operacion) {
 
 //eventos de los botones de calidades de agua
 document.getElementById("calidad1").onclick = function(){
-  if(document.getElementById("calidad1").value==0){    
+  if(document.getElementById("calidad1").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Azul"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad1").value=1;    
+    document.getElementById("calidad1").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Azul"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad1").value=0;
   }
 }
 
 
 document.getElementById("calidad2").onclick = function(){
-  if(document.getElementById("calidad2").value==0){    
+  if(document.getElementById("calidad2").value==0){
   	for(var i=0;i<niveles.length;i++){
   		if(niveles[i]=="Verde"){
-  		markers[i].setVisible(false);  		
+  		markers[i].setVisible(false);
   		}
   	}
-    document.getElementById("calidad2").value=1; 	  
+    document.getElementById("calidad2").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Verde"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad2").value=0;
   }
 }
 
 
 document.getElementById("calidad3").onclick = function(){
-  if(document.getElementById("calidad3").value==0){    
+  if(document.getElementById("calidad3").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Amarillo"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad3").value=1;    
+    document.getElementById("calidad3").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Amarillo"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad3").value=0;
   }
 }
 
 
 document.getElementById("calidad4").onclick = function(){
-  if(document.getElementById("calidad4").value==0){    
+  if(document.getElementById("calidad4").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Anaranjado"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad4").value=1;    
+    document.getElementById("calidad4").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Anaranjado"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad4").value=0;
   }
 }
 
 
 document.getElementById("calidad5").onclick = function(){
-  if(document.getElementById("calidad5").value==0){    
+  if(document.getElementById("calidad5").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Rojo"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad5").value=1;    
+    document.getElementById("calidad5").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Rojo"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad5").value=0;
   }
 }
@@ -832,7 +858,7 @@ document.getElementById("calidad5").onclick = function(){
 document.getElementById("reset").onclick = function(){
   for(var i=0;i<markers.length;i++){
     markers[i].setVisible(true);
-  } 
+  }
 }
 
 function graficar() {
@@ -843,7 +869,7 @@ function graficar() {
 function toggleMitigacion() {
   verMitigacion = !verMitigacion;
   if (!verMitigacion) {
-    for (var key in markers) { 
+    for (var key in markers) {
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(false);
       }
@@ -851,11 +877,11 @@ function toggleMitigacion() {
     document.getElementById("toggleMitigacion").className = "fa fa-eye";
   }
   else {
-   for (var key in markers) { 
+   for (var key in markers) {
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(true);
       }
-    } 
+    }
     document.getElementById("toggleMitigacion").className = "fa fa-eye-slash";
   }
 }
@@ -864,7 +890,7 @@ function toggleMitigacion() {
 function toggleMuestreo() {
   verMuestreo = !verMuestreo;
   if (!verMuestreo) {
-    for (var key in markers) { 
+    for (var key in markers) {
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(false);
       }
@@ -872,17 +898,17 @@ function toggleMuestreo() {
     document.getElementById("toggleMuestreo").className = "fa fa-eye";
   }
   else {
-   for (var key in markers) { 
+   for (var key in markers) {
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(true);
       }
-    } 
+    }
     document.getElementById("toggleMuestreo").className = "fa fa-eye-slash";
   }
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
-//filtrado por radio de influencia. Se busca dentro del mapa por un radio brindado por el usuario. 
+//filtrado por radio de influencia. Se busca dentro del mapa por un radio brindado por el usuario.
 function aplicarFiltro(valor,flag){
   if (flag&&valor>=1) {//caso filtro de radio de influencia
     var dist=0;
@@ -929,9 +955,9 @@ $.ajax({
 
 function completar(datos){
   //alert(datos.length);
-    $("#institucion").append("<option value='hh'>seleccione</option>");  
+    $("#institucion").append("<option value='hh'>seleccione</option>");
   for(var i =0;i<datos.length;i++){
-    $("#institucion").append("<option value='hh'>"+datos[i]+"</option>");  
+    $("#institucion").append("<option value='hh'>"+datos[i]+"</option>");
   }
   var styles = {
     width:"80%"
@@ -940,3 +966,50 @@ function completar(datos){
 }
 
 
+//---------------------------------------------FUNCIONES PARA MODAL DE PALABRAS CLAVE------------------------------------------------------------//
+var elModalKW = document.getElementById('modalKeywords');
+var elSpanKWCerrar = document.getElementById("closeModal");
+function mostrarModal(numeroFoto) {
+	if (numeroFoto === 1) {
+		$('#imgupload1').trigger('click');
+		formData = new FormData();
+		formData.append("fotos[]", document.getElementById('imgupload1').files[0]);
+	}
+	else if (numeroFoto === 2) {
+		$('#imgupload2').trigger('click');
+		formData = new FormData();
+		formData.append("fotos[]", document.getElementById('imgupload2').files[0]);
+	}
+	else if (numeroFoto === 3) {
+		$('#imgupload3').trigger('click');
+		formData = new FormData();
+		formData.append("fotos[]", document.getElementById('imgupload3').files[0]);
+	}
+	else if (numeroFoto === 4) {
+		$('#imgupload4').trigger('click');
+		formData = new FormData();
+		formData.append("fotos[]", document.getElementById('imgupload4').files[0]);
+	}
+
+
+  elModalKW.style.display = "block";
+  document.getElementById('smtKW').onclick = function() {
+    var arrayPalabrasClave = [];
+    arrayPalabrasClave.push(document.getElementById('ipKW1').value);
+    arrayPalabrasClave.push(document.getElementById('ipKW2').value);
+    arrayPalabrasClave.push(document.getElementById('ipKW3').value);
+    palabrasClaveMitigacion.push(arrayPalabrasClave);
+		document.getElementById('ipKW1').value = "";
+		document.getElementById('ipKW2').value = "";
+		document.getElementById('ipKW3').value = "";
+		elModalKW.style.display = "none";
+  }
+}
+elSpanKWCerrar.onclick = function() {
+  elModalKW.style.display = "none";
+}
+window.onclick = function(event) {
+    if (event.target == elModalKW) {
+        elModalKW.style.display = "none";
+    }
+}
