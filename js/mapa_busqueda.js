@@ -193,6 +193,7 @@ function placeMarker(position, map) {
     });
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
+		formData = new FormData();
     var cTipos = llenarTipos();
 		if (cTipos < 1) {
 			ocultarCombobox();
@@ -969,29 +970,39 @@ function completar(datos){
 //---------------------------------------------FUNCIONES PARA MODAL DE PALABRAS CLAVE------------------------------------------------------------//
 var elModalKW = document.getElementById('modalKeywords');
 var elSpanKWCerrar = document.getElementById("closeModal");
-function mostrarModal(numeroFoto) {
+
+function dialogoSubirFoto(numeroFoto) {
 	if (numeroFoto === 1) {
 		$('#imgupload1').trigger('click');
-		formData = new FormData();
-		formData.append("fotos[]", document.getElementById('imgupload1').files[0]);
+		$(":file").change(function(e){
+			formData.append("fotos[]", document.getElementById('imgupload1').files[0]);
+			mostrarModal();
+		});
 	}
 	else if (numeroFoto === 2) {
 		$('#imgupload2').trigger('click');
-		formData = new FormData();
-		formData.append("fotos[]", document.getElementById('imgupload2').files[0]);
+		$(":file").change(function(e){
+			formData.append("fotos[]", document.getElementById('imgupload2').files[0]);
+			mostrarModal();
+		});
 	}
 	else if (numeroFoto === 3) {
 		$('#imgupload3').trigger('click');
-		formData = new FormData();
-		formData.append("fotos[]", document.getElementById('imgupload3').files[0]);
+		$(":file").change(function(e){
+			formData.append("fotos[]", document.getElementById('imgupload3').files[0]);
+			mostrarModal();
+		});
 	}
 	else if (numeroFoto === 4) {
 		$('#imgupload4').trigger('click');
-		formData = new FormData();
-		formData.append("fotos[]", document.getElementById('imgupload4').files[0]);
+		$(":file").change(function(e){
+			formData.append("fotos[]", document.getElementById('imgupload4').files[0]);
+			mostrarModal();
+		});
 	}
+}
 
-
+function mostrarModal() {
   elModalKW.style.display = "block";
   document.getElementById('smtKW').onclick = function() {
     var arrayPalabrasClave = [];

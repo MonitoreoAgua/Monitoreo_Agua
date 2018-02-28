@@ -20,19 +20,19 @@ var contentNuevoMarcador =
 		"<div class =\"entrada\"> " +
 			"<label for=\"photos\">Fotos:</label>" +
 				"<div class=\"gallery\">" +
-	          "<img width=\"100\" height=\"100\" onclick=\"mostrarModal(1);\">" +
+	          "<img width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(1);\">" +
 						"<input type=\"file\" id=\"imgupload1\" style=\"display:none\"/>" +
 				"</div>"+
 				"<div class=\"gallery\">" +
-					"<img width=\"100\" height=\"100\" onclick=\"mostrarModal(2);\">" +
+					"<img width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(2);\">" +
 					"<input type=\"file\" id=\"imgupload2\" style=\"display:none\"/>" +
 				"</div>"+
 				"<div class=\"gallery\">" +
-					"<img width=\"100\" height=\"100\" onclick=\"mostrarModal(3);\">" +
+					"<img width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(3);\">" +
 					"<input type=\"file\" id=\"imgupload3\" style=\"display:none\"/>" +
 				"</div>"+
 				"<div class=\"gallery\">" +
-					"<img width=\"100\" height=\"100\" onclick=\"mostrarModal(4);\">" +
+					"<img width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(4);\">" +
 					"<input type=\"file\" id=\"imgupload4\" style=\"display:none\"/>" +
 				"</div>"+
 
