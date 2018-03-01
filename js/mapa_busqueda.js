@@ -34,7 +34,7 @@ var infowindowNuevoMarcador;
 //arreglos que guardan las palabras claves asociadas a las fotos de un punto de mitigacion, así como las fotos
 var palabrasClaveMitigacion = [];
 var fotosMarcador = [];
-var formData = null;
+var formularioDatos = null;
 
 
 
@@ -193,7 +193,7 @@ function placeMarker(position, map) {
     });
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
-		formData = new FormData();
+		formularioDatos = new FormData();
     var cTipos = llenarTipos();
 		if (cTipos < 1) {
 			ocultarCombobox();
@@ -450,7 +450,8 @@ function agregarNuevoPunto() {
   var responsable = document.getElementById('responsable').value;
   var email = document.getElementById('email').value;
   var institucion_promotora = document.getElementById('institucion').value;
-  var fotos = "No";
+  var fotos = "";
+  var palabrasClave = JSON.stringify(palabrasClaveMitigacion);
   var descripcion = document.getElementById('descripcion').value;
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
@@ -466,15 +467,15 @@ function agregarNuevoPunto() {
       '&email=' + email +
       '&institucion_promotora=' + institucion_promotora +
       '&fotos=' + fotos +
+      '&palabrasClave=' + palabrasClave + 
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
       '&idUsuario=' + idUsuario.uid;
 
     //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
-  var lasFotos = document.getElementById('fotos');
-  if (lasFotos.files.length > 4) {
-    document.getElementById('errorFotos').innerHTML = "Por favor seleccione solo 4 fotos";
+  if (false) {
+    
   }
   else {
     var idDocumento = "";
@@ -500,23 +501,17 @@ function agregarNuevoPunto() {
             },
             "id": data.elID
           });
-          idDocumento = data.elID;
+          formularioDatos.append("idDocumento",data.elID);
 
           //Guardar fotos
-          var formData = new FormData();
-          formData.append("idDocumento",data.elID);
-          for (var i = 0 ; i < lasFotos.files.length ; i++) {
-            formData.append("fotos[]", lasFotos.files[i]);
-          }
-
           $.ajax({
             type: 'POST',
             processData: false,
             url: '/webservices/mitigacion/subirFotos.php',
             contentType: false,
-            data: formData,
+            data: formularioDatos,
             success: function( data ) {
-              console.log(data);
+              console.log('Todo bien ' + data);
             },
             error: function(err) {
               console.log(err);
@@ -599,6 +594,25 @@ function modificarPunto() {
   ventanaAbierta.close();
 }
 
+function hileraPalabrasClave(jsonPalabrasClave) {
+  var strPalabrasClave = "";
+  var lasPalabras = [];
+  if (jsonPalabrasClave["1"] != undefined) {
+    lasPalabras.push(jsonPalabrasClave["1"])
+  }
+  if (jsonPalabrasClave["2"] != undefined) {
+    lasPalabras.push(jsonPalabrasClave["2"])
+  }
+  if (jsonPalabrasClave["3"] != undefined) {
+    lasPalabras.push(jsonPalabrasClave["3"])
+  }
+
+  for (var i = lasPalabras.length - 1; i >= 0; i--) {
+    strPalabrasClave += lasPalabras[i] + ", "
+  }
+  return strPalabrasClave.substr(0,strPalabrasClave.length-2);
+}
+
 function getDatosMitigacion(idAccion) {
   const userKey = Object.keys(window.localStorage)
     .filter(it => it.startsWith('firebase:authUser'))[0];
@@ -639,14 +653,26 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
 
 	fotosMarcador = [];
-  for (var i = datos.fotos.length - 1; i >= 0; i--) {
-		fotosMarcador.push(datos.fotos[i]);
+  var palabrasClavePunto = JSON.parse(datos.fotos.palabrasClave)[0];
+  var strPalabrasClave = hileraPalabrasClave(palabrasClavePunto);
+  
+  for (var i = datos.fotos.urlFotos.length - 1; i >= 0; i--) {
+		fotosMarcador.push(datos.fotos.urlFotos[i]);
     document.getElementById("divFotos").innerHTML +=
       "<div class=\"gallery\">" +
-        "<a target=\"_blank\" href=\"" + datos.fotos[i] + "\">" +
-          "<img src=\"" + datos.fotos[i] + "\" width=\"100\" height=\"100\">" +
+        "<a target=\"_blank\" href=\"" + datos.fotos.urlFotos[i] + "\">" +
+          "<img src=\"" + datos.fotos.urlFotos[i] + "\" width=\"100\" height=\"100\" title=\"" + strPalabrasClave + "\">" +
         "</a>" +
       "</div>";
+  }
+  if (datos.fotos.urlFotos.length < 4) {
+    for (var i = 4-(datos.fotos.urlFotos.length) - 1; i >= 0; i--) {
+      document.getElementById("divFotos").innerHTML +=
+      "<div class=\"gallery\">" +
+          "<img width=\"100\" height=\"100\">" +
+        "</a>" +
+      "</div>";
+    }
   }
 }
 
@@ -972,31 +998,52 @@ var elModalKW = document.getElementById('modalKeywords');
 var elSpanKWCerrar = document.getElementById("closeModal");
 
 function dialogoSubirFoto(numeroFoto) {
+  var reader = new FileReader();
 	if (numeroFoto === 1) {
 		$('#imgupload1').trigger('click');
 		$(":file").change(function(e){
-			formData.append("fotos[]", document.getElementById('imgupload1').files[0]);
-			mostrarModal();
+			formularioDatos.append("fotos[]", document.getElementById('imgupload1').files[0]);
+      reader.onload = function(e) {
+        $('#picUpd1').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(document.getElementById('imgupload1').files[0]);
+
+      mostrarModal();
 		});
 	}
 	else if (numeroFoto === 2) {
 		$('#imgupload2').trigger('click');
 		$(":file").change(function(e){
-			formData.append("fotos[]", document.getElementById('imgupload2').files[0]);
+			formularioDatos.append("fotos[]", document.getElementById('imgupload2').files[0]);
+      reader.onload = function(e) {
+        $('#picUpd2').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(document.getElementById('imgupload2').files[0]);
+
 			mostrarModal();
 		});
 	}
 	else if (numeroFoto === 3) {
 		$('#imgupload3').trigger('click');
 		$(":file").change(function(e){
-			formData.append("fotos[]", document.getElementById('imgupload3').files[0]);
+			formularioDatos.append("fotos[]", document.getElementById('imgupload3').files[0]);
+      reader.onload = function(e) {
+        $('#picUpd3').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(document.getElementById('imgupload3').files[0]);
+
 			mostrarModal();
 		});
 	}
 	else if (numeroFoto === 4) {
 		$('#imgupload4').trigger('click');
 		$(":file").change(function(e){
-			formData.append("fotos[]", document.getElementById('imgupload4').files[0]);
+			formularioDatos.append("fotos[]", document.getElementById('imgupload4').files[0]);
+      reader.onload = function(e) {
+        $('#picUpd4').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(document.getElementById('imgupload4').files[0]);
+
 			mostrarModal();
 		});
 	}
@@ -1006,10 +1053,11 @@ function mostrarModal() {
   elModalKW.style.display = "block";
   document.getElementById('smtKW').onclick = function() {
     var arrayPalabrasClave = [];
-    arrayPalabrasClave.push(document.getElementById('ipKW1').value);
-    arrayPalabrasClave.push(document.getElementById('ipKW2').value);
-    arrayPalabrasClave.push(document.getElementById('ipKW3').value);
-    palabrasClaveMitigacion.push(arrayPalabrasClave);
+    palabrasClaveMitigacion.push({
+      "1": document.getElementById('ipKW1').value,
+      "2": document.getElementById('ipKW2').value,
+      "3": document.getElementById('ipKW3').value
+    });
 		document.getElementById('ipKW1').value = "";
 		document.getElementById('ipKW2').value = "";
 		document.getElementById('ipKW3').value = "";
@@ -1018,9 +1066,4 @@ function mostrarModal() {
 }
 elSpanKWCerrar.onclick = function() {
   elModalKW.style.display = "none";
-}
-window.onclick = function(event) {
-    if (event.target == elModalKW) {
-        elModalKW.style.display = "none";
-    }
 }

@@ -1,6 +1,6 @@
 <?php
 require '../databaseConnection.php';
-
+var_dump($_FILES);
 $extension = array("jpeg","jpg","png","gif");
 $_id = $_POST["idDocumento"];
 if (!mkdir("..".DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."pictures".DIRECTORY_SEPARATOR."$_id".DIRECTORY_SEPARATOR, 0777)) {
@@ -45,7 +45,8 @@ try {
     $updRec2 = new MongoDB\Driver\BulkWrite;
     $obj_id = new MongoDB\BSON\ObjectId($_id);
 
-    $updRec->update(['_id' => $obj_id], ['$set' => ['fotos' => $fotos_array]], ['multi' => false, 'upsert' => false]);
+
+    $updRec->update(['_id' => $obj_id], ['$set' => ['fotos.urlFotos' => $fotos_array]], ['multi' => false, 'upsert' => false]);
     // $updRec2->update(['_id' => $obj_id], ['$set' => ['Muestra.palabras_claves' => $palabras_clave_array]], ['multi' => false, 'upsert' => false]);
     $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
     $result = $cliente->executeBulkWrite('MonitoreoAgua.accionesMitigacion', $updRec, $writeConcern);

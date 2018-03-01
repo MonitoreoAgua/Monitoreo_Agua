@@ -88,6 +88,7 @@
                                                 <button id="smtKW" style="width: 155px">Aceptar</button>
                                             </div>
                                       </div>
+                                  </div>
 
 
                                     <!-- Contenedor utilizado para mostrar la simbología usada en el mapa -->
