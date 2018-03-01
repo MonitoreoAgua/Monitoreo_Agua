@@ -1,6 +1,5 @@
 <?php
 require '../databaseConnection.php';
-var_dump($_FILES);
 $extension = array("jpeg","jpg","png","gif");
 $_id = $_POST["idDocumento"];
 if (!mkdir("..".DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."pictures".DIRECTORY_SEPARATOR."$_id".DIRECTORY_SEPARATOR, 0777)) {

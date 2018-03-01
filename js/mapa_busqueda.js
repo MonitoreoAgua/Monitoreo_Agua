@@ -35,6 +35,7 @@ var infowindowNuevoMarcador;
 var palabrasClaveMitigacion = [];
 var fotosMarcador = [];
 var formularioDatos = null;
+var flagFileChange = false;
 
 
 
@@ -653,10 +654,10 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
 
 	fotosMarcador = [];
-  var palabrasClavePunto = JSON.parse(datos.fotos.palabrasClave)[0];
-  var strPalabrasClave = hileraPalabrasClave(palabrasClavePunto);
   
   for (var i = datos.fotos.urlFotos.length - 1; i >= 0; i--) {
+    var palabrasClavePunto = JSON.parse(datos.fotos.palabrasClave)[i];
+    var strPalabrasClave = hileraPalabrasClave(palabrasClavePunto);
 		fotosMarcador.push(datos.fotos.urlFotos[i]);
     document.getElementById("divFotos").innerHTML +=
       "<div class=\"gallery\">" +
@@ -998,55 +999,29 @@ var elModalKW = document.getElementById('modalKeywords');
 var elSpanKWCerrar = document.getElementById("closeModal");
 
 function dialogoSubirFoto(numeroFoto) {
-  var reader = new FileReader();
-	if (numeroFoto === 1) {
-		$('#imgupload1').trigger('click');
-		$(":file").change(function(e){
-			formularioDatos.append("fotos[]", document.getElementById('imgupload1').files[0]);
-      reader.onload = function(e) {
-        $('#picUpd1').attr('src', e.target.result);
+  $('#imgupload'+numeroFoto).trigger('click');
+  if (!flagFileChange) {
+    $(":file").change(function(e){    
+      var reader = new FileReader();
+      var idTarget = e.target.id;
+      formularioDatos.append("fotos[]", document.getElementById(idTarget).files[0]);
+
+      reader.onload = function(ee) {
+        if (idTarget == "imgupload1")
+          $('#picUpd1').attr('src', ee.target.result);
+        else if (idTarget == "imgupload2")
+          $('#picUpd2').attr('src', ee.target.result);
+        else if (idTarget == "imgupload3")
+          $('#picUpd3').attr('src', ee.target.result);
+        else if (idTarget == "imgupload4")
+          $('#picUpd4').attr('src', ee.target.result);
       }
-      reader.readAsDataURL(document.getElementById('imgupload1').files[0]);
+      reader.readAsDataURL(document.getElementById(idTarget).files[0]);
 
       mostrarModal();
-		});
-	}
-	else if (numeroFoto === 2) {
-		$('#imgupload2').trigger('click');
-		$(":file").change(function(e){
-			formularioDatos.append("fotos[]", document.getElementById('imgupload2').files[0]);
-      reader.onload = function(e) {
-        $('#picUpd2').attr('src', e.target.result);
-      }
-      reader.readAsDataURL(document.getElementById('imgupload2').files[0]);
-
-			mostrarModal();
-		});
-	}
-	else if (numeroFoto === 3) {
-		$('#imgupload3').trigger('click');
-		$(":file").change(function(e){
-			formularioDatos.append("fotos[]", document.getElementById('imgupload3').files[0]);
-      reader.onload = function(e) {
-        $('#picUpd3').attr('src', e.target.result);
-      }
-      reader.readAsDataURL(document.getElementById('imgupload3').files[0]);
-
-			mostrarModal();
-		});
-	}
-	else if (numeroFoto === 4) {
-		$('#imgupload4').trigger('click');
-		$(":file").change(function(e){
-			formularioDatos.append("fotos[]", document.getElementById('imgupload4').files[0]);
-      reader.onload = function(e) {
-        $('#picUpd4').attr('src', e.target.result);
-      }
-      reader.readAsDataURL(document.getElementById('imgupload4').files[0]);
-
-			mostrarModal();
-		});
-	}
+    });
+    flagFileChange = true;
+  }
 }
 
 function mostrarModal() {
@@ -1067,3 +1042,4 @@ function mostrarModal() {
 elSpanKWCerrar.onclick = function() {
   elModalKW.style.display = "none";
 }
+
