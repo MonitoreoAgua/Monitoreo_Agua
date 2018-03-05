@@ -591,3 +591,65 @@ Stack trace:
 #1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
 #2 {main}
   thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[16-Feb-2018 05:12:33 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[16-Feb-2018 05:15:14 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[16-Feb-2018 05:16:38 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[16-Feb-2018 05:16:40 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:16:40 UTC] PHP Stack trace:
+[16-Feb-2018 05:16:40 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:16:40 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:28
+[16-Feb-2018 05:17:01 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:17:01 UTC] PHP Stack trace:
+[16-Feb-2018 05:17:01 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:17:01 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:28
+[16-Feb-2018 05:17:35 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[16-Feb-2018 05:17:42 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:17:42 UTC] PHP Stack trace:
+[16-Feb-2018 05:17:42 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:17:42 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:28
+[16-Feb-2018 05:21:46 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[16-Feb-2018 05:21:49 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:21:49 UTC] PHP Stack trace:
+[16-Feb-2018 05:21:49 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:21:49 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:29
+[16-Feb-2018 05:22:00 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:22:00 UTC] PHP Stack trace:
+[16-Feb-2018 05:22:00 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:22:00 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:29
+[16-Feb-2018 05:22:00 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:22:00 UTC] PHP Stack trace:
+[16-Feb-2018 05:22:00 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:22:00 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:29
+[16-Feb-2018 05:22:01 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:22:01 UTC] PHP Stack trace:
+[16-Feb-2018 05:22:01 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:22:01 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:29
+[16-Feb-2018 05:22:01 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mongui.php on line 98
+[16-Feb-2018 05:22:01 UTC] PHP Stack trace:
+[16-Feb-2018 05:22:01 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/insertarGrafico.php:0
+[16-Feb-2018 05:22:01 UTC] PHP   2. Mongui::insertarDocumentoGrafico() /home/ubuntu/workspace/webservices/insertarGrafico.php:29
