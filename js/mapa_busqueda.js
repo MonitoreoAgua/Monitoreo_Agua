@@ -113,10 +113,16 @@ function revisarLimitesRectangulo() {
   puntosMuestreo = [];
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
+  var rivers = [];
   for (var key in markers) {
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
-      markers[key].setIcon("/data/Templatic-map-icons/default.png")
-      puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
+      markers[key].setIcon("/data/Templatic-map-icons/default.png");
+      var riverKey = jsonDatosBD[markers[key].id]._id;
+      var river_name = jsonDatosBD[markers[key].id].river_name;
+      puntosMuestreo.push(riverKey); 
+      //New section: set checkbox with selected rivers names.
+      var riverToCheckBox = "<li><input type='checkbox' value="+riverKey+"/>"+river_name+"</li>";
+      $('#checkBoxRiverNames').append(riverToCheckBox);
     } else {
       markers[key].setIcon(markers[key].oldIcon)
     }
@@ -1043,3 +1049,24 @@ elSpanKWCerrar.onclick = function() {
   elModalKW.style.display = "none";
 }
 
+
+
+//dropdown checkbox for river filtered rivers names.
+
+$(".dropdown dt a").on('click', function() {
+  $(".dropdown dd ul").slideToggle('fast');
+});
+
+$(".dropdown dd ul li a").on('click', function() {
+  $(".dropdown dd ul").hide();
+});
+
+$(document).bind('click', function(e) {
+  var $clicked = $(e.target);
+  if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+});
+
+
+
+/*Así se debe hacer el append, recordar que se debe utilizar el id para poder borrar cuando se quite la seleccion.*/
+//$('#checkBoxRiverNames').append("<li><input type='checkbox' value='Blackberry' />Blackberry</li>");

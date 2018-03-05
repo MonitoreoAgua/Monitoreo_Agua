@@ -30,6 +30,24 @@
                                         <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><i class="fa fa-plus"></i></button>
                                         <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><i class="fa fa-eye-slash" id="toggleMitigacion">Mi</i></button>
                                         <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><i class="fa fa-eye-slash" id="toggleMuestreo">Mu</i></button>
+                                        <dl class="dropdown"> 
+                                            <dt>
+                                            <a href="#">
+                                              <span class="hida">Rios:</span>    
+                                            </a>
+                                            </dt>
+                                          
+                                            <dd>
+                                                <div class="mutliSelect">
+                                                    <ul id="checkBoxRiverNames">
+                                                        <li>
+                                                            <input type="checkbox" value="Apple" checked/>Apple</li>
+                                                        <li>
+                                                    </ul>
+                                                </div>
+                                            </dd>
+                                        </dl>                                        
+                                        <br/>
                                     </div>
 
                                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->
