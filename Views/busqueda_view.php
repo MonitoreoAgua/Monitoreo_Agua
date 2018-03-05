@@ -3,7 +3,7 @@
 
 <head>
     <!-- Se cargar los encabezados de la página -->
-    <?php require 'Views/inc/header.php';?> 
+    <?php require 'Views/inc/header.php';?>
     <!--Estilos propios-->
     <link rel="stylesheet" type="text/css" href="/css/estilo_busqueda.css">
 </head>
@@ -21,33 +21,36 @@
                             <div class="mdl-grid">
                                 <div class="main">
                                     <!-- SubMenu para el mapa, principalmente para anidar consultas -->
-                                    <div class="anidar">                                        
+                                    <div class="anidar">
                                         <input type="number" min="1" id="inputFilterRadio" placeholder="Radio">
                                         <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
                                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
                                         <button class="btn btnFiltrarArPOI"><i class="fa fa-map-marker"></i>-<i class="fa fa-map-marker"></i></button>
                                         <button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
+                                        <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><i class="fa fa-plus"></i></button>
+                                        <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><i class="fa fa-eye-slash" id="toggleMitigacion">Mi</i></button>
+                                        <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><i class="fa fa-eye-slash" id="toggleMuestreo">Mu</i></button>
                                     </div>
 
                                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->
                                     <!-- <div class="buscador">
       <ul class="mainUl">
         <h4 class="title">Seleccione filtros</h4>
-        <ul class="childUl">      
+        <ul class="childUl">
           <li>
-            <h4>Fecha (inicio-fin)</h4> 
-            <input type="date" class="date">  
+            <h4>Fecha (inicio-fin)</h4>
+            <input type="date" class="date">
             <input type="date" class="date">
           </li>
           <li>
-            <h4>Institución</h4>    
+            <h4>Institución</h4>
             <select id="institucion">
 
             </select>
           </li>
               <button class="btnFiltrar"><i class="fa fa-search" style="color: blue;"></i></button>
         </ul>
-      </ul> 
+      </ul>
     </div> -->
 
                                     <!-- Contenedor del mapa, cargado desde js -->
@@ -62,6 +65,31 @@
                                             <div class="contenidoArPOIShort"></div>
                                         </div>
                                     </div>
+
+                                    <!-- Contenedor utilizado para ingresar las palabras clave pertenecientes a una fotode una acción de mitigación -->
+                                    <div id="modalKeywords" class="modal">
+
+                                      <!-- Modal content -->
+                                      <div class="modal-content">
+                                        <span class="close" id="closeModal">&times;</span>
+                                        <h4>Ingrese máximo tres palabras claves asociadas a esta imagen</h4>
+                                        <form>
+                                            <div class ="entrada">
+                                                <input type="text" id="ipKW1" style="width: 310px">
+                                            </div>
+                                            <div class ="entrada">
+                                                <input type="text" id="ipKW2" style="width: 310px">
+                                            </div>
+                                            <div class ="entrada">
+                                                <input type="text" id="ipKW3" style="width: 310px">
+                                            </div>
+                                        </form>
+                                            <div class ="entrada" style="margin-top: 15px; margin-left: 25%">
+                                                <button id="smtKW" style="width: 155px">Aceptar</button>
+                                            </div>
+                                      </div>
+                                  </div>
+
 
                                     <!-- Contenedor utilizado para mostrar la simbología usada en el mapa -->
                                     <div class="anidar">
@@ -88,6 +116,8 @@
                 </div>
                 <?php require 'Views/inc/firebase.php';?>
                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    <script src="/js/contentNuevoMarcador.js"></script>
+                    <script src="/js/llenarComboTipoMitigacion.js"></script>
                     <script type="text/javascript" src="/js/mapa_busqueda.js"></script>
                     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc&signed_in=true&callback=initMap"></script>
     </body>
