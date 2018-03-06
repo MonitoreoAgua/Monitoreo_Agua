@@ -93,19 +93,19 @@ function initMap() {
   });
     //rectangulo de seleccion
     var bounds = {
-          north: 9.949835778560997,
-          south: 9.916332528326867,
-          east: -84.08193743896476,
-          west: -84.12855075073242
-        };
+      north: 9.949835778560997,
+      south: 9.916332528326867,
+      east: -84.08193743896476,
+      west: -84.12855075073242
+    };
     rectangle = new google.maps.Rectangle ({
-          bounds: bounds,
-          editable: true,
-          draggable: true
-        });
-
-        rectangle.setMap(map);
-        rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
+      bounds: bounds,
+      editable: true,
+      draggable: true
+    });
+    centrarRectangulo();
+    rectangle.setMap(map);
+    rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
 
 }
 
@@ -530,6 +530,8 @@ function agregarNuevoPunto() {
     infowindowNuevoMarcador.close();
     nuevoPunto = !nuevoPunto;
     actualizarContadorBanderasUsuario(1);
+    flagFileChange = false;
+    palabrasClaveMitigacion = [];
   }
 }
 
@@ -1043,3 +1045,27 @@ elSpanKWCerrar.onclick = function() {
   elModalKW.style.display = "none";
 }
 
+
+function centrarRectangulo() {
+  var latCenter = map.getCenter().lat();
+  var lngCenter = map.getCenter().lng();
+  var difZoom = 11 - map.getZoom();
+  var tamanoHori = 0.05;
+  var tamanoVert = 0.025;
+  if (difZoom > 0) {
+    tamanoHori *= (2*difZoom);
+    tamanoVert *= (2*difZoom);
+  }
+  else if (difZoom < 0) {
+    tamanoHori /= (-2*difZoom);
+    tamanoVert /= (-2*difZoom);
+  }
+
+  var bounds = {
+    north: latCenter - tamanoVert,
+    south: latCenter + tamanoVert,
+    east: lngCenter + tamanoHori,
+    west: lngCenter - tamanoHori
+  };
+  rectangle.setBounds(bounds);
+}

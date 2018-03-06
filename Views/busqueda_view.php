@@ -30,6 +30,7 @@
                                         <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><i class="fa fa-plus"></i></button>
                                         <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><i class="fa fa-eye-slash" id="toggleMitigacion">Mi</i></button>
                                         <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><i class="fa fa-eye-slash" id="toggleMuestreo">Mu</i></button>
+                                        <button class="btn" id="btnCentrarRectangulo" onclick="centrarRectangulo();"><i style="font-size: 12px">Centrar</i></button>
                                     </div>
 
                                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->
