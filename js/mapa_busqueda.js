@@ -192,6 +192,7 @@ function placeMarker(position, map) {
       nMarcador.setMap(null);
       nuevoPunto = !nuevoPunto;
     });
+
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
 		formularioDatos = new FormData();
@@ -482,8 +483,10 @@ function agregarNuevoPunto() {
     var idDocumento = "";
     var longitud = nMarcador.getPosition().lng();
     var latitud = nMarcador.getPosition().lat();
+    var datos_geograficos = obtenerZonasAdministrativas(latitud,longitud);
     urlPHP += '&longitud=' + longitud +
-              '&latitud=' + latitud;
+              '&latitud=' + latitud +
+              '&datos_geograficos=' + JSON.stringify(datos_geograficos);
     $.ajax({
       type: 'POST',
       url: '/webservices/mitigacion/insertarMitigacion.php',
@@ -511,9 +514,6 @@ function agregarNuevoPunto() {
             url: '/webservices/mitigacion/subirFotos.php',
             contentType: false,
             data: formularioDatos,
-            success: function( data ) {
-              console.log('Todo bien ' + data);
-            },
             error: function(err) {
               console.log(err);
             }
@@ -1068,4 +1068,44 @@ function centrarRectangulo() {
     west: lngCenter - tamanoHori
   };
   rectangle.setBounds(bounds);
+}
+
+
+function obtenerZonasAdministrativas(latPunto, lngPunto) {
+  var res = {};
+  var country = "";
+  var zonaAdm1 = "";
+  var zonaAdm2 = "";
+  var zonaAdm3 = "";
+  $.ajax({
+    url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latPunto + "," + lngPunto + "&key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc",
+    async: false,
+    dataType: 'json',
+    success: function(data) {
+      if (data.status == "OK") {
+        var jsonArrayGeo = data.results[0].address_components;
+        for (var i = 0; i < jsonArrayGeo.length; i++) {
+          var objGeo = jsonArrayGeo[i];
+          var jsonArrayType = objGeo.types;
+          var tipo = jsonArrayType[0];
+          if (tipo == "country") {
+            country = objGeo.long_name;
+          }
+          else if (tipo == "administrative_area_level_1") {
+            zonaAdm1 = objGeo.long_name;
+          }
+          else if (tipo == "administrative_area_level_2") {
+            zonaAdm2 = objGeo.long_name;
+            zonaAdm3 = jsonArrayGeo[i-1].long_name;
+          }
+        }
+        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};        
+      }
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      console.log(XMLHttpRequest);
+    }
+  });
+  
+  return res;
 }
