@@ -26,12 +26,12 @@ $documento['tipo_actividad'] = $tipo_actividad;
 $documento['responsable'] = $responsable;
 $documento['email'] = $email;
 $documento['institucion_promotora'] = $institucion_promotora;
-$documento['fotos'] = $fotos;
+$documento['fotos'] = json_decode($fotos);
 $documento['descripcion'] = $descripcion;
 $documento['cantidad_participantes'] = $cantidad_participantes;
 $documento['ponderacion_resultados'] = $ponderacion_resultados;
 
 $response = array();
 $response = Mitigacion::actualizarDocumentoMitigacion($documento,$id);
-    
+
 echo json_encode($response);

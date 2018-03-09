@@ -1,9 +1,10 @@
 <?php
 require '../databaseConnection.php';
-
 $extension = array("jpeg","jpg","png","gif");
 $_id = $_POST["idDocumento"];
- mkdir("..".DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."pictures".DIRECTORY_SEPARATOR."$_id".DIRECTORY_SEPARATOR, 0777);
+if (!mkdir("..".DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."pictures".DIRECTORY_SEPARATOR."$_id".DIRECTORY_SEPARATOR, 0777)) {
+  print_r(error_get_last());
+}
 // $ruta = "http://monitoreoagua.ucr.ac.cr/pictures/".$_id."/";
  $ruta = "http://localhost/pictures/".$_id."/";
  $fotos_array = array();
@@ -13,7 +14,7 @@ $counter = 0;
 foreach($_FILES["fotos"]["tmp_name"] as $key=>$tmp_name){
 	$temp = $_FILES["fotos"]["tmp_name"][$key];
 	$name = $_FILES["fotos"]["name"][$key];
-	
+
 	if(empty($temp))
 	{
 		break;
@@ -43,7 +44,8 @@ try {
     $updRec2 = new MongoDB\Driver\BulkWrite;
     $obj_id = new MongoDB\BSON\ObjectId($_id);
 
-    $updRec->update(['_id' => $obj_id], ['$set' => ['fotos' => $fotos_array]], ['multi' => false, 'upsert' => false]);
+
+    $updRec->update(['_id' => $obj_id], ['$set' => ['fotos.urlFotos' => $fotos_array]], ['multi' => false, 'upsert' => false]);
     // $updRec2->update(['_id' => $obj_id], ['$set' => ['Muestra.palabras_claves' => $palabras_clave_array]], ['multi' => false, 'upsert' => false]);
     $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
     $result = $cliente->executeBulkWrite('MonitoreoAgua.accionesMitigacion', $updRec, $writeConcern);

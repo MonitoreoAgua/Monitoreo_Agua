@@ -2,17 +2,17 @@
 se crean los eventos y consultas a la BD mongoDB con ayuda de PHP.*/
 //--------------------------------------------VARIABLES GLOBALES-------------------------------------------------------------//
 var jsonDatosBD='';//variable global con la finalidad de guardar los datos de las consultas y así poder anidar consultas. Guarda los valores en formato JSON.
-var map; //mapa general 
+var map; //mapa general
 var markers=[];//marcadores indicadores de calidad del agua
 var niveles=[];//es paralelo a vector de marcadores acá se guardan las calidades del agua del marcador i, se utiliza para buscar sobre él y no sobre los marcadores
 var filterMarker;//marcador movible para indicar areas de filtro
 //var colors = ["null","blue","green","yellow","orange","red"];//colores asociados a cada calidad
 //var calidad = ["null","excelente","buena calidad","aceptable","contaminada","fuertemente contaminada"];//nombres asociados a cada calidad
 //Esta varible es muy importante ya que indica y controla los eventos de clic sobre los marcadores. Para saber en que estado está la selección.
-var contadorClicks = 0; //evento de aritmetica de POIS, lleva un conteo de los clicks porque solo deben haber dos seleccionados. 
+var contadorClicks = 0; //evento de aritmetica de POIS, lleva un conteo de los clicks porque solo deben haber dos seleccionados.
 var first;//Respaldo para mantener el marcador en ser presionado primero.
 var second;//Respaldo para mantener el marcador en ser presionado segundo.
-/*para indexar datos traídos de la BD*/ 
+/*para indexar datos traídos de la BD*/
 //var parametrosObligatorios=["% O2","DBO","pts DBO","NH4","pts NH4"];//no utilizado
 //var parametrosOpcionales=["CF","DQO","EC","PO4","GYA","Ph","SD", "Ssed", "SST","SAAM","T","Aforo","ST","pts PSO"];//no utilizado
 var contentVerMas="<div><button class='btn btn-primary' style='width:200px' onclick='mostrarVerMas()' id='btnVerMuestra'>Ver muestra</button></div>";
@@ -31,6 +31,12 @@ var verMuestreo = true;
 var nuevoPunto = false;
 var nMarcador;
 var infowindowNuevoMarcador;
+//arreglos que guardan las palabras claves asociadas a las fotos de un punto de mitigacion, así como las fotos
+var palabrasClaveMitigacion = [];
+var fotosMarcador = [];
+var formularioDatos = null;
+var flagFileChange = false;
+
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -81,25 +87,25 @@ function initMap() {
         contadorClicks=0;
         document.getElementById("btnChart").disabled = true;
         puntosMuestreo = [];
-      }   
+      }
       if (nuevoPunto)
         placeMarker(e.latLng, map);
   });
     //rectangulo de seleccion
     var bounds = {
-          north: 9.949835778560997,
-          south: 9.916332528326867,
-          east: -84.08193743896476,
-          west: -84.12855075073242
-        };
+      north: 9.949835778560997,
+      south: 9.916332528326867,
+      east: -84.08193743896476,
+      west: -84.12855075073242
+    };
     rectangle = new google.maps.Rectangle ({
-          bounds: bounds,
-          editable: true,
-          draggable: true
-        });
-
-        rectangle.setMap(map);
-        rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
+      bounds: bounds,
+      editable: true,
+      draggable: true
+    });
+    centrarRectangulo();
+    rectangle.setMap(map);
+    rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
 
 }
 
@@ -107,7 +113,7 @@ function revisarLimitesRectangulo() {
   puntosMuestreo = [];
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
-  for (var key in markers) { 
+  for (var key in markers) {
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
       markers[key].setIcon("/data/Templatic-map-icons/default.png")
       puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
@@ -153,7 +159,7 @@ function pintar(jsonData){
 	    title: titulo,
 	    icon:"/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png",
 	    id:i,//parametro que identifica de forma única a cada marcador, con él se puede encontrar el id real del objeto.
-      oldIcon: "/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"   
+      oldIcon: "/data/Templatic-map-icons/"+jsonDatosBD[i].color+".png"
 	  });
 
       //se hace una asociación indice color.
@@ -169,7 +175,7 @@ function placeMarker(position, map) {
   if (checkContadorBanderasUsuario()) {
     nMarcador = new google.maps.Marker({
         position: position,
-        map: map,        
+        map: map,
         draggable:true,
         icon: "/data/Templatic-map-icons/Mitigacion.png",
         title: "Acción de Mitigacion",
@@ -181,14 +187,21 @@ function placeMarker(position, map) {
       });
     map.panTo(position);
     document.getElementById("btnMitigacion").className = "btnMitigacion btn";
-    google.maps.event.addListener(infowindowNuevoMarcador, 'closeclick', function() {  
+    google.maps.event.addListener(infowindowNuevoMarcador, 'closeclick', function() {
       //Si no se guardaron los cambios
       nMarcador.setMap(null);
       nuevoPunto = !nuevoPunto;
-    });  
-    infowindowNuevoMarcador.setContent(contentNuevoMarcador);                              
+    });
+
+    infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
-    llenarTipos();
+    document.getElementById("responsable").value = name_google;
+    document.getElementById("email").value = email_google;
+		formularioDatos = new FormData();
+    var cTipos = llenarTipos();
+		if (cTipos < 1) {
+			ocultarCombobox();
+		}
   }
   else {
     window.alert("Ha excedido el límite de banderas por año");
@@ -208,7 +221,7 @@ function aritmeticaPOIS(marcador) {
             marcador.setIcon(iconColor);
 
             //se abre la ventana de informacion para ver más
-            infowindowVerMas.setContent(contentVerMas);                              
+            infowindowVerMas.setContent(contentVerMas);
             infowindowVerMas.open(map, marcador);
 
             //se cambia el color del marcador
@@ -226,11 +239,11 @@ function aritmeticaPOIS(marcador) {
             if(!(marcador.id==first.id)){//se debe dar clic sobre uno distinto.
                 puntosMuestreo.push(jsonDatosBD[marcador.id]._id);
                 second=marcador;
-                
+
                 //se cierra el marcador de ver más
                 infowindowVerMas.close();
-                infowindowCalcularDiferencia.setContent(contentCalcularDiferencia);                              
-                infowindowCalcularDiferencia.open(map, marcador);                 
+                infowindowCalcularDiferencia.setContent(contentCalcularDiferencia);
+                infowindowCalcularDiferencia.open(map, marcador);
 
                 if (jsonDatosBD[marcador.id].color == "Mitigacion"){
                   marcador.setIcon(flagColor);
@@ -244,7 +257,7 @@ function aritmeticaPOIS(marcador) {
             }
         }
         //return view;
-    }else{//ya se han seleccionado los dos, se resetean y se llama recursivo para seleccionar el actual. 
+    }else{//ya se han seleccionado los dos, se resetean y se llama recursivo para seleccionar el actual.
         //En este punto está abierta la ventana de información de calcular diferencia; se debe cerrar.
         infowindowCalcularDiferencia.close();
         contadorClicks=0;
@@ -318,7 +331,7 @@ function calcularDiferencia(datos){
           texto=texto+". <b>Ubicación:</b> "+datos[puntoBajo].POI.nombre_institucion;
           texto=texto+" <b>Estación:</b> "+datos[puntoBajo].POI.nombre_estacion+"</h6>";
           texto=texto+"<table class='tablaArPOI'><tr><th>Elemento</th><th>Diferencia</th><th>Diferencia porcentual</th></tr>";
-          
+
           //se obtienen los parametros obligatorios y opcionales para cada uno.
           var POIOne={};
           var POITwo={};
@@ -337,7 +350,7 @@ function calcularDiferencia(datos){
               }
             }
           }
-          
+
           texto=texto+"</table>";
 
           $(".contenidoArPOIShort").append(texto);
@@ -361,7 +374,7 @@ function mostrarVerMas() {
   }
   if (colorMarcador == "Mitigacion") {
     getDatosMitigacion(identificador);
-  } 
+  }
   else {
     var parametros = {
       "id1" : identificador
@@ -379,7 +392,7 @@ function mostrarVerMas() {
 
 
 function calcularVerMas(datos){
-  
+
   var muestra = datos[0].Muestra;
   var POI = datos[0].POI;
   var texto="<h2>Datos asociados a la muestra seleccionada</h2><br><br>";
@@ -396,9 +409,9 @@ function calcularVerMas(datos){
             //texto=texto+"<tr><td>"+'foto'+"</td><td>"+muestra[key][pckey]+"</td></tr>";
           }
         }else{
-          texto=texto+"<tr><td>"+key+"</td><td>"+muestra[key]+"</td></tr>"; 
+          texto=texto+"<tr><td>"+key+"</td><td>"+muestra[key]+"</td></tr>";
         }
-          
+
       }/*else if(key=='obligatorios'){
         texto = texto+"<tr><th colspan='2'>Datos obligatorios</th></tr>"
         var obligatorios = muestra['obligatorios'];
@@ -410,11 +423,11 @@ function calcularVerMas(datos){
         var opcionales = muestra['obligatorios'];
         for(var key in obligatorios){
           texto=texto+"<tr><td>"+key+"</td><td>"+opcionales[key]+"</td></tr>";
-        }        
+        }
       }*/
-    }  
+    }
   texto=texto+"</table>";
-  
+
   $(".contenidoArPOIShort").append(texto);
   $(".arPOIBig").css("display","block");
 }
@@ -425,7 +438,7 @@ function nuevoPuntoMitigacion(element) {
     document.getElementById(element.id).className = "btnMitigacion btn";
   }
   else {
-   document.getElementById(element.id).className = "btnMitigacion_Pressed btn"; 
+   document.getElementById(element.id).className = "btnMitigacion_Pressed btn";
   }
 
   nuevoPunto = !nuevoPunto;
@@ -441,10 +454,13 @@ function agregarNuevoPunto() {
   var responsable = document.getElementById('responsable').value;
   var email = document.getElementById('email').value;
   var institucion_promotora = document.getElementById('institucion').value;
-  var fotos = "No";
+  var fotos = "";
+  var palabrasClave = JSON.stringify(palabrasClaveMitigacion);
   var descripcion = document.getElementById('descripcion').value;
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
+  var periodicidad = $("input[name=periodicidad]:checked").val();
+  var obsPeriodicidad = document.getElementById('obsPeriodicidad').value;
 
   const userKey = Object.keys(window.localStorage)
     .filter(it => it.startsWith('firebase:authUser'))[0];
@@ -454,28 +470,32 @@ function agregarNuevoPunto() {
       '&fecha_fin=' + fecha_fin +
       '&tipo_actividad=' + tipo_actividad +
       '&responsable=' + responsable +
-      '&email=' + email + 
+      '&email=' + email +
       '&institucion_promotora=' + institucion_promotora +
       '&fotos=' + fotos +
+      '&palabrasClave=' + palabrasClave + 
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
-      '&idUsuario=' + idUsuario.uid;
+      '&idUsuario=' + idUsuario.uid +
+      '&periodicidad=' + periodicidad +
+      '&obsPeriodicidad=' + obsPeriodicidad;
 
     //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
-  var lasFotos = document.getElementById('fotos');
-  if (lasFotos.files.length > 4) {
-    document.getElementById('errorFotos').innerHTML = "Por favor seleccione solo 4 fotos";
+  if (false) {
+    
   }
   else {
     var idDocumento = "";
     var longitud = nMarcador.getPosition().lng();
     var latitud = nMarcador.getPosition().lat();
+    var datos_geograficos = obtenerZonasAdministrativas(latitud,longitud);
     urlPHP += '&longitud=' + longitud +
-              '&latitud=' + latitud;
+              '&latitud=' + latitud +
+              '&datos_geograficos=' + JSON.stringify(datos_geograficos);
     $.ajax({
       type: 'POST',
-      url: '/webservices/Mitigacion/insertarMitigacion.php',
+      url: '/webservices/mitigacion/insertarMitigacion.php',
       cache: false,
       data: urlPHP,
       success: function( data ) {
@@ -491,28 +511,19 @@ function agregarNuevoPunto() {
             },
             "id": data.elID
           });
-          idDocumento = data.elID;
+          formularioDatos.append("idDocumento",data.elID);
 
           //Guardar fotos
-          var formData = new FormData();
-          formData.append("idDocumento",data.elID);
-          for (var i = 0 ; i < lasFotos.files.length ; i++) {
-            formData.append("fotos[]", lasFotos.files[i]);
-          }
-          
           $.ajax({
             type: 'POST',
             processData: false,
-            url: '/webservices/Mitigacion/subirFotos.php',
+            url: '/webservices/mitigacion/subirFotos.php',
             contentType: false,
-            data: formData,
-            success: function( data ) {
-              console.log(data);
-            },
+            data: formularioDatos,
             error: function(err) {
               console.log(err);
             }
-          });  
+          });
         }
       },
       error: function(err) {
@@ -523,8 +534,10 @@ function agregarNuevoPunto() {
     markers.push(nMarcador);
 
     infowindowNuevoMarcador.close();
-    nuevoPunto = !nuevoPunto; 
-    actualizarContadorBanderasUsuario(1);      
+    nuevoPunto = !nuevoPunto;
+    actualizarContadorBanderasUsuario(1);
+    flagFileChange = false;
+    palabrasClaveMitigacion = [];
   }
 }
 
@@ -540,6 +553,22 @@ function modificarPunto() {
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
   var idAccion = "";
   var ventanaAbierta = null;
+
+	const userKey = Object.keys(window.localStorage)
+    .filter(it => it.startsWith('firebase:authUser'))[0];
+  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+
+  var urlPHP = 'fecha_inicio=' + fecha_inicio +
+      '&fecha_fin=' + fecha_fin +
+      '&tipo_actividad=' + tipo_actividad +
+      '&responsable=' + responsable +
+      '&email=' + email +
+      '&institucion_promotora=' + institucion_promotora +
+      '&fotos=' + JSON.stringify(fotosMarcador) +
+      '&descripcion=' + descripcion +
+      '&cantidad_participantes=' + cantidad_participantes +
+      '&ponderacion_resultados=' + ponderacion_resultados +
+      '&idUsuario=' + idUsuario.uid;
 
   if (contadorClicks==2)  {
     idAccion = jsonDatosBD[second.id].id;
@@ -559,7 +588,7 @@ function modificarPunto() {
             '&idAccion=' + idAccion;
   $.ajax({
     type: 'POST',
-    url: '/webservices/Mitigacion/modificarMitigacion.php',
+    url: '/webservices/mitigacion/modificarMitigacion.php',
     cache: false,
     data: urlPHP,
     success: function( data ) {
@@ -574,6 +603,25 @@ function modificarPunto() {
   ventanaAbierta.close();
 }
 
+function hileraPalabrasClave(jsonPalabrasClave) {
+  var strPalabrasClave = "";
+  var lasPalabras = [];
+  if (jsonPalabrasClave["1"] != undefined) {
+    lasPalabras.push(jsonPalabrasClave["1"])
+  }
+  if (jsonPalabrasClave["2"] != undefined) {
+    lasPalabras.push(jsonPalabrasClave["2"])
+  }
+  if (jsonPalabrasClave["3"] != undefined) {
+    lasPalabras.push(jsonPalabrasClave["3"])
+  }
+
+  for (var i = lasPalabras.length - 1; i >= 0; i--) {
+    strPalabrasClave += lasPalabras[i] + ", "
+  }
+  return strPalabrasClave.substr(0,strPalabrasClave.length-2);
+}
+
 function getDatosMitigacion(idAccion) {
   const userKey = Object.keys(window.localStorage)
     .filter(it => it.startsWith('firebase:authUser'))[0];
@@ -581,7 +629,7 @@ function getDatosMitigacion(idAccion) {
 
   var datos = [];
 
-  if (contadorClicks == 2) 
+  if (contadorClicks == 2)
     infowindowCalcularDiferencia.setContent(contentDatosMarcador);
   else
     infowindowVerMas.setContent(contentDatosMarcador);
@@ -593,9 +641,9 @@ function getDatosMitigacion(idAccion) {
       success: function(data) {
           datos = data;
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(XMLHttpRequest);
-    }   
+    }
   });
 
   if (datos.idUsuario != idUsuario.uid) {
@@ -612,14 +660,37 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("descripcion").value = datos.descripcion;
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
+  document.getElementById("obsPeriodicidad").value = datos.observaciones_periodicidad;
+  
+  var rdbPeriodicidad = document.getElementsByName("periodicidad");
+  for (var i = rdbPeriodicidad.length - 1; i >= 0; i--) {
+    if (datos.periodicidad === rdbPeriodicidad[i].value) {
+      rdbPeriodicidad[i].checked = true;
+      break;
+    }
+  }
 
-  for (var i = datos.fotos.length - 1; i >= 0; i--) {
+	fotosMarcador = [];
+  
+  for (var i = datos.fotos.urlFotos.length - 1; i >= 0; i--) {
+    var palabrasClavePunto = JSON.parse(datos.fotos.palabrasClave)[i];
+    var strPalabrasClave = hileraPalabrasClave(palabrasClavePunto);
+		fotosMarcador.push(datos.fotos.urlFotos[i]);
     document.getElementById("divFotos").innerHTML +=
       "<div class=\"gallery\">" +
-        "<a target=\"_blank\" href=\"" + datos.fotos[i] + "\">" +
-          "<img src=\"" + datos.fotos[i] + "\" width=\"100\" height=\"100\">" +
+        "<a target=\"_blank\" href=\"" + datos.fotos.urlFotos[i] + "\">" +
+          "<img src=\"" + datos.fotos.urlFotos[i] + "\" width=\"100\" height=\"100\" title=\"" + strPalabrasClave + "\">" +
         "</a>" +
       "</div>";
+  }
+  if (datos.fotos.urlFotos.length < 4) {
+    for (var i = 4-(datos.fotos.urlFotos.length) - 1; i >= 0; i--) {
+      document.getElementById("divFotos").innerHTML +=
+      "<div class=\"gallery\">" +
+          "<img width=\"100\" height=\"100\">" +
+        "</a>" +
+      "</div>";
+    }
   }
 }
 
@@ -633,7 +704,7 @@ function eliminarDatosMitigacion() {
     }
     $.ajax({
       type: 'POST',
-      url: '/webservices/Mitigacion/eliminarMitigacion.php',
+      url: '/webservices/mitigacion/eliminarMitigacion.php',
       cache: false,
       data: 'idAccion=' +  jsonDatosBD[elMarcador.id].id,
       success: function( res ) {
@@ -664,16 +735,16 @@ function checkContadorBanderasUsuario(idDocumento) {
       success: function(data) {
           contadorUsuario = data;
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(XMLHttpRequest);
-    }   
+    }
   });
 
   if (contadorUsuario != null) {
     idContadorBanderas = contadorUsuario._id.$oid;
     if (contadorUsuario.cantidadBanderas >= 10 && contadorUsuario.anioActual == String(new Date().getFullYear())) {
       puedeInsertar = false;
-    }    
+    }
   }
 
   return puedeInsertar;
@@ -695,9 +766,9 @@ function actualizarContadorBanderasUsuario(operacion) {
       success: function(data) {
           contadorUsuario = data;
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
         console.log(XMLHttpRequest);
-    }   
+    }
   });
 
   if (contadorUsuario != null) {
@@ -709,7 +780,7 @@ function actualizarContadorBanderasUsuario(operacion) {
   }
 
   var urlPHP = '&idUsuario=' + idUsuario.uid +
-              '&anioActual=' + anioActual + 
+              '&anioActual=' + anioActual +
               '&cantidadBanderas=' + cantidadBanderas;
   if (_id != "") {
     urlPHP += '&idDocumento=' + _id;
@@ -717,7 +788,7 @@ function actualizarContadorBanderasUsuario(operacion) {
 
   $.ajax({
     type: 'POST',
-    url: '/webservices/Mitigacion/actualizarContadorBanderas.php',
+    url: '/webservices/mitigacion/actualizarContadorBanderas.php',
     cache: false,
     data: urlPHP,
     success: function( data ) {
@@ -735,95 +806,95 @@ function actualizarContadorBanderasUsuario(operacion) {
 
 //eventos de los botones de calidades de agua
 document.getElementById("calidad1").onclick = function(){
-  if(document.getElementById("calidad1").value==0){    
+  if(document.getElementById("calidad1").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Azul"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad1").value=1;    
+    document.getElementById("calidad1").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Azul"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad1").value=0;
   }
 }
 
 
 document.getElementById("calidad2").onclick = function(){
-  if(document.getElementById("calidad2").value==0){    
+  if(document.getElementById("calidad2").value==0){
   	for(var i=0;i<niveles.length;i++){
   		if(niveles[i]=="Verde"){
-  		markers[i].setVisible(false);  		
+  		markers[i].setVisible(false);
   		}
   	}
-    document.getElementById("calidad2").value=1; 	  
+    document.getElementById("calidad2").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Verde"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad2").value=0;
   }
 }
 
 
 document.getElementById("calidad3").onclick = function(){
-  if(document.getElementById("calidad3").value==0){    
+  if(document.getElementById("calidad3").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Amarillo"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad3").value=1;    
+    document.getElementById("calidad3").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Amarillo"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad3").value=0;
   }
 }
 
 
 document.getElementById("calidad4").onclick = function(){
-  if(document.getElementById("calidad4").value==0){    
+  if(document.getElementById("calidad4").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Anaranjado"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad4").value=1;    
+    document.getElementById("calidad4").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Anaranjado"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad4").value=0;
   }
 }
 
 
 document.getElementById("calidad5").onclick = function(){
-  if(document.getElementById("calidad5").value==0){    
+  if(document.getElementById("calidad5").value==0){
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Rojo"){
-      markers[i].setVisible(false);     
+      markers[i].setVisible(false);
       }
     }
-    document.getElementById("calidad5").value=1;    
+    document.getElementById("calidad5").value=1;
   }else{
     for(var i=0;i<niveles.length;i++){
       if(niveles[i]=="Rojo"){
-       markers[i].setVisible(true);     
+       markers[i].setVisible(true);
       }
-    } 
+    }
     document.getElementById("calidad5").value=0;
   }
 }
@@ -832,7 +903,7 @@ document.getElementById("calidad5").onclick = function(){
 document.getElementById("reset").onclick = function(){
   for(var i=0;i<markers.length;i++){
     markers[i].setVisible(true);
-  } 
+  }
 }
 
 function graficar() {
@@ -843,7 +914,7 @@ function graficar() {
 function toggleMitigacion() {
   verMitigacion = !verMitigacion;
   if (!verMitigacion) {
-    for (var key in markers) { 
+    for (var key in markers) {
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(false);
       }
@@ -851,11 +922,11 @@ function toggleMitigacion() {
     document.getElementById("toggleMitigacion").className = "fa fa-eye";
   }
   else {
-   for (var key in markers) { 
+   for (var key in markers) {
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(true);
       }
-    } 
+    }
     document.getElementById("toggleMitigacion").className = "fa fa-eye-slash";
   }
 }
@@ -864,7 +935,7 @@ function toggleMitigacion() {
 function toggleMuestreo() {
   verMuestreo = !verMuestreo;
   if (!verMuestreo) {
-    for (var key in markers) { 
+    for (var key in markers) {
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(false);
       }
@@ -872,17 +943,17 @@ function toggleMuestreo() {
     document.getElementById("toggleMuestreo").className = "fa fa-eye";
   }
   else {
-   for (var key in markers) { 
+   for (var key in markers) {
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(true);
       }
-    } 
+    }
     document.getElementById("toggleMuestreo").className = "fa fa-eye-slash";
   }
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
-//filtrado por radio de influencia. Se busca dentro del mapa por un radio brindado por el usuario. 
+//filtrado por radio de influencia. Se busca dentro del mapa por un radio brindado por el usuario.
 function aplicarFiltro(valor,flag){
   if (flag&&valor>=1) {//caso filtro de radio de influencia
     var dist=0;
@@ -929,9 +1000,9 @@ $.ajax({
 
 function completar(datos){
   //alert(datos.length);
-    $("#institucion").append("<option value='hh'>seleccione</option>");  
+    $("#institucion").append("<option value='hh'>seleccione</option>");
   for(var i =0;i<datos.length;i++){
-    $("#institucion").append("<option value='hh'>"+datos[i]+"</option>");  
+    $("#institucion").append("<option value='hh'>"+datos[i]+"</option>");
   }
   var styles = {
     width:"80%"
@@ -940,3 +1011,116 @@ function completar(datos){
 }
 
 
+//---------------------------------------------FUNCIONES PARA MODAL DE PALABRAS CLAVE------------------------------------------------------------//
+var elModalKW = document.getElementById('modalKeywords');
+var elSpanKWCerrar = document.getElementById("closeModal");
+
+function dialogoSubirFoto(numeroFoto) {
+  $('#imgupload'+numeroFoto).trigger('click');
+  if (!flagFileChange) {
+    $(":file").change(function(e){    
+      var reader = new FileReader();
+      var idTarget = e.target.id;
+      formularioDatos.append("fotos[]", document.getElementById(idTarget).files[0]);
+
+      reader.onload = function(ee) {
+        if (idTarget == "imgupload1")
+          $('#picUpd1').attr('src', ee.target.result);
+        else if (idTarget == "imgupload2")
+          $('#picUpd2').attr('src', ee.target.result);
+        else if (idTarget == "imgupload3")
+          $('#picUpd3').attr('src', ee.target.result);
+        else if (idTarget == "imgupload4")
+          $('#picUpd4').attr('src', ee.target.result);
+      }
+      reader.readAsDataURL(document.getElementById(idTarget).files[0]);
+
+      mostrarModal();
+    });
+    flagFileChange = true;
+  }
+}
+
+function mostrarModal() {
+  elModalKW.style.display = "block";
+  document.getElementById('smtKW').onclick = function() {
+    var arrayPalabrasClave = [];
+    palabrasClaveMitigacion.push({
+      "1": document.getElementById('ipKW1').value,
+      "2": document.getElementById('ipKW2').value,
+      "3": document.getElementById('ipKW3').value
+    });
+		document.getElementById('ipKW1').value = "";
+		document.getElementById('ipKW2').value = "";
+		document.getElementById('ipKW3').value = "";
+		elModalKW.style.display = "none";
+  }
+}
+elSpanKWCerrar.onclick = function() {
+  elModalKW.style.display = "none";
+}
+
+
+function centrarRectangulo() {
+  var latCenter = map.getCenter().lat();
+  var lngCenter = map.getCenter().lng();
+  var difZoom = 11 - map.getZoom();
+  var tamanoHori = 0.05;
+  var tamanoVert = 0.025;
+  if (difZoom > 0) {
+    tamanoHori *= (2*difZoom);
+    tamanoVert *= (2*difZoom);
+  }
+  else if (difZoom < 0) {
+    tamanoHori /= (-2*difZoom);
+    tamanoVert /= (-2*difZoom);
+  }
+
+  var bounds = {
+    north: latCenter - tamanoVert,
+    south: latCenter + tamanoVert,
+    east: lngCenter + tamanoHori,
+    west: lngCenter - tamanoHori
+  };
+  rectangle.setBounds(bounds);
+}
+
+
+function obtenerZonasAdministrativas(latPunto, lngPunto) {
+  var res = {};
+  var country = "";
+  var zonaAdm1 = "";
+  var zonaAdm2 = "";
+  var zonaAdm3 = "";
+  $.ajax({
+    url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latPunto + "," + lngPunto + "&key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc",
+    async: false,
+    dataType: 'json',
+    success: function(data) {
+      if (data.status == "OK") {
+        var jsonArrayGeo = data.results[0].address_components;
+        for (var i = 0; i < jsonArrayGeo.length; i++) {
+          var objGeo = jsonArrayGeo[i];
+          var jsonArrayType = objGeo.types;
+          var tipo = jsonArrayType[0];
+          if (tipo == "country") {
+            country = objGeo.long_name;
+          }
+          else if (tipo == "administrative_area_level_1") {
+            zonaAdm1 = objGeo.long_name;
+          }
+          else if (tipo == "administrative_area_level_2") {
+            zonaAdm2 = objGeo.long_name;
+            zonaAdm3 = jsonArrayGeo[i-1].long_name;
+          }
+        }
+        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};        
+      }
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      console.log(XMLHttpRequest);
+    }
+  });
+  
+  return res;
+}
