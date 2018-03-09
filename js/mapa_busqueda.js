@@ -370,7 +370,7 @@ function mostrarVerMas() {
       async:true,
       data:  parametros,
       dataType:"json",
-      url: "webservices/datosMarker_busqueda.php",
+      url: "/webservices/datosMarker_busqueda.php",
       success:  calcularVerMas
     });
   }
