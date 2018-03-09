@@ -53,7 +53,7 @@ function llenarTipos() {
 function generarCombobox(jsonData){
 	/** Generar el HTML **/
 	var headerHtml = 	"<label for=\"tipoAct\">Tipo de actividad:</label>" +
-			   			"<select id=\"tipoAct\" onchange=\"if(this.selectedIndex == this.length-1)ocultarCombobox();\">";
+			   			"<select id=\"tipoAct\" onchange=\"if(this.selectedIndex == this.length-1)ocultarCombobox();\" style=\"width: 200px\">";
 	var html = parsearTipos(jsonData,headerHtml);
 	html += "<option value=\"otro\">Otro</option></select>";
 	/** Colocar el HTML en la sección correspondiente **/

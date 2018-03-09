@@ -17,6 +17,8 @@ $cantidad_participantes = $_POST['cantidad_participantes'];
 $ponderacion_resultados = $_POST['ponderacion_resultados'];
 $idUsuario = $_POST['idUsuario'];
 $datos_geograficos = $_POST['datos_geograficos'];
+$periodicidad = $_POST['periodicidad'];
+$obsPeriodicidad = $_POST['obsPeriodicidad'];
 $timestampAhora = new MongoDB\BSON\UTCDateTime();
 
 $documento = array();
@@ -41,6 +43,8 @@ $documento['color'] = 'Mitigacion';
 $documento['idUsuario'] = $idUsuario;
 $documento['datos_geograficos'] = json_decode($datos_geograficos);
 $documento['fechaCreacion'] = $timestampAhora;
+$documento['periodicidad'] = $periodicidad;
+$documento['observaciones_periodicidad'] = $obsPeriodicidad;
 
 $response = array();
 $response = Mitigacion::insertarDocumentoMitigacion($documento);

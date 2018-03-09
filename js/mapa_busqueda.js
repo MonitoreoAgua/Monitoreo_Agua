@@ -195,6 +195,8 @@ function placeMarker(position, map) {
 
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
+    document.getElementById("responsable").value = name_google;
+    document.getElementById("email").value = email_google;
 		formularioDatos = new FormData();
     var cTipos = llenarTipos();
 		if (cTipos < 1) {
@@ -457,6 +459,8 @@ function agregarNuevoPunto() {
   var descripcion = document.getElementById('descripcion').value;
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
+  var periodicidad = $("input[name=periodicidad]:checked").val();
+  var obsPeriodicidad = document.getElementById('obsPeriodicidad').value;
 
   const userKey = Object.keys(window.localStorage)
     .filter(it => it.startsWith('firebase:authUser'))[0];
@@ -473,7 +477,9 @@ function agregarNuevoPunto() {
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
-      '&idUsuario=' + idUsuario.uid;
+      '&idUsuario=' + idUsuario.uid +
+      '&periodicidad=' + periodicidad +
+      '&obsPeriodicidad=' + obsPeriodicidad;
 
     //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
   if (false) {
@@ -654,6 +660,15 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("descripcion").value = datos.descripcion;
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
+  document.getElementById("obsPeriodicidad").value = datos.observaciones_periodicidad;
+  
+  var rdbPeriodicidad = document.getElementsByName("periodicidad");
+  for (var i = rdbPeriodicidad.length - 1; i >= 0; i--) {
+    if (datos.periodicidad === rdbPeriodicidad[i].value) {
+      rdbPeriodicidad[i].checked = true;
+      break;
+    }
+  }
 
 	fotosMarcador = [];
   
