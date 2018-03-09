@@ -62,6 +62,8 @@ body{
 	width: 15%;
 }
 
+
+
 .botonFiltroR{
 /* 	position: absolute;
 left: 58.8%;
@@ -340,8 +342,6 @@ div.gallery img {
   font-size: 12px;
 }
 
-
-/*This element control the title*/
 .dropdown dt a {
   background-color: buttonface;
   display: block;
@@ -388,4 +388,6 @@ div.gallery img {
 .dropdown dd ul li a:hover {
   background-color: #fff;
 }
+
+/*END FILTER RIVER*/
 
