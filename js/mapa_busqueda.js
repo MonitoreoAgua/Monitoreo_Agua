@@ -3,6 +3,7 @@ se crean los eventos y consultas a la BD mongoDB con ayuda de PHP.*/
 //--------------------------------------------VARIABLES GLOBALES-------------------------------------------------------------//
 var jsonDatosBD='';//variable global con la finalidad de guardar los datos de las consultas y así poder anidar consultas. Guarda los valores en formato JSON.
 var map; //mapa general
+var rivers = {};//array to store rivers currently selected
 var markers=[];//marcadores indicadores de calidad del agua
 var niveles=[];//es paralelo a vector de marcadores acá se guardan las calidades del agua del marcador i, se utiliza para buscar sobre él y no sobre los marcadores
 var filterMarker;//marcador movible para indicar areas de filtro
@@ -110,19 +111,26 @@ function initMap() {
 }
 
 function revisarLimitesRectangulo() {
+  $('#checkBoxRiverNames').empty();
   puntosMuestreo = [];
+  rivers={};
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
-  var rivers = [];
   for (var key in markers) {
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
       markers[key].setIcon("/data/Templatic-map-icons/default.png");
       var riverKey = jsonDatosBD[markers[key].id]._id;
       var river_name = jsonDatosBD[markers[key].id].river_name;
+      if(rivers[river_name] == undefined){
+        rivers[river_name]=[];
+        rivers[river_name].push(riverKey);
+        //New section: set checkbox with selected rivers names.
+        var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
+        $('#checkBoxRiverNames').append(riverToCheckBox);
+      }else{
+        rivers[river_name].push(riverKey);
+      }
       puntosMuestreo.push(riverKey); 
-      //New section: set checkbox with selected rivers names.
-      var riverToCheckBox = "<li><input type='checkbox' value="+riverKey+"/>"+river_name+"</li>";
-      $('#checkBoxRiverNames').append(riverToCheckBox);
     } else {
       markers[key].setIcon(markers[key].oldIcon)
     }
@@ -1067,6 +1075,50 @@ $(document).bind('click', function(e) {
 });
 
 
+/*function riverChecked(elem){
+  console.log(elem.value);
+  console.log(rivers);
+  console.log("-----------------");
+  console.log(puntosMuestreo);
+  //If element is checked it is necessary to return values back to puntosMuestreo array
+  if($(elem).is(':checked')){
+      for(var river in rivers){
+        if(river!=elem.value){
+          console.log(river);
+        }
+      }
+  }else{//If river is unchecked it is necessary to remove stations from puntosMuestreo array
+      for(var river in rivers){
+        if(river!=elem.value){
+          console.log(river);
+        }
+      }
+  }
+  console.log(puntosMuestreo);
+  console.log("-----------------");
+}*/
 
-/*Así se debe hacer el append, recordar que se debe utilizar el id para poder borrar cuando se quite la seleccion.*/
-//$('#checkBoxRiverNames').append("<li><input type='checkbox' value='Blackberry' />Blackberry</li>");
+
+function riverChecked(elem){
+  //If element is checked it is necessary to return values back to puntosMuestreo array
+  if($(elem).is(':checked')){
+    puntosMuestreo = puntosMuestreo.concat(rivers[elem.value]);
+  }else{//If river is unchecked it is necessary to remove stations from puntosMuestreo array
+      var tempSt = [];
+      var stations = rivers[elem.value];
+      for(var i = 0; i < puntosMuestreo.length;i++){
+        //se buscan todos excepto los que están en stations
+        if(stations.indexOf(puntosMuestreo[i])==-1){//No está en stations se guarda.
+          tempSt.push(puntosMuestreo[i]);
+        }
+      }
+      puntosMuestreo=tempSt;
+  }
+  if (puntosMuestreo.length > 0) {
+    document.getElementById("btnChart").disabled = false;
+  }
+  else {
+    document.getElementById("btnChart").disabled = true;
+  }
+
+}
