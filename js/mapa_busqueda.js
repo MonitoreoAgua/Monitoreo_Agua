@@ -94,19 +94,19 @@ function initMap() {
   });
     //rectangulo de seleccion
     var bounds = {
-          north: 9.949835778560997,
-          south: 9.916332528326867,
-          east: -84.08193743896476,
-          west: -84.12855075073242
-        };
+      north: 9.949835778560997,
+      south: 9.916332528326867,
+      east: -84.08193743896476,
+      west: -84.12855075073242
+    };
     rectangle = new google.maps.Rectangle ({
-          bounds: bounds,
-          editable: true,
-          draggable: true
-        });
-
-        rectangle.setMap(map);
-        rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
+      bounds: bounds,
+      editable: true,
+      draggable: true
+    });
+    centrarRectangulo();
+    rectangle.setMap(map);
+    rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
 
 }
 
@@ -206,8 +206,11 @@ function placeMarker(position, map) {
       nMarcador.setMap(null);
       nuevoPunto = !nuevoPunto;
     });
+
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
+    document.getElementById("responsable").value = name_google;
+    document.getElementById("email").value = email_google;
 		formularioDatos = new FormData();
     var cTipos = llenarTipos();
 		if (cTipos < 1) {
@@ -470,6 +473,8 @@ function agregarNuevoPunto() {
   var descripcion = document.getElementById('descripcion').value;
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
+  var periodicidad = $("input[name=periodicidad]:checked").val();
+  var obsPeriodicidad = document.getElementById('obsPeriodicidad').value;
 
   const userKey = Object.keys(window.localStorage)
     .filter(it => it.startsWith('firebase:authUser'))[0];
@@ -486,7 +491,9 @@ function agregarNuevoPunto() {
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
-      '&idUsuario=' + idUsuario.uid;
+      '&idUsuario=' + idUsuario.uid +
+      '&periodicidad=' + periodicidad +
+      '&obsPeriodicidad=' + obsPeriodicidad;
 
     //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
   if (false) {
@@ -496,8 +503,10 @@ function agregarNuevoPunto() {
     var idDocumento = "";
     var longitud = nMarcador.getPosition().lng();
     var latitud = nMarcador.getPosition().lat();
+    var datos_geograficos = obtenerZonasAdministrativas(latitud,longitud);
     urlPHP += '&longitud=' + longitud +
-              '&latitud=' + latitud;
+              '&latitud=' + latitud +
+              '&datos_geograficos=' + JSON.stringify(datos_geograficos);
     $.ajax({
       type: 'POST',
       url: '/webservices/mitigacion/insertarMitigacion.php',
@@ -525,9 +534,6 @@ function agregarNuevoPunto() {
             url: '/webservices/mitigacion/subirFotos.php',
             contentType: false,
             data: formularioDatos,
-            success: function( data ) {
-              console.log('Todo bien ' + data);
-            },
             error: function(err) {
               console.log(err);
             }
@@ -544,6 +550,8 @@ function agregarNuevoPunto() {
     infowindowNuevoMarcador.close();
     nuevoPunto = !nuevoPunto;
     actualizarContadorBanderasUsuario(1);
+    flagFileChange = false;
+    palabrasClaveMitigacion = [];
   }
 }
 
@@ -666,6 +674,15 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("descripcion").value = datos.descripcion;
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
+  document.getElementById("obsPeriodicidad").value = datos.observaciones_periodicidad;
+  
+  var rdbPeriodicidad = document.getElementsByName("periodicidad");
+  for (var i = rdbPeriodicidad.length - 1; i >= 0; i--) {
+    if (datos.periodicidad === rdbPeriodicidad[i].value) {
+      rdbPeriodicidad[i].checked = true;
+      break;
+    }
+  }
 
 	fotosMarcador = [];
   
@@ -1121,4 +1138,68 @@ function riverChecked(elem){
     document.getElementById("btnChart").disabled = true;
   }
 
+}
+
+function centrarRectangulo() {
+  var latCenter = map.getCenter().lat();
+  var lngCenter = map.getCenter().lng();
+  var difZoom = 11 - map.getZoom();
+  var tamanoHori = 0.05;
+  var tamanoVert = 0.025;
+  if (difZoom > 0) {
+    tamanoHori *= (2*difZoom);
+    tamanoVert *= (2*difZoom);
+  }
+  else if (difZoom < 0) {
+    tamanoHori /= (-2*difZoom);
+    tamanoVert /= (-2*difZoom);
+  }
+
+  var bounds = {
+    north: latCenter - tamanoVert,
+    south: latCenter + tamanoVert,
+    east: lngCenter + tamanoHori,
+    west: lngCenter - tamanoHori
+  };
+  rectangle.setBounds(bounds);
+}
+
+
+function obtenerZonasAdministrativas(latPunto, lngPunto) {
+  var res = {};
+  var country = "";
+  var zonaAdm1 = "";
+  var zonaAdm2 = "";
+  var zonaAdm3 = "";
+  $.ajax({
+    url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latPunto + "," + lngPunto + "&key=AIzaSyBF0VFFF-7ojo6bKf_G81kq2cazEhaB2cc",
+    async: false,
+    dataType: 'json',
+    success: function(data) {
+      if (data.status == "OK") {
+        var jsonArrayGeo = data.results[0].address_components;
+        for (var i = 0; i < jsonArrayGeo.length; i++) {
+          var objGeo = jsonArrayGeo[i];
+          var jsonArrayType = objGeo.types;
+          var tipo = jsonArrayType[0];
+          if (tipo == "country") {
+            country = objGeo.long_name;
+          }
+          else if (tipo == "administrative_area_level_1") {
+            zonaAdm1 = objGeo.long_name;
+          }
+          else if (tipo == "administrative_area_level_2") {
+            zonaAdm2 = objGeo.long_name;
+            zonaAdm3 = jsonArrayGeo[i-1].long_name;
+          }
+        }
+        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};        
+      }
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      console.log(XMLHttpRequest);
+    }
+  });
+  
+  return res;
 }
