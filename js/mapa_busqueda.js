@@ -969,6 +969,9 @@ function toggleMuestreo() {
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
 //filtrado por radio de influencia. Se busca dentro del mapa por un radio brindado por el usuario.
 function aplicarFiltro(valor,flag){
+      for(var i =0;i<markers.length;i++){
+        markers[i].setVisible(true);
+      }
   if (flag&&valor>=1) {//caso filtro de radio de influencia
     var dist=0;
     for(var i =0;i<markers.length;i++){
@@ -1092,30 +1095,7 @@ $(document).bind('click', function(e) {
 });
 
 
-/*function riverChecked(elem){
-  console.log(elem.value);
-  console.log(rivers);
-  console.log("-----------------");
-  console.log(puntosMuestreo);
-  //If element is checked it is necessary to return values back to puntosMuestreo array
-  if($(elem).is(':checked')){
-      for(var river in rivers){
-        if(river!=elem.value){
-          console.log(river);
-        }
-      }
-  }else{//If river is unchecked it is necessary to remove stations from puntosMuestreo array
-      for(var river in rivers){
-        if(river!=elem.value){
-          console.log(river);
-        }
-      }
-  }
-  console.log(puntosMuestreo);
-  console.log("-----------------");
-}*/
-
-
+//This function receive the element with value equal to station name
 function riverChecked(elem){
   //If element is checked it is necessary to return values back to puntosMuestreo array
   if($(elem).is(':checked')){

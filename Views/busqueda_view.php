@@ -41,25 +41,6 @@
                         <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
                      </div>
-                     <!-- Contenedor realizan las consultas gruesas de la base de datos, se encuentra dentro del mapa -->
-                     <!-- <div class="buscador">
-                        <ul class="mainUl">
-                          <h4 class="title">Seleccione filtros</h4>
-                          <ul class="childUl">
-                            <li>
-                              <h4>Fecha (inicio-fin)</h4>
-                              <input type="date" class="date">
-                              <input type="date" class="date">
-                            </li>
-                            <li>
-                              <h4>Institución</h4>
-                              <select id="institucion">
-                              </select>
-                            </li>
-                                <button class="btnFiltrar"><i class="fa fa-search" style="color: blue;"></i></button>
-                          </ul>
-                        </ul>
-                        </div> -->
                      <!-- Contenedor del mapa, cargado desde js -->
                      <div id="map"></div>
                      <!-- Contenedor utilizado para mostrar los resultados del evento de seleccionar dos marcadores, cargado desde js -->
