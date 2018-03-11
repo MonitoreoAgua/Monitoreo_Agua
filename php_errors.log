@@ -765,3 +765,10 @@ Stack trace:
 #1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
 #2 {main}
   thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[11-Mar-2018 19:29:01 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\AuthenticationException' with message 'auth failed' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Operation/Aggregate.php:223
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Operation/Aggregate.php(223): MongoDB\Driver\Server->executeCommand('MonitoreoAgua', Object(MongoDB\Driver\Command), Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(215): MongoDB\Operation\Aggregate->execute(Object(MongoDB\Driver\Server))
+#2 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#3 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Operation/Aggregate.php on line 223
