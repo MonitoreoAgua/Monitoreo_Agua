@@ -10,7 +10,7 @@
 	//Quitar comentarios para obtener timeStamp	  
 	$result1 = $collectionPuntos->aggregate([
         [ '$sort' => ['Muestra.fecha'=> -1]],
-        [ '$group' => ['_id' => '$POI.nombre_estacion', 'id'=>['$first'=>'$_id'],'color' => ['$first' => '$Muestra.color'],'location'=>['$first'=>'$POI.location']/*,'fecha'=>['$first'=>'$Muestra.fecha']*/  ] ]
+        [ '$group' => ['_id' => '$POI.nombre_estacion', 'id'=>['$first'=>'$_id'],'color' => ['$first' => '$Muestra.color'],'location'=>['$first'=>'$POI.location'],'river_name'=>['$first'=>'$POI.nombre_rio']/*,'fecha'=>['$first'=>'$Muestra.fecha']*/  ] ]
     ]);
 
     //Obtener las acciones de mitigación en un iterator

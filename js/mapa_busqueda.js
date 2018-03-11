@@ -3,6 +3,7 @@ se crean los eventos y consultas a la BD mongoDB con ayuda de PHP.*/
 //--------------------------------------------VARIABLES GLOBALES-------------------------------------------------------------//
 var jsonDatosBD='';//variable global con la finalidad de guardar los datos de las consultas y así poder anidar consultas. Guarda los valores en formato JSON.
 var map; //mapa general
+var rivers = {};//array to store rivers currently selected
 var markers=[];//marcadores indicadores de calidad del agua
 var niveles=[];//es paralelo a vector de marcadores acá se guardan las calidades del agua del marcador i, se utiliza para buscar sobre él y no sobre los marcadores
 var filterMarker;//marcador movible para indicar areas de filtro
@@ -110,13 +111,26 @@ function initMap() {
 }
 
 function revisarLimitesRectangulo() {
+  $('#checkBoxRiverNames').empty();
   puntosMuestreo = [];
+  rivers={};
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
   for (var key in markers) {
     if (rectangle.getBounds().contains(markers[key].getPosition())) {
-      markers[key].setIcon("/data/Templatic-map-icons/default.png")
-      puntosMuestreo.push(jsonDatosBD[markers[key].id]._id);
+      markers[key].setIcon("/data/Templatic-map-icons/default.png");
+      var riverKey = jsonDatosBD[markers[key].id]._id;
+      var river_name = jsonDatosBD[markers[key].id].river_name;
+      if(rivers[river_name] == undefined){
+        rivers[river_name]=[];
+        rivers[river_name].push(riverKey);
+        //New section: set checkbox with selected rivers names.
+        var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
+        $('#checkBoxRiverNames').append(riverToCheckBox);
+      }else{
+        rivers[river_name].push(riverKey);
+      }
+      puntosMuestreo.push(riverKey); 
     } else {
       markers[key].setIcon(markers[key].oldIcon)
     }
@@ -955,6 +969,9 @@ function toggleMuestreo() {
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//
 //filtrado por radio de influencia. Se busca dentro del mapa por un radio brindado por el usuario.
 function aplicarFiltro(valor,flag){
+      for(var i =0;i<markers.length;i++){
+        markers[i].setVisible(true);
+      }
   if (flag&&valor>=1) {//caso filtro de radio de influencia
     var dist=0;
     for(var i =0;i<markers.length;i++){
@@ -1060,6 +1077,48 @@ elSpanKWCerrar.onclick = function() {
   elModalKW.style.display = "none";
 }
 
+
+
+//dropdown checkbox for river filtered rivers names.
+
+$(".dropdown dt a").on('click', function() {
+  $(".dropdown dd ul").slideToggle('fast');
+});
+
+$(".dropdown dd ul li a").on('click', function() {
+  $(".dropdown dd ul").hide();
+});
+
+$(document).bind('click', function(e) {
+  var $clicked = $(e.target);
+  if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+});
+
+
+//This function receive the element with value equal to station name
+function riverChecked(elem){
+  //If element is checked it is necessary to return values back to puntosMuestreo array
+  if($(elem).is(':checked')){
+    puntosMuestreo = puntosMuestreo.concat(rivers[elem.value]);
+  }else{//If river is unchecked it is necessary to remove stations from puntosMuestreo array
+      var tempSt = [];
+      var stations = rivers[elem.value];
+      for(var i = 0; i < puntosMuestreo.length;i++){
+        //se buscan todos excepto los que están en stations
+        if(stations.indexOf(puntosMuestreo[i])==-1){//No está en stations se guarda.
+          tempSt.push(puntosMuestreo[i]);
+        }
+      }
+      puntosMuestreo=tempSt;
+  }
+  if (puntosMuestreo.length > 0) {
+    document.getElementById("btnChart").disabled = false;
+  }
+  else {
+    document.getElementById("btnChart").disabled = true;
+  }
+
+}
 
 function centrarRectangulo() {
   var latCenter = map.getCenter().lat();
