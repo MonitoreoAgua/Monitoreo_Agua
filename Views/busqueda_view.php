@@ -26,7 +26,7 @@
                         <button class="btn" id="btnCentrarRectangulo" onclick="centrarRectangulo();"><i style="font-size: 12px">Centrar</i></button>
                         <dl class="dropdown">
                            <dt>
-                              <a href="#">
+                              <a>
                               <span class="hida">Rios:</span>    
                               </a>
                            </dt>
