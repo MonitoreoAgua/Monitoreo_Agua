@@ -35,8 +35,11 @@ var infowindowNuevoMarcador;
 //arreglos que guardan las palabras claves asociadas a las fotos de un punto de mitigacion, así como las fotos
 var palabrasClaveMitigacion = [];
 var fotosMarcador = [];
+// variables que guardan los datos asociados a un punto de mitigación que se va a guardar en la bas e de datos
 var formularioDatos = null;
 var flagFileChange = false;
+// variable que representa un círculo alrededor del centroide en el mapa
+var centroidCircle;
 
 
 
@@ -108,6 +111,22 @@ function initMap() {
     rectangle.setMap(map);
     rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
 
+    //circulo alrededor del centroide
+    centroidCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.5,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: filterMarker.getPosition(),
+      radius: 2 * 1000
+    });
+    //evento asociado al movimiento del centroide en el mapa para redibujar el círculo a su alrededor
+    google.maps.event.addListener(filterMarker, 'dragend', function() {
+        centroidCircle.setCenter(filterMarker.getPosition());
+    });
+
 }
 
 function revisarLimitesRectangulo() {
@@ -117,22 +136,24 @@ function revisarLimitesRectangulo() {
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
   for (var key in markers) {
-    if (rectangle.getBounds().contains(markers[key].getPosition())) {
-      markers[key].setIcon("/data/Templatic-map-icons/default.png");
-      var riverKey = jsonDatosBD[markers[key].id]._id;
-      var river_name = jsonDatosBD[markers[key].id].river_name;
-      if(rivers[river_name] == undefined){
-        rivers[river_name]=[];
-        rivers[river_name].push(riverKey);
-        //New section: set checkbox with selected rivers names.
-        var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
-        $('#checkBoxRiverNames').append(riverToCheckBox);
-      }else{
-        rivers[river_name].push(riverKey);
-      }
-      puntosMuestreo.push(riverKey); 
-    } else {
-      markers[key].setIcon(markers[key].oldIcon)
+    if (jsonDatosBD[markers[key].id].color != "Mitigacion") {
+      if (rectangle.getBounds().contains(markers[key].getPosition())) {
+        markers[key].setIcon("/data/Templatic-map-icons/default.png");
+        var riverKey = jsonDatosBD[markers[key].id]._id;
+        var river_name = jsonDatosBD[markers[key].id].river_name;
+        if(rivers[river_name] == undefined){
+          rivers[river_name]=[];
+          rivers[river_name].push(riverKey);
+          //New section: set checkbox with selected rivers names.
+          var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
+          $('#checkBoxRiverNames').append(riverToCheckBox);
+        }else{
+          rivers[river_name].push(riverKey);
+        }
+        puntosMuestreo.push(riverKey); 
+      } else {
+        markers[key].setIcon(markers[key].oldIcon)
+      }      
     }
   }
   if (puntosMuestreo.length > 0) {
