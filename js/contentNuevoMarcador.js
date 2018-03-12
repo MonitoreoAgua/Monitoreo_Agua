@@ -41,19 +41,19 @@ var contentNuevoMarcador =
 		"<div class =\"entrada\"> " +
 			"<label for=\"photos\">Fotos:</label>" +
 				"<div class=\"gallery\">" +
-	          		"<img id=\"picUpd1\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(1);\">" +
+	          		"<img id=\"picUpd1\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(1, false);\">" +
 					"<input type=\"file\" id=\"imgupload1\" style=\"display:none\"/>" +
 				"</div>"+
 				"<div class=\"gallery\">" +
-					"<img id=\"picUpd2\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(2);\">" +
+					"<img id=\"picUpd2\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(2, false);\">" +
 					"<input type=\"file\" id=\"imgupload2\" style=\"display:none\"/>" +
 				"</div>"+
 				"<div class=\"gallery\">" +
-					"<img id=\"picUpd3\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(3);\">" +
+					"<img id=\"picUpd3\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(3, false);\">" +
 					"<input type=\"file\" id=\"imgupload3\" style=\"display:none\"/>" +
 				"</div>"+
 				"<div class=\"gallery\">" +
-					"<img id=\"picUpd4\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(4);\">" +
+					"<img id=\"picUpd4\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(4, false);\">" +
 					"<input type=\"file\" id=\"imgupload4\" style=\"display:none\"/>" +
 				"</div>"+
 		"</div>" +	

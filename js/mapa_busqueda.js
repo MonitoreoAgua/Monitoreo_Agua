@@ -36,11 +36,9 @@ var infowindowNuevoMarcador;
 var palabrasClaveMitigacion = [];
 var fotosMarcador = [];
 // variables que guardan los datos asociados a un punto de mitigación que se va a guardar en la bas e de datos
-var formularioDatos = null;
 var flagFileChange = false;
 // variable que representa un círculo alrededor del centroide en el mapa
-var centroidCircle;
-
+var centroidCircle; 
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -232,7 +230,6 @@ function placeMarker(position, map) {
     infowindowNuevoMarcador.open(map, nMarcador);
     document.getElementById("responsable").value = name_google;
     document.getElementById("email").value = email_google;
-		formularioDatos = new FormData();
     var cTipos = llenarTipos();
 		if (cTipos < 1) {
 			ocultarCombobox();
@@ -490,7 +487,7 @@ function agregarNuevoPunto() {
   var email = document.getElementById('email').value;
   var institucion_promotora = document.getElementById('institucion').value;
   var fotos = "";
-  var palabrasClave = JSON.stringify(palabrasClaveMitigacion);
+  var palabrasClave = JSON.stringify(storeKeywordsInArray());
   var descripcion = document.getElementById('descripcion').value;
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
@@ -546,7 +543,8 @@ function agregarNuevoPunto() {
             },
             "id": data.elID
           });
-          formularioDatos.append("idDocumento",data.elID);
+          
+          var formularioDatos = storePhotosInForm(data.elID);
 
           //Guardar fotos
           $.ajax({
@@ -1053,44 +1051,126 @@ function completar(datos){
 var elModalKW = document.getElementById('modalKeywords');
 var elSpanKWCerrar = document.getElementById("closeModal");
 
-function dialogoSubirFoto(numeroFoto) {
-  $('#imgupload'+numeroFoto).trigger('click');
-  if (!flagFileChange) {
-    $(":file").change(function(e){    
-      var reader = new FileReader();
-      var idTarget = e.target.id;
-      formularioDatos.append("fotos[]", document.getElementById(idTarget).files[0]);
+function photoChosen(numeroFoto) {
+  switch (numeroFoto) {
+    case 1:
+      if (photosArray.ph1 == null)
+        return false;
+      break;
+    case 2:
+      if (photosArray.ph2 == null)
+        return false;
+      break;
+    case 3:
+      if (photosArray.ph3 == null)
+        return false;
+      break;
+    case 4:
+      if (photosArray.ph4 == null)
+        return false;
+      break;
+  }
+  return true;
+}
 
-      reader.onload = function(ee) {
-        if (idTarget == "imgupload1")
-          $('#picUpd1').attr('src', ee.target.result);
-        else if (idTarget == "imgupload2")
-          $('#picUpd2').attr('src', ee.target.result);
-        else if (idTarget == "imgupload3")
-          $('#picUpd3').attr('src', ee.target.result);
-        else if (idTarget == "imgupload4")
-          $('#picUpd4').attr('src', ee.target.result);
-      }
-      reader.readAsDataURL(document.getElementById(idTarget).files[0]);
 
-      mostrarModal();
-    });
-    flagFileChange = true;
+function dialogoSubirFoto(numeroFotoClick, cambioFoto) {
+  if (!photoChosen(numeroFotoClick) || cambioFoto) {
+    $('#imgupload'+numeroFotoClick).trigger('click');
+      $(":file").change(function(e){    
+        var reader = new FileReader();
+        var idTarget = e.target.id;
+        photosArray.appendPhoto(idTarget,document.getElementById(idTarget).files[0]);
+
+        reader.onload = function(ee) {
+          if (idTarget == "imgupload1")
+            $('#picUpd1').attr('src', ee.target.result);
+          else if (idTarget == "imgupload2")
+            $('#picUpd2').attr('src', ee.target.result);
+          else if (idTarget == "imgupload3")
+            $('#picUpd3').attr('src', ee.target.result);
+          else if (idTarget == "imgupload4")
+            $('#picUpd4').attr('src', ee.target.result);
+        }
+        reader.readAsDataURL(document.getElementById(idTarget).files[0]);
+
+        mostrarModal(idTarget,true);
+      });
+  }
+  else {
+    console.log("Ya hay una foto escogida.");
+    mostrarModal("imgupload"+numeroFotoClick,false);
   }
 }
 
-function mostrarModal() {
+function mostrarModal(idTarget, nuevaFoto) {
+	document.getElementById('ipKW1').value = "";
+	document.getElementById('ipKW2').value = "";
+	document.getElementById('ipKW3').value = "";
+  document.getElementById('chPhoto').style.display = "none";
   elModalKW.style.display = "block";
+  if (!nuevaFoto) {
+    switch (idTarget) {
+      case "imgupload1":
+        document.getElementById('ipKW1').value = photosArray.kw1.w1;
+        document.getElementById('ipKW2').value = photosArray.kw1.w2;
+        document.getElementById('ipKW3').value = photosArray.kw1.w3;
+        break;
+      case "imgupload2":
+        document.getElementById('ipKW1').value = photosArray.kw2.w1;
+        document.getElementById('ipKW2').value = photosArray.kw2.w2;
+        document.getElementById('ipKW3').value = photosArray.kw2.w3;
+        break;
+      case "imgupload3":
+        document.getElementById('ipKW1').value = photosArray.kw3.w1;
+        document.getElementById('ipKW2').value = photosArray.kw3.w2;
+        document.getElementById('ipKW3').value = photosArray.kw3.w3;
+        break;
+      case "imgupload4":
+        document.getElementById('ipKW1').value = photosArray.kw4.w1;
+        document.getElementById('ipKW2').value = photosArray.kw4.w2;
+        document.getElementById('ipKW3').value = photosArray.kw4.w3;
+        break;
+    }   
+
+    document.getElementById('chPhoto').style.display = "block";
+    document.getElementById('chPhoto').onclick = function() {
+      switch (idTarget) {
+        case "imgupload1":
+          dialogoSubirFoto(1,true);
+          break;
+        case "imgupload2":
+          dialogoSubirFoto(2,true);
+          break;
+        case "imgupload3":
+          dialogoSubirFoto(3,true);
+          break;
+        case "imgupload4":
+          dialogoSubirFoto(4,true);
+          break;
+      }  
+    }
+  }
   document.getElementById('smtKW').onclick = function() {
-    var arrayPalabrasClave = [];
-    palabrasClaveMitigacion.push({
-      "1": document.getElementById('ipKW1').value,
-      "2": document.getElementById('ipKW2').value,
-      "3": document.getElementById('ipKW3').value
-    });
-		document.getElementById('ipKW1').value = "";
-		document.getElementById('ipKW2').value = "";
-		document.getElementById('ipKW3').value = "";
+    var arrayPalabrasClave = {
+      "w1": document.getElementById('ipKW1').value,
+      "w2": document.getElementById('ipKW2').value,
+      "w3": document.getElementById('ipKW3').value
+    };
+    switch (idTarget) {
+      case "imgupload1":
+        photosArray.kw1 = arrayPalabrasClave;
+        break;
+      case "imgupload2":
+        photosArray.kw2 = arrayPalabrasClave;
+        break;
+      case "imgupload3":
+        photosArray.kw3 = arrayPalabrasClave;
+        break;
+      case "imgupload4":
+        photosArray.kw4 = arrayPalabrasClave;
+        break;
+    }
 		elModalKW.style.display = "none";
   }
 }
