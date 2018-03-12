@@ -639,14 +639,14 @@ function modificarPunto() {
 function hileraPalabrasClave(jsonPalabrasClave) {
   var strPalabrasClave = "";
   var lasPalabras = [];
-  if (jsonPalabrasClave["1"] != undefined && jsonPalabrasClave["1"] != "") {
-    lasPalabras.push(jsonPalabrasClave["1"])
+  if (jsonPalabrasClave["w1"] != undefined && jsonPalabrasClave["w1"] != "") {
+    lasPalabras.push(jsonPalabrasClave["w1"])
   }
-  if (jsonPalabrasClave["2"] != undefined && jsonPalabrasClave["2"] != "") {
-    lasPalabras.push(jsonPalabrasClave["2"])
+  if (jsonPalabrasClave["w2"] != undefined && jsonPalabrasClave["w2"] != "") {
+    lasPalabras.push(jsonPalabrasClave["w2"])
   }
-  if (jsonPalabrasClave["3"] != undefined && jsonPalabrasClave["3"] != "") {
-    lasPalabras.push(jsonPalabrasClave["3"])
+  if (jsonPalabrasClave["w3"] != undefined && jsonPalabrasClave["w3"] != "") {
+    lasPalabras.push(jsonPalabrasClave["w3"])
   }
 
   for (var i = lasPalabras.length - 1; i >= 0; i--) {
