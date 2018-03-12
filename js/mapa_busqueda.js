@@ -641,13 +641,13 @@ function modificarPunto() {
 function hileraPalabrasClave(jsonPalabrasClave) {
   var strPalabrasClave = "";
   var lasPalabras = [];
-  if (jsonPalabrasClave["1"] != undefined) {
+  if (jsonPalabrasClave["1"] != undefined && jsonPalabrasClave["1"] != "") {
     lasPalabras.push(jsonPalabrasClave["1"])
   }
-  if (jsonPalabrasClave["2"] != undefined) {
+  if (jsonPalabrasClave["2"] != undefined && jsonPalabrasClave["2"] != "") {
     lasPalabras.push(jsonPalabrasClave["2"])
   }
-  if (jsonPalabrasClave["3"] != undefined) {
+  if (jsonPalabrasClave["3"] != undefined && jsonPalabrasClave["3"] != "") {
     lasPalabras.push(jsonPalabrasClave["3"])
   }
 
@@ -1203,4 +1203,9 @@ function obtenerZonasAdministrativas(latPunto, lngPunto) {
   });
   
   return res;
+}
+
+
+function changeCircleRadius(newRadius) {
+  centroidCircle.setRadius(newRadius*1000);
 }

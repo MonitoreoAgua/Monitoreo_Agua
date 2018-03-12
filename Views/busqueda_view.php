@@ -37,7 +37,7 @@
                               </div>
                            </dd>
                         </dl>
-                        <input type="number" min="1" id="inputFilterRadio" placeholder="Radio">
+                        <input type="number" min="1" id="inputFilterRadio" placeholder="Radio" value=1 onchange="changeCircleRadius(this.value);">
                         <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
                         <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
                      </div>
