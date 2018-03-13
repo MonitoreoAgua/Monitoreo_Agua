@@ -38,7 +38,7 @@ var fotosMarcador = [];
 // variables que guardan los datos asociados a un punto de mitigación que se va a guardar en la bas e de datos
 var flagFileChange = false;
 // variable que representa un círculo alrededor del centroide en el mapa
-var centroidCircle; 
+var centroidCircle;
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -148,10 +148,10 @@ function revisarLimitesRectangulo() {
         }else{
           rivers[river_name].push(riverKey);
         }
-        puntosMuestreo.push(riverKey); 
+        puntosMuestreo.push(riverKey);
       } else {
         markers[key].setIcon(markers[key].oldIcon)
-      }      
+      }
     }
   }
   if (puntosMuestreo.length > 0) {
@@ -224,6 +224,7 @@ function placeMarker(position, map) {
       //Si no se guardaron los cambios
       nMarcador.setMap(null);
       nuevoPunto = !nuevoPunto;
+			photosArray.clearStructure();
     });
 
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
@@ -505,7 +506,7 @@ function agregarNuevoPunto() {
       '&email=' + email +
       '&institucion_promotora=' + institucion_promotora +
       '&fotos=' + fotos +
-      '&palabrasClave=' + palabrasClave + 
+      '&palabrasClave=' + palabrasClave +
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
@@ -515,7 +516,7 @@ function agregarNuevoPunto() {
 
     //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
   if (false) {
-    
+
   }
   else {
     var idDocumento = "";
@@ -543,7 +544,7 @@ function agregarNuevoPunto() {
             },
             "id": data.elID
           });
-          
+
           var formularioDatos = storePhotosInForm(data.elID);
 
           //Guardar fotos
@@ -694,7 +695,7 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
   document.getElementById("obsPeriodicidad").value = datos.observaciones_periodicidad;
-  
+
   var rdbPeriodicidad = document.getElementsByName("periodicidad");
   for (var i = rdbPeriodicidad.length - 1; i >= 0; i--) {
     if (datos.periodicidad === rdbPeriodicidad[i].value) {
@@ -704,7 +705,7 @@ function getDatosMitigacion(idAccion) {
   }
 
 	fotosMarcador = [];
-  
+
   for (var i = datos.fotos.urlFotos.length - 1; i >= 0; i--) {
     var palabrasClavePunto = JSON.parse(datos.fotos.palabrasClave)[i];
     var strPalabrasClave = hileraPalabrasClave(palabrasClavePunto);
@@ -1077,7 +1078,7 @@ function photoChosen(numeroFoto) {
 function dialogoSubirFoto(numeroFotoClick, cambioFoto) {
   if (!photoChosen(numeroFotoClick) || cambioFoto) {
     $('#imgupload'+numeroFotoClick).trigger('click');
-      $(":file").change(function(e){    
+      $(":file").change(function(e){
         var reader = new FileReader();
         var idTarget = e.target.id;
         photosArray.appendPhoto(idTarget,document.getElementById(idTarget).files[0]);
@@ -1131,7 +1132,7 @@ function mostrarModal(idTarget, nuevaFoto) {
         document.getElementById('ipKW2').value = photosArray.kw4.w2;
         document.getElementById('ipKW3').value = photosArray.kw4.w3;
         break;
-    }   
+    }
 
     document.getElementById('chPhoto').style.display = "block";
     document.getElementById('chPhoto').onclick = function() {
@@ -1148,7 +1149,7 @@ function mostrarModal(idTarget, nuevaFoto) {
         case "imgupload4":
           dialogoSubirFoto(4,true);
           break;
-      }  
+      }
     }
   }
   document.getElementById('smtKW').onclick = function() {
@@ -1274,14 +1275,14 @@ function obtenerZonasAdministrativas(latPunto, lngPunto) {
             zonaAdm3 = jsonArrayGeo[i-1].long_name;
           }
         }
-        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};        
+        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};
       }
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       console.log(XMLHttpRequest);
     }
   });
-  
+
   return res;
 }
 
