@@ -35,9 +35,10 @@ var infowindowNuevoMarcador;
 //arreglos que guardan las palabras claves asociadas a las fotos de un punto de mitigacion, así como las fotos
 var palabrasClaveMitigacion = [];
 var fotosMarcador = [];
-var formularioDatos = null;
+// variables que guardan los datos asociados a un punto de mitigación que se va a guardar en la bas e de datos
 var flagFileChange = false;
-
+// variable que representa un círculo alrededor del centroide en el mapa
+var centroidCircle;
 
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
@@ -108,6 +109,22 @@ function initMap() {
     rectangle.setMap(map);
     rectangle.addListener('bounds_changed', revisarLimitesRectangulo);
 
+    //circulo alrededor del centroide
+    centroidCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.5,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: filterMarker.getPosition(),
+      radius: 2 * 1000
+    });
+    //evento asociado al movimiento del centroide en el mapa para redibujar el círculo a su alrededor
+    google.maps.event.addListener(filterMarker, 'dragend', function() {
+        centroidCircle.setCenter(filterMarker.getPosition());
+    });
+
 }
 
 function revisarLimitesRectangulo() {
@@ -117,22 +134,24 @@ function revisarLimitesRectangulo() {
   var boundsSelectionArea = new google.maps.LatLngBounds(rectangle.getBounds().getSouthWest(), rectangle.getBounds().getNorthEast());
   var hilera = "";
   for (var key in markers) {
-    if (rectangle.getBounds().contains(markers[key].getPosition())) {
-      markers[key].setIcon("/data/Templatic-map-icons/default.png");
-      var riverKey = jsonDatosBD[markers[key].id]._id;
-      var river_name = jsonDatosBD[markers[key].id].river_name;
-      if(rivers[river_name] == undefined){
-        rivers[river_name]=[];
-        rivers[river_name].push(riverKey);
-        //New section: set checkbox with selected rivers names.
-        var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
-        $('#checkBoxRiverNames').append(riverToCheckBox);
-      }else{
-        rivers[river_name].push(riverKey);
+    if (jsonDatosBD[markers[key].id].color != "Mitigacion") {
+      if (rectangle.getBounds().contains(markers[key].getPosition())) {
+        markers[key].setIcon("/data/Templatic-map-icons/default.png");
+        var riverKey = jsonDatosBD[markers[key].id]._id;
+        var river_name = jsonDatosBD[markers[key].id].river_name;
+        if(rivers[river_name] == undefined){
+          rivers[river_name]=[];
+          rivers[river_name].push(riverKey);
+          //New section: set checkbox with selected rivers names.
+          var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
+          $('#checkBoxRiverNames').append(riverToCheckBox);
+        }else{
+          rivers[river_name].push(riverKey);
+        }
+        puntosMuestreo.push(riverKey);
+      } else {
+        markers[key].setIcon(markers[key].oldIcon)
       }
-      puntosMuestreo.push(riverKey); 
-    } else {
-      markers[key].setIcon(markers[key].oldIcon)
     }
   }
   if (puntosMuestreo.length > 0) {
@@ -205,13 +224,13 @@ function placeMarker(position, map) {
       //Si no se guardaron los cambios
       nMarcador.setMap(null);
       nuevoPunto = !nuevoPunto;
+			photosArray.clearStructure();
     });
 
     infowindowNuevoMarcador.setContent(contentNuevoMarcador);
     infowindowNuevoMarcador.open(map, nMarcador);
     document.getElementById("responsable").value = name_google;
     document.getElementById("email").value = email_google;
-		formularioDatos = new FormData();
     var cTipos = llenarTipos();
 		if (cTipos < 1) {
 			ocultarCombobox();
@@ -469,7 +488,7 @@ function agregarNuevoPunto() {
   var email = document.getElementById('email').value;
   var institucion_promotora = document.getElementById('institucion').value;
   var fotos = "";
-  var palabrasClave = JSON.stringify(palabrasClaveMitigacion);
+  var palabrasClave = JSON.stringify(storeKeywordsInArray());
   var descripcion = document.getElementById('descripcion').value;
   var cantidad_participantes = document.getElementById('nParticipantes').value;
   var ponderacion_resultados = document.getElementById('ponderacionRes').value;
@@ -487,7 +506,7 @@ function agregarNuevoPunto() {
       '&email=' + email +
       '&institucion_promotora=' + institucion_promotora +
       '&fotos=' + fotos +
-      '&palabrasClave=' + palabrasClave + 
+      '&palabrasClave=' + palabrasClave +
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
@@ -497,7 +516,7 @@ function agregarNuevoPunto() {
 
     //**TODO: Esto debería ser una función de validación aparte para todos los campos, no solo las fotos.
   if (false) {
-    
+
   }
   else {
     var idDocumento = "";
@@ -525,7 +544,8 @@ function agregarNuevoPunto() {
             },
             "id": data.elID
           });
-          formularioDatos.append("idDocumento",data.elID);
+
+          var formularioDatos = storePhotosInForm(data.elID);
 
           //Guardar fotos
           $.ajax({
@@ -620,14 +640,14 @@ function modificarPunto() {
 function hileraPalabrasClave(jsonPalabrasClave) {
   var strPalabrasClave = "";
   var lasPalabras = [];
-  if (jsonPalabrasClave["1"] != undefined) {
-    lasPalabras.push(jsonPalabrasClave["1"])
+  if (jsonPalabrasClave["w1"] != undefined && jsonPalabrasClave["w1"] != "") {
+    lasPalabras.push(jsonPalabrasClave["w1"])
   }
-  if (jsonPalabrasClave["2"] != undefined) {
-    lasPalabras.push(jsonPalabrasClave["2"])
+  if (jsonPalabrasClave["w2"] != undefined && jsonPalabrasClave["w2"] != "") {
+    lasPalabras.push(jsonPalabrasClave["w2"])
   }
-  if (jsonPalabrasClave["3"] != undefined) {
-    lasPalabras.push(jsonPalabrasClave["3"])
+  if (jsonPalabrasClave["w3"] != undefined && jsonPalabrasClave["w3"] != "") {
+    lasPalabras.push(jsonPalabrasClave["w3"])
   }
 
   for (var i = lasPalabras.length - 1; i >= 0; i--) {
@@ -675,7 +695,7 @@ function getDatosMitigacion(idAccion) {
   document.getElementById("nParticipantes").value = datos.cantidad_participantes;
   document.getElementById("ponderacionRes").value = datos.ponderacion_resultados;
   document.getElementById("obsPeriodicidad").value = datos.observaciones_periodicidad;
-  
+
   var rdbPeriodicidad = document.getElementsByName("periodicidad");
   for (var i = rdbPeriodicidad.length - 1; i >= 0; i--) {
     if (datos.periodicidad === rdbPeriodicidad[i].value) {
@@ -685,7 +705,7 @@ function getDatosMitigacion(idAccion) {
   }
 
 	fotosMarcador = [];
-  
+
   for (var i = datos.fotos.urlFotos.length - 1; i >= 0; i--) {
     var palabrasClavePunto = JSON.parse(datos.fotos.palabrasClave)[i];
     var strPalabrasClave = hileraPalabrasClave(palabrasClavePunto);
@@ -1032,44 +1052,126 @@ function completar(datos){
 var elModalKW = document.getElementById('modalKeywords');
 var elSpanKWCerrar = document.getElementById("closeModal");
 
-function dialogoSubirFoto(numeroFoto) {
-  $('#imgupload'+numeroFoto).trigger('click');
-  if (!flagFileChange) {
-    $(":file").change(function(e){    
-      var reader = new FileReader();
-      var idTarget = e.target.id;
-      formularioDatos.append("fotos[]", document.getElementById(idTarget).files[0]);
+function photoChosen(numeroFoto) {
+  switch (numeroFoto) {
+    case 1:
+      if (photosArray.ph1 == null)
+        return false;
+      break;
+    case 2:
+      if (photosArray.ph2 == null)
+        return false;
+      break;
+    case 3:
+      if (photosArray.ph3 == null)
+        return false;
+      break;
+    case 4:
+      if (photosArray.ph4 == null)
+        return false;
+      break;
+  }
+  return true;
+}
 
-      reader.onload = function(ee) {
-        if (idTarget == "imgupload1")
-          $('#picUpd1').attr('src', ee.target.result);
-        else if (idTarget == "imgupload2")
-          $('#picUpd2').attr('src', ee.target.result);
-        else if (idTarget == "imgupload3")
-          $('#picUpd3').attr('src', ee.target.result);
-        else if (idTarget == "imgupload4")
-          $('#picUpd4').attr('src', ee.target.result);
-      }
-      reader.readAsDataURL(document.getElementById(idTarget).files[0]);
 
-      mostrarModal();
-    });
-    flagFileChange = true;
+function dialogoSubirFoto(numeroFotoClick, cambioFoto) {
+  if (!photoChosen(numeroFotoClick) || cambioFoto) {
+    $('#imgupload'+numeroFotoClick).trigger('click');
+      $(":file").change(function(e){
+        var reader = new FileReader();
+        var idTarget = e.target.id;
+        photosArray.appendPhoto(idTarget,document.getElementById(idTarget).files[0]);
+
+        reader.onload = function(ee) {
+          if (idTarget == "imgupload1")
+            $('#picUpd1').attr('src', ee.target.result);
+          else if (idTarget == "imgupload2")
+            $('#picUpd2').attr('src', ee.target.result);
+          else if (idTarget == "imgupload3")
+            $('#picUpd3').attr('src', ee.target.result);
+          else if (idTarget == "imgupload4")
+            $('#picUpd4').attr('src', ee.target.result);
+        }
+        reader.readAsDataURL(document.getElementById(idTarget).files[0]);
+
+        mostrarModal(idTarget,true);
+      });
+  }
+  else {
+    console.log("Ya hay una foto escogida.");
+    mostrarModal("imgupload"+numeroFotoClick,false);
   }
 }
 
-function mostrarModal() {
+function mostrarModal(idTarget, nuevaFoto) {
+	document.getElementById('ipKW1').value = "";
+	document.getElementById('ipKW2').value = "";
+	document.getElementById('ipKW3').value = "";
+  document.getElementById('chPhoto').style.display = "none";
   elModalKW.style.display = "block";
+  if (!nuevaFoto) {
+    switch (idTarget) {
+      case "imgupload1":
+        document.getElementById('ipKW1').value = photosArray.kw1.w1;
+        document.getElementById('ipKW2').value = photosArray.kw1.w2;
+        document.getElementById('ipKW3').value = photosArray.kw1.w3;
+        break;
+      case "imgupload2":
+        document.getElementById('ipKW1').value = photosArray.kw2.w1;
+        document.getElementById('ipKW2').value = photosArray.kw2.w2;
+        document.getElementById('ipKW3').value = photosArray.kw2.w3;
+        break;
+      case "imgupload3":
+        document.getElementById('ipKW1').value = photosArray.kw3.w1;
+        document.getElementById('ipKW2').value = photosArray.kw3.w2;
+        document.getElementById('ipKW3').value = photosArray.kw3.w3;
+        break;
+      case "imgupload4":
+        document.getElementById('ipKW1').value = photosArray.kw4.w1;
+        document.getElementById('ipKW2').value = photosArray.kw4.w2;
+        document.getElementById('ipKW3').value = photosArray.kw4.w3;
+        break;
+    }
+
+    document.getElementById('chPhoto').style.display = "block";
+    document.getElementById('chPhoto').onclick = function() {
+      switch (idTarget) {
+        case "imgupload1":
+          dialogoSubirFoto(1,true);
+          break;
+        case "imgupload2":
+          dialogoSubirFoto(2,true);
+          break;
+        case "imgupload3":
+          dialogoSubirFoto(3,true);
+          break;
+        case "imgupload4":
+          dialogoSubirFoto(4,true);
+          break;
+      }
+    }
+  }
   document.getElementById('smtKW').onclick = function() {
-    var arrayPalabrasClave = [];
-    palabrasClaveMitigacion.push({
-      "1": document.getElementById('ipKW1').value,
-      "2": document.getElementById('ipKW2').value,
-      "3": document.getElementById('ipKW3').value
-    });
-		document.getElementById('ipKW1').value = "";
-		document.getElementById('ipKW2').value = "";
-		document.getElementById('ipKW3').value = "";
+    var arrayPalabrasClave = {
+      "w1": document.getElementById('ipKW1').value,
+      "w2": document.getElementById('ipKW2').value,
+      "w3": document.getElementById('ipKW3').value
+    };
+    switch (idTarget) {
+      case "imgupload1":
+        photosArray.kw1 = arrayPalabrasClave;
+        break;
+      case "imgupload2":
+        photosArray.kw2 = arrayPalabrasClave;
+        break;
+      case "imgupload3":
+        photosArray.kw3 = arrayPalabrasClave;
+        break;
+      case "imgupload4":
+        photosArray.kw4 = arrayPalabrasClave;
+        break;
+    }
 		elModalKW.style.display = "none";
   }
 }
@@ -1173,13 +1275,18 @@ function obtenerZonasAdministrativas(latPunto, lngPunto) {
             zonaAdm3 = jsonArrayGeo[i-1].long_name;
           }
         }
-        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};        
+        res = {"pais": country, "area_administrativa_1": zonaAdm1, "area_administrativa_2": zonaAdm2, "area_administrativa_3": zonaAdm3};
       }
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       console.log(XMLHttpRequest);
     }
   });
-  
+
   return res;
+}
+
+
+function changeCircleRadius(newRadius) {
+  centroidCircle.setRadius(newRadius*1000);
 }
