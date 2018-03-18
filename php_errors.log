@@ -772,3 +772,255 @@ Stack trace:
 #2 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
 #3 {main}
   thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Operation/Aggregate.php on line 223
+[16-Mar-2018 02:07:56 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 02:07:56 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:07:56 UTC] PHP Stack trace:
+[16-Mar-2018 02:07:56 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:07:56 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:07:56 UTC] PHP Stack trace:
+[16-Mar-2018 02:07:56 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:22:40 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 02:22:40 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:22:40 UTC] PHP Stack trace:
+[16-Mar-2018 02:22:40 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:22:40 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:22:40 UTC] PHP Stack trace:
+[16-Mar-2018 02:22:40 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:23:45 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 02:23:45 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:23:45 UTC] PHP Stack trace:
+[16-Mar-2018 02:23:45 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:23:45 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:23:45 UTC] PHP Stack trace:
+[16-Mar-2018 02:23:45 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:34:14 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:34:14 UTC] PHP Stack trace:
+[16-Mar-2018 02:34:14 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:34:14 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 02:34:14 UTC] PHP Stack trace:
+[16-Mar-2018 02:34:14 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 02:34:16 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:02:02 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:02:06 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:02:06 UTC] PHP Stack trace:
+[16-Mar-2018 03:02:06 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:02:06 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:02:06 UTC] PHP Stack trace:
+[16-Mar-2018 03:02:06 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:05:13 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:05:14 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:05:14 UTC] PHP Stack trace:
+[16-Mar-2018 03:05:14 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:05:14 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:05:14 UTC] PHP Stack trace:
+[16-Mar-2018 03:05:14 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:06:14 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:06:14 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:06:14 UTC] PHP Stack trace:
+[16-Mar-2018 03:06:14 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:06:14 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:06:14 UTC] PHP Stack trace:
+[16-Mar-2018 03:06:14 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:06:39 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:06:39 UTC] PHP Stack trace:
+[16-Mar-2018 03:06:39 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:06:39 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:06:39 UTC] PHP Stack trace:
+[16-Mar-2018 03:06:39 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:06:39 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:09:23 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:09:27 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:09:27 UTC] PHP Stack trace:
+[16-Mar-2018 03:09:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:09:27 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:09:27 UTC] PHP Stack trace:
+[16-Mar-2018 03:09:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:09:55 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:09:55 UTC] PHP Stack trace:
+[16-Mar-2018 03:09:55 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:09:55 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:09:55 UTC] PHP Stack trace:
+[16-Mar-2018 03:09:55 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:09:55 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[16-Mar-2018 03:23:10 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:23:10 UTC] PHP Stack trace:
+[16-Mar-2018 03:23:10 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:23:10 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:23:10 UTC] PHP Stack trace:
+[16-Mar-2018 03:23:10 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:23:51 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:23:51 UTC] PHP Stack trace:
+[16-Mar-2018 03:23:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:23:51 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:23:51 UTC] PHP Stack trace:
+[16-Mar-2018 03:23:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:15 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:15 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:15 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:15 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:15 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:15 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:26 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:26 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:26 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:26 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:26 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:26 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:36 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:36 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:36 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:36 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:36 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:36 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:51 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:51 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:24:51 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:24:51 UTC] PHP Stack trace:
+[16-Mar-2018 03:24:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:35:54 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:35:54 UTC] PHP Stack trace:
+[16-Mar-2018 03:35:54 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:35:54 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:35:54 UTC] PHP Stack trace:
+[16-Mar-2018 03:35:54 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:38:27 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:38:27 UTC] PHP Stack trace:
+[16-Mar-2018 03:38:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:38:27 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:38:27 UTC] PHP Stack trace:
+[16-Mar-2018 03:38:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:40:27 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:40:27 UTC] PHP Stack trace:
+[16-Mar-2018 03:40:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:40:27 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:40:27 UTC] PHP Stack trace:
+[16-Mar-2018 03:40:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:42:02 UTC] PHP Warning:  require(databaseConnection.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:42:02 UTC] PHP Stack trace:
+[16-Mar-2018 03:42:02 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[16-Mar-2018 03:42:02 UTC] PHP Fatal error:  require(): Failed opening required 'databaseConnection.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/webservices/getMarkers_busqueda.php on line 4
+[16-Mar-2018 03:42:02 UTC] PHP Stack trace:
+[16-Mar-2018 03:42:02 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/getMarkers_busqueda.php:0
+[18-Mar-2018 03:46:27 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[18-Mar-2018 03:46:27 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:194
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(194): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 194
+[18-Mar-2018 03:51:13 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[18-Mar-2018 03:51:13 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:194
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(194): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 194
+[18-Mar-2018 03:52:19 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[18-Mar-2018 03:52:19 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:194
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(194): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 194
+[18-Mar-2018 03:56:05 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[18-Mar-2018 03:56:05 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:194
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(194): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 194
+[18-Mar-2018 03:57:09 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[18-Mar-2018 03:57:09 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:194
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(194): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 194
+[18-Mar-2018 03:57:24 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:398
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(398): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/php/completadoFiltro_busqueda.php(10): MongoDB\Collection->distinct('POI.nombre_inst...')
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 398
+[18-Mar-2018 03:57:24 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\ConnectionTimeoutException' with message 'No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on 'localhost:27017']' in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php:194
+Stack trace:
+#0 /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php(194): MongoDB\Driver\Manager->selectServer(Object(MongoDB\Driver\ReadPreference))
+#1 /home/ubuntu/workspace/webservices/getMarkers_busqueda.php(14): MongoDB\Collection->aggregate(Array)
+#2 {main}
+  thrown in /home/ubuntu/workspace/vendor/mongodb/mongodb/src/Collection.php on line 194

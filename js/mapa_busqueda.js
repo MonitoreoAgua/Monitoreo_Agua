@@ -946,14 +946,14 @@ function graficar() {
 
 //=================Función utilizada para ocultar o mostrar los puntos de mitigación en el mapa======
 function toggleMitigacion() {
-  verMitigacion = !verMitigacion;
-  if (!verMitigacion) {
+  if (verMitigacion) {
     for (var key in markers) {
       if (markers[key].getIcon() == "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(false);
       }
     }
-    document.getElementById("toggleMitigacion").className = "fa fa-eye";
+    console.log("changing to miS");
+    document.getElementById("toggleMitigacion").src = "/data/Templatic-map-icons/miSlash.png";
   }
   else {
    for (var key in markers) {
@@ -961,20 +961,21 @@ function toggleMitigacion() {
         markers[key].setVisible(true);
       }
     }
-    document.getElementById("toggleMitigacion").className = "fa fa-eye-slash";
+    console.log("changing to mi");
+    document.getElementById("toggleMitigacion").src = "/data/Templatic-map-icons/mi.png";
   }
+  verMitigacion = !verMitigacion;
 }
 
 //=================Función utilizada para ocultar o mostrar los puntos de muestreo en el mapa======
 function toggleMuestreo() {
-  verMuestreo = !verMuestreo;
-  if (!verMuestreo) {
+  if (verMuestreo) {
     for (var key in markers) {
       if (markers[key].getIcon() != "/data/Templatic-map-icons/Mitigacion.png") {
         markers[key].setVisible(false);
       }
     }
-    document.getElementById("toggleMuestreo").className = "fa fa-eye";
+    document.getElementById("toggleMuestreo").src = "/data/Templatic-map-icons/muSlash.png";
   }
   else {
    for (var key in markers) {
@@ -982,8 +983,9 @@ function toggleMuestreo() {
         markers[key].setVisible(true);
       }
     }
-    document.getElementById("toggleMuestreo").className = "fa fa-eye-slash";
+    document.getElementById("toggleMuestreo").src = "/data/Templatic-map-icons/mu.png";
   }
+  verMuestreo = !verMuestreo;
 }
 
 //-----------------------------------------FILTRO POR RADIO-MARCADOR MOVIBLE ASOCIADO----------------------------------------------------------------//

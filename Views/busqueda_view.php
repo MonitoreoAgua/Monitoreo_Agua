@@ -20,9 +20,9 @@
                      <!-- SubMenu para el mapa, principalmente para anidar consultas -->
                      <div class="anidar">
                         <button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
-                        <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><i class="fa fa-plus"></i></button>
-                        <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><i class="fa fa-eye-slash" id="toggleMitigacion">Mi</i></button>
-                        <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><i class="fa fa-eye-slash" id="toggleMuestreo">Mu</i></button>
+                        <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><img class="iconMiMu" src="/data/Templatic-map-icons/MitigacionAdd.png"></img></button>
+                        <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><img class="iconMiMu" id=toggleMitigacion src="/data/Templatic-map-icons/mi.png"></img></button>
+                        <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><img class="iconMiMu" id=toggleMuestreo src="/data/Templatic-map-icons/mu.png"></img></button>
                         <button class="btn" id="btnCentrarRectangulo" onclick="centrarRectangulo();"><i style="font-size: 12px">Centrar</i></button>
                         <dl class="dropdown">
                            <dt>

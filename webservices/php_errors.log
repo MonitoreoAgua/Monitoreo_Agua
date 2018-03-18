@@ -6,3 +6,27 @@
 [09-Mar-2018 23:49:52 UTC] PHP Stack trace:
 [09-Mar-2018 23:49:52 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
 [09-Mar-2018 23:49:52 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
+[16-Mar-2018 04:11:53 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 123
+[16-Mar-2018 04:11:53 UTC] PHP Stack trace:
+[16-Mar-2018 04:11:53 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:0
+[16-Mar-2018 04:11:53 UTC] PHP   2. Mitigacion::insertarDocumentoMitigacion() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:50
+[16-Mar-2018 04:11:53 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 158
+[16-Mar-2018 04:11:53 UTC] PHP Stack trace:
+[16-Mar-2018 04:11:53 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
+[16-Mar-2018 04:11:53 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
+[18-Mar-2018 19:46:51 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 123
+[18-Mar-2018 19:46:51 UTC] PHP Stack trace:
+[18-Mar-2018 19:46:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:0
+[18-Mar-2018 19:46:51 UTC] PHP   2. Mitigacion::insertarDocumentoMitigacion() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:50
+[18-Mar-2018 19:46:51 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 158
+[18-Mar-2018 19:46:51 UTC] PHP Stack trace:
+[18-Mar-2018 19:46:51 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
+[18-Mar-2018 19:46:51 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
+[18-Mar-2018 19:46:57 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 123
+[18-Mar-2018 19:46:57 UTC] PHP Stack trace:
+[18-Mar-2018 19:46:57 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:0
+[18-Mar-2018 19:46:57 UTC] PHP   2. Mitigacion::insertarDocumentoMitigacion() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:50
+[18-Mar-2018 19:46:57 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 158
+[18-Mar-2018 19:46:57 UTC] PHP Stack trace:
+[18-Mar-2018 19:46:57 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
+[18-Mar-2018 19:46:57 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
