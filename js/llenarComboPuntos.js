@@ -107,7 +107,7 @@ function llenarParametros() {
 		}
 	});
 	/** Generar los HTML **/
-	var html = "Parámetro a analizar: <select id=\"parametro\" onchange=\"if(graficoGenerado) graficar();\">";
+	var html = "<label for=\"parametro\">Parámetro a analizar:</label> <select id=\"parametro\" onchange=\"if(graficoGenerado) graficar();\">";
 	html = parsearParametros(json,html);
 	html += "</select>";
 	/** Colocar los HTML en las secciones correspondientes **/

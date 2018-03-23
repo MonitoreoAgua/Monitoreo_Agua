@@ -30,3 +30,19 @@
 [18-Mar-2018 19:46:57 UTC] PHP Stack trace:
 [18-Mar-2018 19:46:57 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
 [18-Mar-2018 19:46:57 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
+[23-Mar-2018 02:49:40 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 123
+[23-Mar-2018 02:49:40 UTC] PHP Stack trace:
+[23-Mar-2018 02:49:40 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:0
+[23-Mar-2018 02:49:40 UTC] PHP   2. Mitigacion::insertarDocumentoMitigacion() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:50
+[23-Mar-2018 02:49:41 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 158
+[23-Mar-2018 02:49:41 UTC] PHP Stack trace:
+[23-Mar-2018 02:49:41 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
+[23-Mar-2018 02:49:41 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
+[23-Mar-2018 02:50:20 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 123
+[23-Mar-2018 02:50:20 UTC] PHP Stack trace:
+[23-Mar-2018 02:50:20 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:0
+[23-Mar-2018 02:50:20 UTC] PHP   2. Mitigacion::insertarDocumentoMitigacion() /home/ubuntu/workspace/webservices/mitigacion/insertarMitigacion.php:50
+[23-Mar-2018 02:50:20 UTC] PHP Fatal error:  Call to undefined method MongoDB\Client::executeBulkWrite() in /home/ubuntu/workspace/webservices/mitigacion/mitigacion.php on line 158
+[23-Mar-2018 02:50:20 UTC] PHP Stack trace:
+[23-Mar-2018 02:50:20 UTC] PHP   1. {main}() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:0
+[23-Mar-2018 02:50:20 UTC] PHP   2. Mitigacion::insertarContadorBanderas() /home/ubuntu/workspace/webservices/mitigacion/actualizarContadorBanderas.php:26
