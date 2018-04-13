@@ -1294,3 +1294,45 @@ Stack trace:
 #1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', 'NH4')
 #2 {main}
   thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:13:47 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:14:49 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:15:03 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', 'Fosfato')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:15:06 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', 'NH4')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:15:09 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', 'PO4')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:16:45 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', '% O2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
+[24-Mar-2018 00:17:00 UTC] PHP Fatal error:  Uncaught exception 'MongoDB\Driver\Exception\InvalidArgumentException' with message 'Error parsing "NaN" as 64-bit integer for MongoDB\BSON\UTCDateTime initialization' in /home/ubuntu/workspace/webservices/mongui.php:42
+Stack trace:
+#0 /home/ubuntu/workspace/webservices/mongui.php(42): MongoDB\BSON\UTCDateTime->__construct('NaN')
+#1 /home/ubuntu/workspace/webservices/buscarPorFechas.php(13): Mongui::getPorRangoFechas('NaN', 'NaN', 'I_Hol2')
+#2 {main}
+  thrown in /home/ubuntu/workspace/webservices/mongui.php on line 42
