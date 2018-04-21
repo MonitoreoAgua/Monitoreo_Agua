@@ -14,7 +14,7 @@
             <nav class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link" href='/index.php/listaGraficas'>Gráficas</a>
                 <a class="mdl-navigation__link" href="/index.php/busqueda">Búsqueda</a>
-                <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+                <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" onclick="signOut();">
                     <i class="button-left-icon material-icons">account_circle</i>Cerrar Sesión
                 </button>
             </nav>
@@ -23,7 +23,7 @@
     <div class="mdl-layout__drawer mdl-layout--small-screen-only">
         <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="/index.php/listaGraficas">Gráficas</a>
-            <span class="btn-logout mdl-navigation__link">
+            <span class="btn-logout mdl-navigation__link" onclick="signOut();">
             <i class="button-left-icon material-icons">account_circle</i>Cerrar Sesión
         </span>
 

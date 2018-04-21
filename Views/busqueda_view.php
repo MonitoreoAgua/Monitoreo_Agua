@@ -10,7 +10,7 @@
    <body>
       <!-- Se carga el cover para control de login mediante firebase -->
       <?php require 'Views/inc/login_cover.php';?>
-      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <div class=" mdl-js-layout mdl-layout--fixed-header">
          <!-- Carga del menú del sitio web -->
          <?php require 'Views/inc/menu.php'; ?>
          <main class="mdl-layout__content">
@@ -98,7 +98,6 @@
             <?php require 'Views/inc/footer.php';?>
          </main>
       </div>
-      <?php require 'Views/inc/firebase.php';?>
       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
       <script src="/js/contentNuevoMarcador.js"></script>
       <script src="/js/llenarComboTipoMitigacion.js"></script>
