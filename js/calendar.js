@@ -35,10 +35,7 @@ function addEvent() {
   var description = $("#descripcion").val();
   var endDate = new Date(reminderDate);
   endDate.setDate(endDate.getDate()+1);
-  console.log(summary);
-  console.log(description);
-  console.log(reminderDate);
-  console.log(endDate);
+  
   var event = {
     'summary': summary,
     'description': description,
@@ -53,8 +50,7 @@ function addEvent() {
     'reminders': {
       'useDefault': false,
       'overrides': [
-        {'method': 'email', 'minutes': 24 * 60},
-        {'method': 'popup', 'minutes': 10}
+        {'method': 'email', 'minutes': 24 * 60}
       ]
     }
   };
