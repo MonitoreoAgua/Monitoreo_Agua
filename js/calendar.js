@@ -19,11 +19,6 @@ function prepareReminder() {
 		$("#lblRecordatorio").html("El recordatorio se creará para el " + reminderDate.toLocaleDateString("es-CR"));
 		$("#crearRecordatorio").prop("disabled", false);
   	$("#lblRecordatorio").show();
-
-	}
-	else {
-		$("#lblRecordatorio").hide();
-		$("#crearRecordatorio").prop("disabled", true);
 	}
 }
 
