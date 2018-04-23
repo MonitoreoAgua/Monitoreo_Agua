@@ -2,7 +2,7 @@ var reminderDate = null;
 
 function prepareReminder() {
 	var valPeriodicidad = $("input[name=periodicidad]:checked").val();
-	if (typeof valPeriodicidad != 'undefined') {
+	if (typeof valPeriodicidad != 'undefined' && $("#lblRecordatorio").html() != "Se creó un recordatorio.") {
 		var now = new Date();
 		switch (valPeriodicidad) {
 			case 'Anual':
@@ -32,10 +32,10 @@ function addEvent() {
     var summary = $("#tipoAct").val();
   else
     var summary = $("#otroTipoAct").val();
-  var description = $("#descripcion").val();
+  var description = $("#descripcion").val() + "\n" + $("#obsPeriodicidad").val();
   var endDate = new Date(reminderDate);
   endDate.setDate(endDate.getDate()+1);
-  
+
   var event = {
     'summary': summary,
     'description': description,
