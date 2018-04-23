@@ -1,10 +1,11 @@
-var name_google, email_google;
+var name_google, email_google, id_google;
 
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   document.getElementsByClassName("bg")[0].style.display = "none";
   name_google = profile.getName();
   email_google = profile.getEmail();
+  id_google = profile.getId();
 }
 
 function signOut() {
@@ -22,8 +23,4 @@ $(window).on('load', function(){
     $("#login_content").fadeIn("slow");
     handleClientLoad();
   }
-});
-
-$(window).on('readystatechange', function(){
-   if (this.readyState === 'complete') this.onload();
 });

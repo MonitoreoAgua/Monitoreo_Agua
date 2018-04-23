@@ -87,7 +87,9 @@ top: 17.5%; */
 	width: 200px;
 }
 
-
+.entrada input[type="button"]:disabled {
+    cursor: not-allowed;
+}
 
 
 /* Estilo para elementos del menú dentro del mapa */

@@ -99,6 +99,7 @@
          </main>
       </div>
       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script src="/js/calendar.js"></script>
       <script src="/js/contentNuevoMarcador.js"></script>
       <script src="/js/llenarComboTipoMitigacion.js"></script>
       <script src="/js/structPhotos.js"></script>

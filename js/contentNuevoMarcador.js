@@ -36,7 +36,7 @@ var contentNuevoMarcador =
 
 		"<div class=\"entrada\">" +
 			"<label for=\"ponderacionRes\">Ponderación de resultados:</label> <input id=\"ponderacionRes\" name=\"ponderacionRes\" type=\"number\" style=\"width: 200px\">" +
-		"</div>" +		
+		"</div>" +
 
 		"<div class =\"entrada\"> " +
 			"<label for=\"photos\">Fotos:</label>" +
@@ -56,16 +56,21 @@ var contentNuevoMarcador =
 					"<img id=\"picUpd4\" width=\"100\" height=\"100\" onclick=\"dialogoSubirFoto(4, false);\">" +
 					"<input type=\"file\" id=\"imgupload4\" style=\"display:none\"/>" +
 				"</div>"+
-		"</div>" +	
+		"</div>" +
 
 		"<div class=\"entrada\">" +
-			"<label for=\"periodicidad\">Periodicidad planeada:</label> <input id=\"periodicidad\" name=\"periodicidad\" type=\"radio\" value=\"Anual\"> Anual&nbsp&nbsp" +
-			"<input id=\"periodicidad\" name=\"periodicidad\" type=\"radio\" value=\"Semestral\"> Semestral&nbsp&nbsp" +
-			"<input id=\"periodicidad\" name=\"periodicidad\" type=\"radio\" value=\"Mensual\"> Mensual" +
-		"</div>" +		
+			"<label for=\"periodicidad\">Periodicidad planeada:</label> <input id=\"periodicidad\" name=\"periodicidad\" type=\"radio\" value=\"Anual\" onclick=\"prepareReminder()\"> Anual&nbsp&nbsp" +
+			"<input id=\"periodicidad\" name=\"periodicidad\" type=\"radio\" value=\"Semestral\" onclick=\"prepareReminder()\"> Semestral&nbsp&nbsp" +
+			"<input id=\"periodicidad\" name=\"periodicidad\" type=\"radio\" value=\"Mensual\" onclick=\"prepareReminder()\"> Mensual" +
+		"</div>" +
 
 		"<div class=\"entrada\">" +
 			"<label for=\"obsPeriodicidad\">Observaciones sobre periodicidad:</label> <textarea id=\"obsPeriodicidad\" name=\"obsPeriodicidad\" style=\"width: 200px\"></textarea>" +
+		"</div>" +
+
+		"<div class=\"entrada\">" +
+			"<label for=\"crearRecordatorio\" style=\"height:30px\">Recordatorio en Google Calendar:</label> <input id=\"crearRecordatorio\" name=\"crearRecordatorio\" type=\"button\" value=\"Crear Recordatorio\" style=\"width: 200px\" disabled=\"true\" onclick=\"addEvent()\">" +
+			"<p id=\"lblRecordatorio\" style=\"font-size: 12px; color: gray; display: none; text-align: center; line-height: 14px\"><b>El recordatorio se creará para el </b></p>" +
 		"</div>" +
 
 	"</form>" +
@@ -112,17 +117,17 @@ var contentDatosMarcador =
 
 			"<div class=\"entrada\">" +
 				"<label for=\"ponderacionRes\">Ponderación de resultados:</label> <input id=\"ponderacionRes\" name=\"ponderacionRes\" type=\"number\" style=\"width: 200px\">" +
-			"</div>" +			
+			"</div>" +
 
 			"<div class =\"entrada\" id=\"divFotos\"> " +
 				"<label for=\"fotos\">Fotos:</label>" +
-			"</div><br><br><br><br>" +			
+			"</div><br><br><br><br>" +
 
 			"<div class=\"entrada\">" +
 				"<label for=\"periodicidad\">Periodicidad planeada:</label> <input id=\"periodicidad1\" name=\"periodicidad\" type=\"radio\" value=\"Anual\"> Anual&nbsp&nbsp" +
 				"<input id=\"periodicidad2\" name=\"periodicidad\" type=\"radio\" value=\"Semestral\"> Semestral&nbsp&nbsp" +
 				"<input id=\"periodicidad3\" name=\"periodicidad\" type=\"radio\" value=\"Mensual\"> Mensual" +
-			"</div>" +		
+			"</div>" +
 
 			"<div class=\"entrada\">" +
 				"<label for=\"obsPeriodicidad\">Observaciones sobre periodicidad:</label> <textarea id=\"obsPeriodicidad\" name=\"obsPeriodicidad\" style=\"width: 200px\"></textarea>" +
