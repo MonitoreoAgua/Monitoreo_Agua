@@ -53,7 +53,7 @@ var isFilterToggle=true;
         /*ControlUI to control all content of menu*/
         var controlUI = document.createElement('div');
         controlUI.className = 'anidar';
-        controlDiv.style.width="96%";
+        controlDiv.style.width="100%";
         controlDiv.id = "controlDiv";
         controlDiv.appendChild(controlUI);
         controlDiv.style.backgroundColor = '#039BE5';
@@ -66,13 +66,15 @@ var isFilterToggle=true;
         anidarMenu.addEventListener('click', function() {
           $( ".filters" ).toggle( "slow", function() {
             if(isFilterToggle){
-              $("#controlDiv").css('width','96%');
+              $("#controlDiv").css('width','100%');
               $("#controlDiv").css('border-radius','0px');
               $("#controlDiv").css('margin-top','0px');
+              $("#controlDiv").css('margin-left','0px');
             }else{
               $("#controlDiv").css('width','4%');
               $("#controlDiv").css('border-radius','5px');
-              $("#controlDiv").css('margin-top','20px');
+              $("#controlDiv").css('margin-top','15px');
+              $("#controlDiv").css('margin-left','15px');
             }
           });
           isFilterToggle=!isFilterToggle;          
@@ -111,6 +113,7 @@ var isFilterToggle=true;
         btnCentrarRectangulo.addEventListener('click',function () {
           centrarRectangulo();
         });  
+
         //<button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
         var btnChart = document.createElement('button');
         btnChart.className = 'btn filters';
@@ -175,8 +178,9 @@ var isFilterToggle=true;
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
 function initMap() {
 
+    var container = $('#map').get(0);
 	  //creación del mapa
-	 map = new google.maps.Map(document.getElementById('map'), {
+	 map = new google.maps.Map(container, {
 	    zoom: 11,
 	    center: {"lat":9.876711,"lng":-84.104376},
 	    radius:19,
@@ -184,8 +188,6 @@ function initMap() {
       mapTypeControl: false
 
 	  });
-
-
 
 
     // Create the DIV to hold the control and call the CenterControl()
@@ -1438,3 +1440,6 @@ function obtenerZonasAdministrativas(latPunto, lngPunto) {
 function changeCircleRadius(newRadius) {
   centroidCircle.setRadius(newRadius*1000);
 }
+
+
+

@@ -17,8 +17,6 @@
             <div class="page-content">
                <div class="mdl-grid">
                   <div class="main">
-                     <!-- SubMenu para el mapa, principalmente para anidar consultas -->
-
                      <!-- Contenedor del mapa, cargado desde js -->
                      <div id="map"></div>
                      <!-- Contenedor utilizado para mostrar los resultados del evento de seleccionar dos marcadores, cargado desde js -->

@@ -24,6 +24,11 @@ body{
 	width: 100%;
 }
 
+/*Usado para sobreponer el boton de pantalla completa sobre el menu del mapa*/
+#map div.gm-style > button {
+	z-index: 1;
+}
+
 
 /* Elementos del menú de filtros anidados */
 

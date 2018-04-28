@@ -8,6 +8,9 @@
         <div class="mdl-layout__header-row">
             <!-- Title -->
             <span class="mdl-layout-title"><a href="/index.php/busqueda">Monitoreo de aguas UCR</a></span>
+            
+            <a href='/index.php/medicionDescarga' style='margin-left:20px;'>MedicionDescarga Tmp</a>
+            
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
