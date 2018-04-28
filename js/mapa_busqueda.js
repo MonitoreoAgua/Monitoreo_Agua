@@ -123,7 +123,7 @@ var isFilterToggle=true;
         //River checkbox
         var riversCheck = document.createElement('dl');
         riversCheck.className = 'dropdown filters';
-        riversCheck.innerHTML="<dt><a><span class='hida'>Rios:</span></a></dt><dd><div class='mutliSelect'><ul id='checkBoxRiverNames' onclick='riverDropDownClicked();'></ul></div></dd>";
+        riversCheck.innerHTML="<dt onclick='riverDropDownClicked();'><a><span class='hida'>Rios:</span></a></dt><dd><div class='mutliSelect'><ul id='checkBoxRiverNames'></ul></div></dd>";
         
         //<input type='number' min='1' id='inputFilterRadio' placeholder='Radio' value=1 onchange='changeCircleRadius(this.value);'>
         var riverInput=document.createElement('input');
@@ -1332,7 +1332,7 @@ elSpanKWCerrar.onclick = function() {
 
 function riverDropDownClicked() {
   $("#checkBoxRiverNames").slideToggle('fast');
-  $("#checkBoxRiverNames").style.display = block;
+  $("#checkBoxRiverNames").style.display = 'block';
 }
        
 $(".dropdown dd ul li a").on('click', function() {

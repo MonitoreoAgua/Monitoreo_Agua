@@ -211,8 +211,8 @@ top: 17.5%; */
 	 padding: 5px 0px 0px 2px;
 }
 
-#btnCloseArPOI:hover{
-	background: red;
+#btnCloseArPOI span{
+	color:black;
 }
 
 .btnFiltrarArPOI{

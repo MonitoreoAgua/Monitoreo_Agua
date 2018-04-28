@@ -24,8 +24,8 @@
                      <!-- Contenedor utilizado para mostrar los resultados del evento de seleccionar dos marcadores, cargado desde js -->
                      <div class="container-fluid arPOIBig">
                         <div class="col-md-9 arPOIShort">
-                           <button class="btn" id="btnCloseArPOI">
-                              <h5>X</h5>
+                           <button class="close" aria-label="Close" id="btnCloseArPOI">
+                              <span aria-hidden="true">&times;</span>
                            </button>
                            <br>
                            <div class="contenidoArPOIShort"></div>
