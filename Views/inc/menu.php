@@ -7,14 +7,14 @@
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
             <!-- Title -->
-            <span class="mdl-layout-title"><a href="/index.php/busqueda">Monitoreo de aguas UCR</a></span>
-            
-            <a href='/index.php/medicionDescarga' style='margin-left:20px;'>MedicionDescarga Tmp</a>
+            <img src="/data/monitoreo_logo.png" style="height: 100%; margin-left:-70px; padding-left:0px;"></img>
+            <span class="mdl-layout-title"><a href="/index.php/busqueda" style="text-decoration:none;">Monitoreo de aguas UCR</a></span>
             
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
             <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link" href='/index.php/medicionDescarga' style='margin-left:20px;'>MedicionDescarga Tmp</a>
                 <a class="mdl-navigation__link" href='/index.php/listaGraficas'>Gráficas</a>
                 <a class="mdl-navigation__link" href="/index.php/busqueda">Búsqueda</a>
                 <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
