@@ -10,44 +10,20 @@
    <body>
       <!-- Se carga el cover para control de login mediante firebase -->
       <?php require 'Views/inc/login_cover.php';?>
-      <div class=" mdl-js-layout mdl-layout--fixed-header">
+      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
          <!-- Carga del menú del sitio web -->
          <?php require 'Views/inc/menu.php'; ?>
          <main class="mdl-layout__content">
             <div class="page-content">
                <div class="mdl-grid">
                   <div class="main">
-                     <!-- SubMenu para el mapa, principalmente para anidar consultas -->
-                     <div class="anidar">
-                        <button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><img class="iconMiMu" src="/data/Templatic-map-icons/MitigacionAdd.png"></img></button>
-                        <button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><img class="iconMiMu" id=toggleMitigacion src="/data/Templatic-map-icons/mi.png"></img></button>
-                        <button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><img class="iconMiMu" id=toggleMuestreo src="/data/Templatic-map-icons/mu.png"></img></button>
-                        <button class="btn" id="btnCentrarRectangulo" onclick="centrarRectangulo();"><i style="font-size: 12px">Centrar</i></button>
-                        <button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
-                        <dl class="dropdown">
-                           <dt>
-                              <a>
-                              <span class="hida">Rios:</span>
-                              </a>
-                           </dt>
-                           <dd>
-                              <div class="mutliSelect">
-                                 <ul id="checkBoxRiverNames">
-                                 </ul>
-                              </div>
-                           </dd>
-                        </dl>
-                        <input type="number" min="1" id="inputFilterRadio" placeholder="Radio" value=1 onchange="changeCircleRadius(this.value);">
-                        <button class="btn botonFiltroR" onclick="aplicarFiltro(document.getElementById('inputFilterRadio').value,1)"><i class="fa fa-filter"></i></button>
-                        <button class="btn reset" id="reset"><i class="fa fa-eraser"></i></button>
-                     </div>
                      <!-- Contenedor del mapa, cargado desde js -->
                      <div id="map"></div>
                      <!-- Contenedor utilizado para mostrar los resultados del evento de seleccionar dos marcadores, cargado desde js -->
                      <div class="container-fluid arPOIBig">
                         <div class="col-md-9 arPOIShort">
-                           <button class="btn" id="btnCloseArPOI">
-                              <h5>X</h5>
+                           <button class="close" aria-label="Close" id="btnCloseArPOI">
+                              <span aria-hidden="true">&times;</span>
                            </button>
                            <br>
                            <div class="contenidoArPOIShort"></div>
@@ -98,8 +74,8 @@
             <?php require 'Views/inc/footer.php';?>
          </main>
       </div>
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
       <script src="/js/calendar.js"></script>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
       <script src="/js/contentNuevoMarcador.js"></script>
       <script src="/js/llenarComboTipoMitigacion.js"></script>
       <script src="/js/structPhotos.js"></script>
