@@ -74,7 +74,7 @@
             <?php require 'Views/inc/footer.php';?>
          </main>
       </div>
-      <script src="/js/calendar.js"></script>
+      <?php require 'Views/inc/firebase.php';?>
       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
       <script src="/js/contentNuevoMarcador.js"></script>
       <script src="/js/llenarComboTipoMitigacion.js"></script>
