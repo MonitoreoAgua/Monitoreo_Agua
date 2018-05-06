@@ -39,20 +39,167 @@ var fotosMarcador = [];
 var flagFileChange = false;
 // variable que representa un círculo alrededor del centroide en el mapa
 var centroidCircle;
+var isFilterToggle=true;
+//-------------FUNCTIONS FOR CONTROLING THE TOP BUTTON ON THE MAP--------------------//
+   
+        /**
+       * The CenterControl adds a control to the map that recenters the map on
+       * Chicago.
+       * This constructor takes the control DIV as an argument.
+       * @constructor
+       */
+      function CenterControl(controlDiv, map) {
 
+        /*ControlUI to control all content of menu*/
+        var controlUI = document.createElement('div');
+        controlUI.className = 'anidar';
+        controlDiv.style.width="100%";
+        controlDiv.id = "controlDiv";
+        controlDiv.appendChild(controlUI);
+        controlDiv.style.backgroundColor = '#039BE5';
+        
+        /*BTN to control menu over the map*/
+        var anidarMenu = document.createElement('SPAN');
+        anidarMenu.id = 'anidarMenu';
+        anidarMenu.innerHTML = "<a>&#9776;</a>";
+        //anidarMenu.className = "btn";
+        anidarMenu.addEventListener('click', function() {
+          $( ".filters" ).toggle( "slow", function() {
+            if(isFilterToggle){
+              $("#controlDiv").css('width','100%');
+              $("#controlDiv").css('border-radius','0px');
+              $("#controlDiv").css('margin-top','0px');
+              $("#controlDiv").css('margin-left','0px');
+            }else{
+              $("#controlDiv").css('width','4%');
+              $("#controlDiv").css('border-radius','5px');
+              $("#controlDiv").css('margin-top','15px');
+              $("#controlDiv").css('margin-left','15px');
+            }
+          });
+          isFilterToggle=!isFilterToggle;          
+        });
+        
+        //<button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><img class="iconMiMu" src="/data/Templatic-map-icons/MitigacionAdd.png"></img></button>
+        var btnMitigacion = document.createElement('button');
+        btnMitigacion.className = 'btn filters';
+        btnMitigacion.id ='btnMitigacion';
+        btnMitigacion.innerHTML = '<img class="iconMiMu" src="/data/Templatic-map-icons/MitigacionAdd.png"></img>';
+        btnMitigacion.addEventListener("click", function() {
+          nuevoPuntoMitigacion(this);
+        });
+        
+        //<button class="btn" id="btnToggleMitigacion" onclick="toggleMitigacion();"><img class="iconMiMu" id=toggleMitigacion src="/data/Templatic-map-icons/mi.png"></img></button>
+        var btnToggleMitigacion = document.createElement('button');
+        btnToggleMitigacion.className = 'btn filters';
+        btnToggleMitigacion.id ='btnToggleMitigacion';
+        btnToggleMitigacion.innerHTML = '<img class="iconMiMu" id=toggleMitigacion src="/data/Templatic-map-icons/mi.png"></img>';
+        btnToggleMitigacion.addEventListener('click',function () {
+          toggleMitigacion();
+        });
+        //<button class="btn" id="btnToggleMuestreo" onclick="toggleMuestreo();"><img class="iconMiMu" id=toggleMuestreo src="/data/Templatic-map-icons/mu.png"></img></button>
+        var btnToggleMuestreo = document.createElement('button');
+        btnToggleMuestreo.className = 'btn filters';
+        btnToggleMuestreo.id ='btnToggleMuestreo';
+        btnToggleMuestreo.innerHTML = '<img class="iconMiMu" id=toggleMuestreo src="/data/Templatic-map-icons/mu.png"></img>';
+        btnToggleMuestreo.addEventListener('click',function () {
+          toggleMuestreo();
+        });  
+        //<button class="btn" id="btnCentrarRectangulo" onclick="centrarRectangulo();"><i style="font-size: 12px">Centrar</i></button>
+        var btnCentrarRectangulo = document.createElement('button');
+        btnCentrarRectangulo.className = 'btn filters';
+        btnCentrarRectangulo.id ='btnCentrarRectangulo';
+        btnCentrarRectangulo.innerHTML = '<i style="font-size: 12px">Centrar</i>';
+        btnCentrarRectangulo.addEventListener('click',function () {
+          centrarRectangulo();
+        });  
+
+        //<button class="btn" id="btnChart" onclick="graficar();" disabled="true"><i class="fa fa-area-chart"></i></button>
+        var btnChart = document.createElement('button');
+        btnChart.className = 'btn filters';
+        btnChart.id ='btnChart';
+        btnChart.innerHTML = '<i class="fa fa-area-chart"></i>';
+        btnChart.addEventListener('click',function () {
+          graficar();
+        });       
+        
+        //River checkbox
+        var riversCheck = document.createElement('dl');
+        riversCheck.className = 'dropdown filters';
+        riversCheck.innerHTML="<dt onclick='riverDropDownClicked();'><a><span class='hida'>Rios:</span></a></dt><dd><div class='mutliSelect'><ul id='checkBoxRiverNames'></ul></div></dd>";
+        
+        //<input type='number' min='1' id='inputFilterRadio' placeholder='Radio' value=1 onchange='changeCircleRadius(this.value);'>
+        var riverInput=document.createElement('input');
+        riverInput.className='filters';
+        riverInput.style.height = '30px';
+        riverInput.style.width = '4%';
+        riverInput.type='number';
+        riverInput.min = '1';
+        riverInput.id='inputFilterRadio';
+        riverInput.placeholder='Radio';
+        riverInput.value='1';
+        riverInput.addEventListener('change',function() {
+            changeCircleRadius(this.value);
+        });
+        
+        //<button class='btn botonFiltroR' onclick='aplicarFiltro(document.getElementById('inputFilterRadio').value,1)'><i class='fa fa-filter'></i></button>
+        var riverBtnAplicar = document.createElement('button');
+        riverBtnAplicar.className='btn botonFiltroR filters';
+        riverBtnAplicar.addEventListener('click', function() {
+            aplicarFiltro(document.getElementById('inputFilterRadio').value,1);
+        });
+        riverBtnAplicar.innerHTML = "<i class='fa fa-filter'></i>";
+        
+        
+        //<button class='btn reset' id='reset'><i class='fa fa-eraser'></i></button>
+        var riverBtnReset = document.createElement('button');
+        riverBtnReset.className='btn reset filters';
+        riverBtnReset.id='reset';
+        riverBtnReset.addEventListener('click',function() {
+            reset_radio_filter();
+        });
+        riverBtnReset.innerHTML = "<i class='fa fa-eraser'></i>";
+        
+        controlUI.appendChild(anidarMenu);
+        controlUI.appendChild(btnMitigacion);
+        controlUI.appendChild(btnToggleMitigacion);
+        controlUI.appendChild(btnToggleMuestreo);
+        controlUI.appendChild(btnCentrarRectangulo);
+        controlUI.appendChild(btnChart);
+        controlUI.appendChild(riversCheck);
+        controlUI.appendChild(riverInput);
+        controlUI.appendChild(riverBtnAplicar);
+        controlUI.appendChild(riverBtnReset);
+        // Setup the click event listeners: simply set the map to Chicago.
+
+
+      }
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
 function initMap() {
 
+    var container = $('#map').get(0);
 	  //creación del mapa
-	 map = new google.maps.Map(document.getElementById('map'), {
+	 map = new google.maps.Map(container, {
 	    zoom: 11,
 	    center: {"lat":9.876711,"lng":-84.104376},
 	    radius:19,
-      gestureHandling: 'cooperative'
+      gestureHandling: 'cooperative',
+      mapTypeControl: false
+
 	  });
 
 
+    // Create the DIV to hold the control and call the CenterControl()
+    // constructor passing in this DIV.
+    var centerControlDiv = document.createElement('div');
+    var centerControl = new CenterControl(centerControlDiv, map);
+
+    centerControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+        
+        
 	//marcador draggable para aplicar filtro
 	 filterMarker = new google.maps.Marker({
 	    map: map,
@@ -143,7 +290,7 @@ function revisarLimitesRectangulo() {
           rivers[river_name]=[];
           rivers[river_name].push(riverKey);
           //New section: set checkbox with selected rivers names.
-          var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this)' value='"+river_name+"' checked/>"+river_name+"</li>";
+          var riverToCheckBox = "<li><input type='checkbox' onclick='riverChecked(this);' value='"+river_name+"' checked/>"+river_name+"</li>";
           $('#checkBoxRiverNames').append(riverToCheckBox);
         }else{
           rivers[river_name].push(riverKey);
@@ -219,7 +366,7 @@ function placeMarker(position, map) {
         aritmeticaPOIS(this);
       });
     map.panTo(position);
-    document.getElementById("btnMitigacion").className = "btnMitigacion btn";
+    document.getElementById("btnMitigacion").className = "btnMitigacion btn filters";
     google.maps.event.addListener(infowindowNuevoMarcador, 'closeclick', function() {
       //Si no se guardaron los cambios
       nMarcador.setMap(null);
@@ -238,7 +385,7 @@ function placeMarker(position, map) {
   }
   else {
     window.alert("Ha excedido el límite de banderas por año");
-    document.getElementById("btnMitigacion").className = "btnMitigacion btn";
+    document.getElementById("btnMitigacion").className = "btnMitigacion btn filters";
     nuevoPunto = !nuevoPunto;
   }
 }
@@ -468,10 +615,10 @@ function calcularVerMas(datos){
 //----------------------------------------INSERCION Y MODIFICACION DE PUNTO DE MITIGACION-----------------------------------------------------------------//
 function nuevoPuntoMitigacion(element) {
   if (nuevoPunto) {
-    document.getElementById(element.id).className = "btnMitigacion btn";
+    document.getElementById(element.id).className = "btnMitigacion btn filters";
   }
   else {
-   document.getElementById(element.id).className = "btnMitigacion_Pressed btn";
+   document.getElementById(element.id).className = "btnMitigacion_Pressed btn filters";
   }
 
   nuevoPunto = !nuevoPunto;
@@ -916,7 +1063,7 @@ document.getElementById("calidad5").onclick = function(){
 }
 
 
-document.getElementById("reset").onclick = function(){
+function reset_radio_filter(){
   for(var i=0;i<markers.length;i++){
     markers[i].setVisible(true);
   }
@@ -1167,12 +1314,13 @@ elSpanKWCerrar.onclick = function() {
 
 //dropdown checkbox for river filtered rivers names.
 
-$(".dropdown dt a").on('click', function() {
-  $(".dropdown dd ul").slideToggle('fast');
-});
-
+function riverDropDownClicked() {
+  $("#checkBoxRiverNames").slideToggle('fast');
+  $("#checkBoxRiverNames").style.display = 'block';
+}
+       
 $(".dropdown dd ul li a").on('click', function() {
-  $(".dropdown dd ul").hide();
+  $("#checkBoxRiverNames").hide();
 });
 
 $(document).bind('click', function(e) {
@@ -1274,3 +1422,6 @@ function obtenerZonasAdministrativas(latPunto, lngPunto) {
 function changeCircleRadius(newRadius) {
   centroidCircle.setRadius(newRadius*1000);
 }
+
+
+

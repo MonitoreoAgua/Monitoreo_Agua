@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
 
 div.container2 {
-	position: absolute;
+    position: absolute;
 top: 0;
 right: 0;
 bottom: 0;
@@ -21,8 +21,8 @@ div.container3 {
 }
 
 div.container3 img {
-	margin-top: 40%;
-	margin-left: -5%;
+    margin-top: 15%;
+    margin-left: -7%;
 }
 
 div.container4 {
@@ -33,8 +33,8 @@ width: 70%;
 }
 
 div.container4 h1 {
-	font-size: 50px;
-	color: rgb(51,170,221);
+    font-size: 50px;
+    color: rgb(51,170,221);
 }
 body, html {
     height: 100%;
@@ -42,7 +42,7 @@ body, html {
 
 .bg {
     /* The image used */
-    background-image: url("/img/fondo.jpg");
+    background-image: url("/data/fondo.jpg");
 
     /* Full height */
     height: 100%;
@@ -52,7 +52,7 @@ body, html {
     background-repeat: no-repeat;
     background-size: cover;
 
-		position: fixed;
+        position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -69,11 +69,11 @@ body, html {
 }
 
 .login-form p {
-	font-size: 20px;
+    font-size: 20px;
 }
 
 .loginBox {
-	padding: 0.5rem 2.5rem;
+    padding: 0.5rem 2.5rem;
 }
 
 .login-btn {

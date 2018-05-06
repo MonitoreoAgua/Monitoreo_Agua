@@ -3,7 +3,8 @@
 <div class="bg">
 	<div class="container2">
 		<div class="container3">
-			<p><img src ="/img/logo.png"></p>
+			<p><img src ="/data/monitoreo_logo.png" style="width: 312px; height: 312px;"></p>
+			
 		</div>
 		<div class="container4">
 			<div align="left" class ="loginBox"> <h1>Monitoreo de agua UCR</h1> </div>
