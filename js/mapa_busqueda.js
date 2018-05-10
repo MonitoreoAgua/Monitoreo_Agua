@@ -39,7 +39,7 @@ var fotosMarcador = [];
 var flagFileChange = false;
 // variable que representa un círculo alrededor del centroide en el mapa
 var centroidCircle;
-var isFilterToggle=true;
+var isFilterToggle=false;
 //-------------FUNCTIONS FOR CONTROLING THE TOP BUTTON ON THE MAP--------------------//
    
         /**
@@ -55,6 +55,7 @@ var isFilterToggle=true;
         controlUI.className = 'anidar';
         controlDiv.style.width="100%";
         controlDiv.id = "controlDiv";
+        controlDiv.style.left = '0px';
         controlDiv.appendChild(controlUI);
         controlDiv.style.backgroundColor = '#039BE5';
         
@@ -70,14 +71,15 @@ var isFilterToggle=true;
               $("#controlDiv").css('border-radius','0px');
               $("#controlDiv").css('margin-top','0px');
               $("#controlDiv").css('margin-left','0px');
+              isFilterToggle=!isFilterToggle; 
             }else{
               $("#controlDiv").css('width','4%');
               $("#controlDiv").css('border-radius','5px');
               $("#controlDiv").css('margin-top','15px');
               $("#controlDiv").css('margin-left','15px');
+              isFilterToggle=!isFilterToggle;            
             }
           });
-          isFilterToggle=!isFilterToggle;          
         });
         
         //<button class="btn" id="btnMitigacion" onclick="nuevoPuntoMitigacion(this);"><img class="iconMiMu" src="/data/Templatic-map-icons/MitigacionAdd.png"></img></button>
@@ -172,8 +174,8 @@ var isFilterToggle=true;
         controlUI.appendChild(riverBtnReset);
         // Setup the click event listeners: simply set the map to Chicago.
 
-
       }
+      
 
 //-----------------------------------------INICIALIZACION DEL MAPA----------------------------------------------------------------//
 function initMap() {
@@ -273,6 +275,22 @@ function initMap() {
     });
 
 }
+
+
+  $( window ).resize(function() {
+      if(isFilterToggle){
+          $( ".filters" ).toggle( "slow", function() {
+              $("#controlDiv").css('width','100%');
+              $("#controlDiv").css('border-radius','0px');
+              $("#controlDiv").css('margin-top','0px');
+              $("#controlDiv").css('margin-left','0px');
+              $("#controlDiv").css('left','0px');
+              isFilterToggle=!isFilterToggle;
+          })
+      }
+  });
+
+
 
 function revisarLimitesRectangulo() {
   $('#checkBoxRiverNames').empty();
