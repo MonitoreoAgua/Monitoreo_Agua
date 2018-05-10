@@ -1,4 +1,4 @@
-<?php require "Views/inc/header.php"; require "Views/inc/menu.php";?>
+<?php require "Views/inc/header.php"; require "Views/inc/menu.php"; require 'Views/inc/login_cover.php';?>
 <!-- Scripts requeridos -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="

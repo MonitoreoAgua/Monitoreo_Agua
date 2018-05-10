@@ -646,7 +646,7 @@ function agregarNuevoPunto() {
   var fecha_inicio = document.getElementById('fechaI').value;
   var fecha_fin = document.getElementById('fechaF').value;
   if (document.getElementById('divTipoAct').style.display == "block")
-    var tipo_actividad = document.getElementById('tipoAct').value
+    var tipo_actividad = document.getElementById('tipoAct').value;
   else
     var tipo_actividad = document.getElementById('otroTipoAct').value;
   var responsable = document.getElementById('responsable').value;
@@ -660,10 +660,6 @@ function agregarNuevoPunto() {
   var periodicidad = $("input[name=periodicidad]:checked").val();
   var obsPeriodicidad = document.getElementById('obsPeriodicidad').value;
 
-  const userKey = Object.keys(window.localStorage)
-    .filter(it => it.startsWith('firebase:authUser'))[0];
-  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
-
   var urlPHP = 'fecha_inicio=' + fecha_inicio +
       '&fecha_fin=' + fecha_fin +
       '&tipo_actividad=' + tipo_actividad +
@@ -675,7 +671,7 @@ function agregarNuevoPunto() {
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
-      '&idUsuario=' + idUsuario.uid +
+      '&idUsuario=' + id_google +
       '&periodicidad=' + periodicidad +
       '&obsPeriodicidad=' + obsPeriodicidad;
 
@@ -753,10 +749,6 @@ function modificarPunto() {
   var idAccion = "";
   var ventanaAbierta = null;
 
-	const userKey = Object.keys(window.localStorage)
-    .filter(it => it.startsWith('firebase:authUser'))[0];
-  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
-
   var urlPHP = 'fecha_inicio=' + fecha_inicio +
       '&fecha_fin=' + fecha_fin +
       '&tipo_actividad=' + tipo_actividad +
@@ -767,7 +759,7 @@ function modificarPunto() {
       '&descripcion=' + descripcion +
       '&cantidad_participantes=' + cantidad_participantes +
       '&ponderacion_resultados=' + ponderacion_resultados +
-      '&idUsuario=' + idUsuario.uid;
+      '&idUsuario=' + id_google;
 
   if (contadorClicks==2)  {
     idAccion = jsonDatosBD[second.id].id;
@@ -822,10 +814,6 @@ function hileraPalabrasClave(jsonPalabrasClave) {
 }
 
 function getDatosMitigacion(idAccion) {
-  const userKey = Object.keys(window.localStorage)
-    .filter(it => it.startsWith('firebase:authUser'))[0];
-  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
-
   var datos = [];
 
   if (contadorClicks == 2)
@@ -845,7 +833,7 @@ function getDatosMitigacion(idAccion) {
     }
   });
 
-  if (datos.idUsuario != idUsuario.uid) {
+  if (datos.idUsuario != id_google) {
     document.getElementById("btnAccionMitigacion").style.display = "none";
     document.getElementById("btnBorrarPunto").style.display = "none";
   }
@@ -923,12 +911,9 @@ function eliminarDatosMitigacion() {
 function checkContadorBanderasUsuario(idDocumento) {
   var puedeInsertar = true;
   idContadorBanderas = "";
-  const userKey = Object.keys(window.localStorage)
-    .filter(it => it.startsWith('firebase:authUser'))[0];
-  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
   var contadorUsuario = [];
   $.ajax({
-      url: "/webservices/mitigacion/getContadorBanderas.php?idUsuario=" + idUsuario.uid,
+      url: "/webservices/mitigacion/getContadorBanderas.php?idUsuario=" + id_google,
       async: false,
       dataType: 'json',
       success: function(data) {
@@ -954,12 +939,9 @@ function actualizarContadorBanderasUsuario(operacion) {
   var anioActual = new Date().getFullYear();
   var cantidadBanderas = 1;
   var _id = "";
-  const userKey = Object.keys(window.localStorage)
-    .filter(it => it.startsWith('firebase:authUser'))[0];
-  const idUsuario = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
 
   $.ajax({
-      url: "/webservices/mitigacion/getContadorBanderas.php?idUsuario=" + idUsuario.uid,
+      url: "/webservices/mitigacion/getContadorBanderas.php?idUsuario=" + id_google,
       async: false,
       dataType: 'json',
       success: function(data) {
@@ -978,7 +960,7 @@ function actualizarContadorBanderasUsuario(operacion) {
     _id = contadorUsuario._id.$oid;
   }
 
-  var urlPHP = '&idUsuario=' + idUsuario.uid +
+  var urlPHP = '&idUsuario=' + id_google +
               '&anioActual=' + anioActual +
               '&cantidadBanderas=' + cantidadBanderas;
   if (_id != "") {
