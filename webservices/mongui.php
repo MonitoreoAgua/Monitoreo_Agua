@@ -194,6 +194,79 @@ class Mongui
       }
     }
 
+    //Método para insertar un documento de datos de token OTP a MongoDB
+    public static function insertarDocumentoOTP($datos)
+    {
+      $response = array();
+      $response["success"] = false;
+      try {
+              $cliente = connectDatabaseClient('MonitoreoAgua',1);
+
+              $insRec = new MongoDB\Driver\BulkWrite;
+
+              $_id = $insRec->insert($datos);
+
+              $result = $cliente->executeBulkWrite('MonitoreoAgua.tokensOTP', $insRec);
+
+          if (!is_null($result)) {
+              $response["success"] = true;
+          } else {
+              $response["mensaje"] = "El registro falló. result = null";
+          }
+      } catch (MongoCursorException $e) {
+          $response["mensaje"] = "El registro falló. MongoCursorException";
+      } catch (MongoException $e) {
+          $response["mensaje"] = "El registro falló. MongoException";
+      } catch (MongoConnectionException $e) {
+          $response["mensaje"] = "La conexión falló. MongoConnectionException";
+      }
+
+      return $response;
+    }
+
+    /**
+    * Retorna el documento de la colección "tokensOTP" cuyo id de usuario sea [_id]
+    * @param $_id El id del usuario del documento a consultar
+    * @return MongoCursor con el resultado de la consulta
+    **/
+    public static function getOTP($_id)
+    {
+      $collection=connectDatabaseCollection('MonitoreoAgua','tokensOTP',0);
+
+      $query = array('idUsuario' => $_id);
+
+      $cursor = $collection->findOne($query);
+
+      return ($cursor);
+    }
+
+    public static function eliminarOTP($id) {
+
+      $client = connectDatabaseClient('MonitoreoAgua',1);
+      $response["success"] = false;
+
+      try {
+      $delRec = new MongoDB\Driver\BulkWrite;
+
+      $dato = new MongoDB\BSON\ObjectID($id);
+
+
+      $delRec->delete(['_id' =>$dato], ['limit' => 1]);
+      $writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+      $result = $client->executeBulkWrite('MonitoreoAgua.tokensOTP', $delRec, $writeConcern);
+
+      if($result->getDeletedCount()){
+      $response["success"] = true;
+      //echo 'deleted';
+      }
+
+      } catch(MongoCursorException $e){
+
+      $response["mensaje"] = "Falló al borrar el documento.";
+      } catch (MongoException $e){
+      $response["mensaje"] = "Falló al borrar el documento.";
+      }
+    }
 
   }
   ?>
