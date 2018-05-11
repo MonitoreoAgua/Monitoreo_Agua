@@ -400,6 +400,8 @@ function placeMarker(position, map) {
 		if (cTipos < 1) {
 			ocultarCombobox();
 		}
+	  var posicion = new google.maps.LatLng(nMarcador.getPosition().lat()+(0.12),nMarcador.getPosition().lng());
+    map.setCenter(posicion);
   }
   else {
     window.alert("Ha excedido el límite de banderas por año");
