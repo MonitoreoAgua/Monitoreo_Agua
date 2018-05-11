@@ -1,3 +1,11 @@
+function initializeData() {
+	if (document.getElementsByClassName("bg")[0].style.display != "none") {
+		setTimeout(initializeData, 50);
+		return;
+	}
+	listarGraficos();
+}
+
 
 function strTipoGrafico(tipo) {
 	if (tipo == "Area")
@@ -15,24 +23,22 @@ function strTipoConsulta(tipo) {
 
 function listarGraficos() {
 	var lista = [];
-	const userKey = Object.keys(window.localStorage)
-  	.filter(it => it.startsWith('firebase:authUser'))[0];
-	const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
+	console.log(email_google);
 	$.ajax({
-        url: "/webservices/getGraficos.php?idUsuario=" + user.email,
+        url: "/webservices/getGraficos.php?idUsuario=" + email_google,
         async: false,
         dataType: 'json',
         success: function(data) {
         	console.log(data);
             lista = data;
         },
-        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
         	console.log(XMLHttpRequest);
-    	}   
+    	}
     });
 	var html = "";
 	for (var i = 0 ; i < lista.length ; i++) {
-		html += "<a class=\"list-group-item list-group-item-action flex-column align-items-start\" href=\"graficoGuardado.php?idGrafico=" + lista[i]._id.$oid + "\">" +
+		html += "<a class=\"list-group-item list-group-item-action flex-column align-items-start\" href=\"graficoGuardado?idGrafico=" + lista[i]._id.$oid + "\">" +
 					"<div class=\"d-flex w-100 justify-content-between\">" +
 						"<h5 class=\"mb-1\">" +
 							lista[i].nombreGrafico +

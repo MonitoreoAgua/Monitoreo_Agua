@@ -4,30 +4,27 @@ var urlConsulta = "";
 * Guarda los metadatos ingresados
 **/
 function guardarGrafi() {
-	const userKey = Object.keys(window.localStorage)
-  	.filter(it => it.startsWith('firebase:authUser'))[0];
-	const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
 	/** Obtener parámetros básicos **/
-	var nombreGrafico = document.getElementById('nombreGrafico').value;	
-	var descripcion = document.getElementById('descripcionGrafico').value;	
+	var nombreGrafico = document.getElementById('nombreGrafico').value;
+	var descripcion = document.getElementById('descripcionGrafico').value;
 	if (document.getElementById("btnArea").checked) {
 		var tipoGrafico = 'Area';
 	} else if (document.getElementById("btnXY").checked) {
 		var tipoGrafico = 'XY';
-	}	
+	}
     var primerPar = document.getElementById("parametro").value;
-	
+
 	/** Preparar los parámetros para el PHP, según el tipo de gráfico y de consulta **/
 	var fechaInicio = new Date(document.getElementById('fechaI').value).getTime();
 	var fechaFinal = new Date(document.getElementById('fechaF').value).getTime();
 	urlConsulta = puntosMuestreo;
 	var urlPHP = 'nombreGrafico=' + nombreGrafico +
-			'&email=' + user.email +
+			'&email=' + email_google +
 			'&fechaInicio=' + fechaInicio +
 			'&fechaFinal=' + fechaFinal +
 			'&tipoGrafico=' + tipoGrafico +
 			'&parametro=' + primerPar +
-			'&puntosMuestreo=' + urlConsulta + 
+			'&puntosMuestreo=' + urlConsulta +
 			'&descripcion=' + descripcion;
 
 	/** Llamar al PHP con los parámetros obtenidos **/
@@ -40,7 +37,7 @@ function guardarGrafi() {
 			if (data.success) {
 				alert("Gráfico guardado correctamente.");
 				document.getElementById("btnGuardarGraf").disabled = true;
-			} 
+			}
 			else {
 				console.log("Hubo un problema al guardar el gráfico.\nMensaje: " + data.mensaje);
 			}
@@ -81,16 +78,16 @@ function cargarGrafi() {
         success: function(data) {
             datosGrafico = data;
         },
-        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
         	console.log(XMLHttpRequest);
-    	}   
+    	}
     });
-	
+
 	/** Seleccionar los valores según lo obtenido **/
 	marcarCombo(document.getElementById('parametro'),datosGrafico[0].parametro);
 	if (datosGrafico[0].tipoGrafico == "Area") document.getElementById('btnArea').checked = true;
 	else if (datosGrafico[0].tipoGrafico == "XY") document.getElementById('btnXY').checked = true;
-	
+
 	var fechaInicio = new Date(parseInt(datosGrafico[0].fechaInicio));
 	var fechaFinal = new Date(parseInt(datosGrafico[0].fechaFinal));
 	fechaInicio.setHours(fechaInicio.getHours()+24);
@@ -100,7 +97,7 @@ function cargarGrafi() {
 	document.getElementById('fechaI').value = sFechaI;
 	document.getElementById('fechaF').value = sFechaF;
 	urlConsulta = datosGrafico[0].puntosMuestreo;
-	
+
 	/** Graficar según el tipo de consulta **/
 	obtenerDatos(urlConsulta);
 	document.getElementById('nombreGrafico').value = datosGrafico[0].nombreGrafico;
@@ -112,29 +109,26 @@ function cargarGrafi() {
 **/
 function modificarGrafi(idGrafico) {
 
-	const userKey = Object.keys(window.localStorage)
-  	.filter(it => it.startsWith('firebase:authUser'))[0];
-	const user = userKey ? JSON.parse(localStorage.getItem(userKey)) : undefined;
 	/** Obtener parámetros básicos **/
-	var nombreGrafico = document.getElementById('nombreGrafico').value;	
-	var descripcion = document.getElementById('descripcionGrafico').value;	
+	var nombreGrafico = document.getElementById('nombreGrafico').value;
+	var descripcion = document.getElementById('descripcionGrafico').value;
 	if (document.getElementById("btnArea").checked) {
 		var tipoGrafico = 'Area';
 	} else if (document.getElementById("btnXY").checked) {
 		var tipoGrafico = 'XY';
-	}	
+	}
     var primerPar = document.getElementById("parametro").value;
-	
+
 	/** Preparar los parámetros para el PHP, según el tipo de gráfico y de consulta **/
 	var fechaInicio = new Date(document.getElementById('fechaI').value).getTime();
 	var fechaFinal = new Date(document.getElementById('fechaF').value).getTime();
 	var urlPHP = 'nombreGrafico=' + nombreGrafico +
-			'&email=' + user.email +
+			'&email=' + email_google +
 			'&fechaInicio=' + fechaInicio +
 			'&fechaFinal=' + fechaFinal +
 			'&tipoGrafico=' + tipoGrafico +
 			'&parametro=' + primerPar +
-			'&puntosMuestreo=' + urlConsulta + 
+			'&puntosMuestreo=' + urlConsulta +
 			'&descripcion=' + descripcion +
 			'&idGrafico=' + idGrafico;
 
@@ -147,7 +141,7 @@ function modificarGrafi(idGrafico) {
 		success: function( data ) {
 			if (data.success) {
 				alert("Cambios guardados correctamente.");
-			} 
+			}
 			else {
 				console.log("Hubo un problema al guardar los cambios.\nMensaje: " + data.mensaje);
 			}
@@ -157,7 +151,7 @@ function modificarGrafi(idGrafico) {
 		}
 	});
 }
-	
+
 /**
 * Elimina el gráfico cargado
 **/
@@ -170,7 +164,7 @@ function eliminarGrafi() {
 		data: 'idGrafico=' + idGrafico,
 		success: function( data ) {
 				alert("El gráfico ha sido eliminado correctamente.");
-				window.open("listaGraficas.php","_self");
+				window.open("listaGraficas","_self");
 		}
 	});
 }

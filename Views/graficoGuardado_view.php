@@ -1,14 +1,13 @@
-<!-- Guardar el id del Gráfico en una variable -->
-<?php
+<!-- Guardar el id del Gráfico en una variable y cargar header, menu y login -->
+<?php require "Views/inc/header.php"; require "Views/inc/menu.php"; require 'Views/inc/login_cover.php';
 	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	  if (isset($_GET['idGrafico'])) {
 		  echo '<script> var idGrafico = "' . $_GET['idGrafico'] . '";</script>';
 	  }
-	} 
+	}
 ?>
 
 <!-- Scripts requeridos -->
-<?php require "Views/inc/header.php"; require "Views/inc/menu.php"; require 'Views/inc/login_cover.php';?>
 <script src="http://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>

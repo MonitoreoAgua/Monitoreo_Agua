@@ -12,7 +12,9 @@
             </h3>
             <hr class="my-3">
                 <div class="list-group" id="listaGraficos">
-                    <script>listarGraficos();</script>
+                  <script type="text/javascript">
+                    window.onload = initializeData;
+                  </script>
                 </div>
             </hr>
         </div>
