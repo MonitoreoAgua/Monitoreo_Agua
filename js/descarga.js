@@ -19,9 +19,17 @@ function agregarFilaDescarga() {
                   "   <textarea class='form-control' name='comentarios'/></textarea>"+
                   "</td>"+
                   "<td>"+
-                  "   <button class='btn btn-danger' onClick=\"$(this).closest(\'tr\').remove();\">Eliminar</button>"+
+                     " <button class=\"btn btn-danger btn-sm\" onClick=\"eliminarFila($(this));\">Eliminar</button>"+
                   "</td>"+
                "</tr>");
+}
+
+
+function eliminarFila(arg) {
+   if($('#aforoTabla tr').length > 2){
+      console.log("eliminar");
+      arg.closest('tr').remove();
+   }
 }
 
 function procesarDescarga() {
@@ -60,4 +68,13 @@ function procesarDescarga() {
    $("#crossDescarga").val(areaSecciones.reduce(function(acc, val) { return acc + val; }));
    $("#descargaCalculada").val(descargaSecciones.reduce(function(acc, val) { return acc + val; }));
    
+}
+
+function fueProcesado() {
+   if($("#descargaCalculada").val()!="0" && $("#crossDescarga").val()!="0"){
+      return true;
+   }else{
+      alert("Datos aún no procesados");
+      return false;
+   }
 }
