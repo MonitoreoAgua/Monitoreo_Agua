@@ -15,10 +15,10 @@
          <br>
          <br>
          <br>
-         <form class="form-horizontal" action="/index.php/medicionDescarga" method="post" onsubmit="return fueProcesado()">
+         <form class="form-horizontal" action="/index.php/medicionDescarga?accion=insertar" method="post" onsubmit="return fueProcesado()">
             <fieldset>
                <!-- Form Name -->
-               <legend>Insertar Aforo</legend>
+               <legend>Ver Aforo</legend>
                <!-- Text input-->
                <div class="form-group">
                   <label class="col-md-4 control-label" for="Ubicacion">Ubicación</label>  
@@ -102,63 +102,6 @@
             </fieldset>
  
             <br><br>
-            <table class="table" id="aforoTabla">
-               <thead>
-                  <tr>
-                     <th>
-                        Distancia sobre el río (m)
-                     </th>
-                     <th>
-                        Profundidad (m)
-                     </th>
-                     <th>
-                        Velocidad (m/s)
-                     </th>
-                     <th>
-                        Área por sección (m2)
-                     </th>
-                     <th>
-                        Descarga por sección (m3/s)
-                     </th>
-                     <th>
-                        Comentarios
-                     </th>
-                     <th>
-                        Acción
-                     </th>
-                  </tr>
-               </thead>
-               <tbody id='tablaDescarga'>
-                  <tr>
-                     <td>
-                        <input type="number" class="form-control" name="distancia"/>
-                     </td>
-                     <td>
-                        <input type="number" class="form-control" name="profundidad"/>
-                     </td>
-                     <td>
-                        <input type="number"   class="form-control"name="velocidad"/>
-                     </td>
-                     <td>
-                        <input type="number" class="form-control" name="area" disabled/>
-                     </td>
-                     <td>
-                        <input type="number" class="form-control" name="descarga" disabled/>
-                     </td>
-                     <td>
-                        <textarea class="form-control" name="comentarios"/> </textarea>
-                     </td>
-                     <td>
-                        <button class="btn btn-danger btn-sm" onClick="eliminarFila($(this));">Eliminar</button>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
-            <input type="button" class="btn btn-info" onclick="agregarFilaDescarga();" value="Agregar Fila"></button>
-            <input type="button" class="btn btn-success" onClick="procesarDescarga();" value="Procesar"></button>
-            <hr>
-            <br>
-            <input type="submit" class="btn btn-primary" value="Enviar"></button>
          </form>
          <br>
          <br>

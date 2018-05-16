@@ -14,7 +14,7 @@
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
             <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link" href='/index.php/medicionDescarga' style='margin-left:20px;'>Aforo</a>
+                <a class="mdl-navigation__link" href='/index.php/medicionDescarga?accion=insertar' style='margin-left:20px;'>Aforo</a>
                 <a class="mdl-navigation__link" href='/index.php/listaGraficas'>Gráficas</a>
                 <a class="mdl-navigation__link" href="/index.php/busqueda">Búsqueda</a>
                 <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" onclick="signOut();">
