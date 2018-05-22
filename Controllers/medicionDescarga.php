@@ -13,7 +13,9 @@
             }
             break;
         case 'ver':
-                 require 'Views/medicionDescarga_ver.php';
+            $pagina = isset($_GET['pag']) && $_GET['pag'] > 0?filter_var($_GET['pag'], FILTER_SANITIZE_STRING):1;
+            $datosAforo = ver($coleccion, $pagina);
+            count($datosAforo) > 0? require 'Views/medicionDescarga_ver.php':header ('Location: /index.php/busqueda');
             break;        
         default:
             header ('Location: /index.php/busqueda');
@@ -28,8 +30,15 @@
      /**
       * Ver
       * */
-     function ver(){
-         
+     function ver($coleccion, $pag){
+        $datos = iterator_to_array($coleccion->find([], ['skip'=> $pag-1,'limit'=>1]));
+        if(count($datos[0])<1){
+            return [];
+        }else{
+            $cantidad = $coleccion->count([]);
+            $datos[0]['cantidad']=$cantidad;
+            return $datos[0];
+        }
      }
      
      /**
