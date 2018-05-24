@@ -21,11 +21,18 @@
                <legend>Insertar Aforo</legend>
                <!-- Text input-->
                <div class="form-group">
-                  <label class="col-md-4 control-label" for="Ubicacion">Ubicación</label>  
+                  <input id="correo" type="hidden" name="correo">
+                  <label class="col-md-4 control-label" for="latitud">Latitud</label>  
                   <div class="col-md-4">
-                     <input id="Ubicacion" name="Ubicacion" type="text" placeholder="Ubicación" class="form-control input-md" required="">
+                     <input id="latitud" name="latitud" type="text" placeholder="Latitud" class="form-control input-md" required="">
                   </div>
                </div>
+               <div class="form-group">
+                  <label class="col-md-4 control-label" for="longitud">Longitud</label>  
+                  <div class="col-md-4">
+                     <input id="longitud" name="longitud" type="text" placeholder="Longitud" class="form-control input-md" required="">
+                  </div>
+               </div>               
                <!-- Text input-->
                <div class="form-group">
                   <label class="col-md-4 control-label" for="Fecha">Fecha</label>  
@@ -166,6 +173,6 @@
         </div>
          <?php require 'Views/inc/footer.php';?>
          <?php require 'Views/inc/firebase.php';?>
-         <script type="text/javascript" src="/js/descarga.js"></script>
+         <script type="text/javascript" src="/js/descarga_insertar.js"></script>
    </body>
 </html>

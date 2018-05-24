@@ -7,19 +7,19 @@
         case 'insertar':
             if($_SERVER['REQUEST_METHOD'] == 'POST'){//data in
                 insertar($coleccion);
-                header ('Location: /index.php/medicionDescarga?accion=ver');
+                header ('Location: /index.php/medicionDescarga?accion=ver&ini=1&pag=1');
             }else{//lets insert data
                  require 'Views/medicionDescarga_insertar.php';
             }
             break;
+            
+            
         case 'ver':
             $pagina = isset($_GET['pag']) && $_GET['pag'] > 0?filter_var($_GET['pag'], FILTER_SANITIZE_STRING):1;
             $datosAforo = ver($coleccion, $pagina);
             $inicio = isset($_GET['ini'])?$_GET['ini']:$pagina;
-            $fin = $datosAforo['cantidad']>4?$inicio+4:$datosAforo['cantidad'];
-            echo $inicio;
-            echo $fin;
-            count($datosAforo) > 0? require 'Views/medicionDescarga_ver.php':header ('Location: /index.php/busqueda');
+            $fin = $datosAforo['cantidad']>4?$inicio+4:$datosAforo['cantidad']+1;
+            require 'Views/medicionDescarga_ver.php';
             break;        
         default:
             header ('Location: /index.php/busqueda');
@@ -49,8 +49,10 @@
       * Insertar
       **/ 
     function insertar($coleccion){
-         $Ubicacion = filter_var($_POST["Ubicacion"], FILTER_SANITIZE_STRING);
-         $Fecha = filter_var($_POST["Fecha"], FILTER_SANITIZE_STRING);
+        $correo = filter_var($_POST["correo"], FILTER_SANITIZE_STRING);
+         $latitud = filter_var($_POST["latitud"], FILTER_SANITIZE_STRING);
+         $longitud = filter_var($_POST["longitud"], FILTER_SANITIZE_STRING);
+         $fecha = filter_var($_POST["fecha"], FILTER_SANITIZE_STRING);
          $tiempoFinal = filter_var($_POST["tiempoFinal"], FILTER_SANITIZE_STRING);
          $tiempoInicio = filter_var($_POST["tiempoInicio"], FILTER_SANITIZE_STRING);
          $medicionInicio = filter_var($_POST["medicionInicio"], FILTER_SANITIZE_STRING);
@@ -61,7 +63,7 @@
          $descargaCalculada = filter_var($_POST["descargaCalculada"], FILTER_SANITIZE_STRING);
          $crossDescarga = filter_var($_POST["crossDescarga"], FILTER_SANITIZE_STRING);
         
-        $resultado = $coleccion->insertOne( ["Ubicacion"=>$Ubicacion,"Fecha"=>$Fecha,"tiempoFinal"=>$tiempoFinal,
+        $resultado = $coleccion->insertOne( ["correo"=>$correo, "latitud"=>$latitud, "longitud"=>$longitud,"fecha"=>$fecha,"tiempoFinal"=>$tiempoFinal,
         "tiempoInicio"=>$tiempoInicio,"medicionInicio"=>$medicionInicio,"medicionFinal"=>$medicionFinal,
         "metodoUsado"=>$metodoUsado,"metodoMedicion"=>$metodoMedicion,"comments"=>$comments,
         "descargaCalculada"=>$descargaCalculada,"crossDescarga"=>$crossDescarga] );

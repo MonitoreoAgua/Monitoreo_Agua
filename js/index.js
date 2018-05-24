@@ -23,4 +23,10 @@ $(window).on('load', function(){
     $("#login_content").fadeIn("slow");
     handleClientLoad();
   }
+  
+  console.log(email_google);
+  document.getElementById("correo").value = email_google;
+  
 });
+
+
