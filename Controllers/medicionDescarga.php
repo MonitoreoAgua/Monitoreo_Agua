@@ -15,6 +15,10 @@
         case 'ver':
             $pagina = isset($_GET['pag']) && $_GET['pag'] > 0?filter_var($_GET['pag'], FILTER_SANITIZE_STRING):1;
             $datosAforo = ver($coleccion, $pagina);
+            $inicio = isset($_GET['ini'])?$_GET['ini']:$pagina;
+            $fin = $datosAforo['cantidad']>4?$inicio+4:$datosAforo['cantidad'];
+            echo $inicio;
+            echo $fin;
             count($datosAforo) > 0? require 'Views/medicionDescarga_ver.php':header ('Location: /index.php/busqueda');
             break;        
         default:
