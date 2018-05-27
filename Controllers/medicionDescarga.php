@@ -5,11 +5,11 @@
 
     switch ($_GET["accion"]) {
         case 'insertar':
-            if($_SERVER['REQUEST_METHOD'] == 'POST' &&isset($_GET["user"]) && filter_var($_GET["user"], FILTER_VALIDATE_EMAIL)){//data in
-                insertar($coleccion, $_GET['user']);
+            if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET["user"]) && filter_var($_GET["user"], FILTER_VALIDATE_EMAIL)){//data in
+                insertar($coleccion);
                 header ('Location: /index.php/medicionDescarga?accion=ver&ini=1&pag=1&user='.$_GET['user']);
             }else{//lets insert data
-                 require 'Views/medicionDescarga_insertar.php';
+                isset($_GET["user"]) && filter_var($_GET["user"], FILTER_VALIDATE_EMAIL)?require 'Views/medicionDescarga_insertar.php':header ('Location: /index.php/busqueda');
             }
             break;
             

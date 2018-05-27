@@ -15,13 +15,13 @@
          <br>
          <br>
          <br>
-         <form class="form-horizontal" action="/index.php/medicionDescarga?accion=insertar&user=" method="post" onsubmit="return fueProcesado()">
+         <form class="form-horizontal" action="/index.php/medicionDescarga?accion=insertar&user=<?=$_GET['user']?>" method="post" onsubmit="return fueProcesado()">
             <fieldset>
                <!-- Form Name -->
                <legend>Insertar Aforo</legend>
                <!-- Text input-->
                <div class="form-group">
-                  <input id="correo" type="hidden" name="correo">
+                  <input id="correo" type="hidden" name="correo" value="<?=$_GET['user']?>">
                   <label class="col-md-4 control-label" for="latitud">Latitud</label>  
                   <div class="col-md-4">
                      <input id="latitud" name="latitud" type="text" placeholder="Latitud" class="form-control input-md" required="">

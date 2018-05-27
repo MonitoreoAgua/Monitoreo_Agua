@@ -24,7 +24,6 @@ $(window).on('load', function(){
     handleClientLoad();
   }
   
-  $("#correo").attr('value', email_google);
 
 });
 
