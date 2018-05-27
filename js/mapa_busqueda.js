@@ -1443,5 +1443,7 @@ function changeCircleRadius(newRadius) {
   centroidCircle.setRadius(newRadius*1000);
 }
 
-
-
+function agregarMail() {
+    var newHref = $(".verAforo").attr('href');
+    $(".verAforo").attr("href",newHref+email_google);
+}

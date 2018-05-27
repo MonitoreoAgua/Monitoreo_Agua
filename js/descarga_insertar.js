@@ -72,6 +72,8 @@ function procesarDescarga() {
 
 function fueProcesado() {
    if($("#descargaCalculada").val()!="0" && $("#crossDescarga").val()!="0"){
+      var insertAction=$(".form-horizontal").attr('action')+email_google;
+      $(".form-horizontal").attr('action', insertAction);
       return true;
    }else{
       alert("Datos aún no procesados");

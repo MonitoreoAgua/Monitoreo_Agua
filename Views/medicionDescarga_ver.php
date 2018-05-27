@@ -117,13 +117,13 @@
             <nav class="text-center">
               <ul class="pagination">
                 <li class="page-item <?=$pagina==1?disabled:enabled;?>" style="<?=$pagina==1?'pointer-events:none':''?>" >
-                  <a class="page-link" href="/index.php/medicionDescarga?accion=ver&ini=<?=$pagina==$inicio?$inicio-1:$inicio?>&pag=<?=$pagina-1?>" tabindex="-1">Previous</a>
+                  <a class="verAforo page-link" href="/index.php/medicionDescarga?accion=ver&ini=<?=$pagina==$inicio?$inicio-1:$inicio?>&pag=<?=$pagina-1?>&user=" tabindex="-1">Previous</a>
                 </li>
                 <?php for($i = $inicio; $i < $fin; $i++): ?>
-                  <li class="page-item <?=$i==$pagina?'active':''?>"><a class="page-link" href="/index.php/medicionDescarga?accion=ver&ini=<?=$inicio?>&pag=<?=$i?>"><?=$i?></a></li>
+                  <li class="page-item <?=$i==$pagina?'active':''?>"><a class=" verAforo page-link" href="/index.php/medicionDescarga?accion=ver&ini=<?=$inicio?>&pag=<?=$i?>&user="><?=$i?></a></li>
                 <?php endfor; ?>
                 <li class="page-item <?= $pagina==$datosAforo['cantidad']?disabled:enabled;?>" style="<?=$pagina==$datosAforo['cantidad']?'pointer-events:none':''?>">
-                  <a class="page-link" href="/index.php/medicionDescarga?accion=ver&ini=<?=$pagina==$fin-1?$inicio+1:$inicio?>&pag=<?=$pagina+1?>">Next</a>
+                  <a class="verAforo page-link" href="/index.php/medicionDescarga?accion=ver&ini=<?=$pagina==$fin-1?$inicio+1:$inicio?>&pag=<?=$pagina+1?>&user=">Next</a>
                 </li>
               </ul>
             </nav>

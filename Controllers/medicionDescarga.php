@@ -5,9 +5,9 @@
 
     switch ($_GET["accion"]) {
         case 'insertar':
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){//data in
-                insertar($coleccion);
-                header ('Location: /index.php/medicionDescarga?accion=ver&ini=1&pag=1');
+            if($_SERVER['REQUEST_METHOD'] == 'POST' &&isset($_GET["user"]) && filter_var($_GET["user"], FILTER_VALIDATE_EMAIL)){//data in
+                insertar($coleccion, $_GET['user']);
+                header ('Location: /index.php/medicionDescarga?accion=ver&ini=1&pag=1&user='.$_GET['user']);
             }else{//lets insert data
                  require 'Views/medicionDescarga_insertar.php';
             }
@@ -15,8 +15,11 @@
             
             
         case 'ver':
+            $email = isset($_GET["user"]) && filter_var($_GET["user"], FILTER_VALIDATE_EMAIL)?$_GET['user']: false ;
+            if(!$email) header ('Location: /index.php/busqueda');
+            
             $pagina = isset($_GET['pag']) && $_GET['pag'] > 0?filter_var($_GET['pag'], FILTER_SANITIZE_STRING):1;
-            $datosAforo = ver($coleccion, $pagina);
+            $datosAforo = ver($coleccion, $pagina, $email);
             $inicio = isset($_GET['ini'])?$_GET['ini']:$pagina;
             $fin = $datosAforo['cantidad']>4?$inicio+4:$datosAforo['cantidad']+1;
             require 'Views/medicionDescarga_ver.php';
@@ -34,12 +37,12 @@
      /**
       * Ver
       * */
-     function ver($coleccion, $pag){
-        $datos = iterator_to_array($coleccion->find([], ['skip'=> $pag-1,'limit'=>1]));
+     function ver($coleccion, $pag, $email){
+        $datos = iterator_to_array($coleccion->find(['correo'=>$email], ['skip'=> $pag-1,'limit'=>1]));
         if(count($datos[0])<1){
             return [];
         }else{
-            $cantidad = $coleccion->count([]);
+            $cantidad = $coleccion->count(['correo'=>$email]);
             $datos[0]['cantidad']=$cantidad;
             return $datos[0];
         }

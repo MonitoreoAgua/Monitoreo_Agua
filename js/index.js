@@ -24,9 +24,12 @@ $(window).on('load', function(){
     handleClientLoad();
   }
   
-  console.log(email_google);
-  document.getElementById("correo").value = email_google;
-  
+  $("#correo").attr('value', email_google);
+
 });
 
 
+$(".verAforo").on('click',function(){
+    var newHref = $(this).attr('href');
+    $(this).attr("href",newHref+email_google);
+}); 

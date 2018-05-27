@@ -15,7 +15,7 @@
          <br>
          <br>
          <br>
-         <form class="form-horizontal" action="/index.php/medicionDescarga?accion=insertar" method="post" onsubmit="return fueProcesado()">
+         <form class="form-horizontal" action="/index.php/medicionDescarga?accion=insertar&user=" method="post" onsubmit="return fueProcesado()">
             <fieldset>
                <!-- Form Name -->
                <legend>Insertar Aforo</legend>
