@@ -37,7 +37,7 @@
                <div class="form-group">
                   <label class="col-md-4 control-label" for="Fecha">Fecha</label>  
                   <div class="col-md-4">
-                     <input id="Fecha" name="Fecha" type="date" placeholder="Fecha" class="form-control input-md" required="">
+                     <input id="fecha" name="fecha" type="date" placeholder="Fecha" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Text input-->
@@ -96,14 +96,14 @@
                <div class="form-group">
                   <label class="col-md-4 control-label" for="descargaCalculada">Descarga calculada</label>  
                   <div class="col-md-4">
-                     <input id="descargaCalculada" name="descargaCalculada" type="number" class="form-control input-md" disabled required="" value=0>
+                     <input id="descargaCalculada" name="descargaCalculada" type="number" class="form-control input-md" readonly="readonly" required="" value=0>
                   </div>
                </div>
                <!-- Text input-->
                <div class="form-group">
                   <label class="col-md-4 control-label" for="crossDescarga">Área cross seccional</label>  
                   <div class="col-md-4">
-                     <input id="crossDescarga" name="crossDescarga" type="number" class="form-control input-md" disabled required="" value=0>
+                     <input id="crossDescarga" name="crossDescarga" type="number" class="form-control input-md" readonly="readonly" required="" value=0>
                   </div>
                </div>               
             </fieldset>

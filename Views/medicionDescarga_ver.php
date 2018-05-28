@@ -18,7 +18,7 @@
          <?php if($datosAforo['cantidad']==0):?>
             <?=$datosAforo['cantidad']==0?"<h2> <span class=\"label label-warning\"><a style='text-decoration: none;' href='/index.php/medicionDescarga?accion=insertar&user=".$_GET['user']."'>No hay datos para mostrar, clic para insertar.</a></span></h2>":""?>
          <?php else:?>
-         <div class="text-right"><button class="btn btn-primary"><a href="/index.php/medicionDescarga?accion=insertar&user=<?=$_GET['user'];?>">Insertar Aforo</a></button></div>
+         <div class="text-right"><button class="btn btn-primary" onclick="window.location.href='/index.php/medicionDescarga?accion=insertar&user=<?=$_GET['user'];?>'">Insertar Aforo</button></div>
             <form class="form-horizontal" >
                
                <fieldset>

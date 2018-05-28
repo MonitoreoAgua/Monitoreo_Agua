@@ -44,6 +44,7 @@
         }else{
             $cantidad = $coleccion->count(['correo'=>$email]);
             $datos[0]['cantidad']=$cantidad;
+            $datos[0]['fecha']=$datos[0]['fecha']->toDateTime()->format('Y-m-d');
             return $datos[0];
         }
      }
@@ -56,6 +57,8 @@
          $latitud = filter_var($_POST["latitud"], FILTER_SANITIZE_STRING);
          $longitud = filter_var($_POST["longitud"], FILTER_SANITIZE_STRING);
          $fecha = filter_var($_POST["fecha"], FILTER_SANITIZE_STRING);
+         $fecha = new DateTime($fecha);
+         $fecha = new MongoDB\BSON\UTCDateTime($fecha->getTimeStamp()*1000);
          $tiempoFinal = filter_var($_POST["tiempoFinal"], FILTER_SANITIZE_STRING);
          $tiempoInicio = filter_var($_POST["tiempoInicio"], FILTER_SANITIZE_STRING);
          $medicionInicio = filter_var($_POST["medicionInicio"], FILTER_SANITIZE_STRING);

@@ -1,4 +1,6 @@
-function agregarFilaDescarga() {
+function agregarFilaDescarga() {   
+   $('#crossDescarga').val(0);
+   $('#descargaCalculada').val(0);
     $('#tablaDescarga').append("<tr>"+
                   "<td>"+
                   "   <input type='number' class='form-control' name='distancia'/>"+
@@ -27,7 +29,8 @@ function agregarFilaDescarga() {
 
 function eliminarFila(arg) {
    if($('#aforoTabla tr').length > 2){
-      console.log("eliminar");
+      $('#crossDescarga').val(0);
+      $('#descargaCalculada').val(0);
       arg.closest('tr').remove();
    }
 }
