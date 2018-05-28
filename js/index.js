@@ -23,4 +23,12 @@ $(window).on('load', function(){
     $("#login_content").fadeIn("slow");
     handleClientLoad();
   }
+  
+
 });
+
+
+$(".verAforo").on('click',function(){
+    var newHref = $(this).attr('href');
+    $(this).attr("href",newHref+email_google);
+}); 
