@@ -40,7 +40,9 @@
      function ver($coleccion, $pag, $email){
         $datos = iterator_to_array($coleccion->find(['correo'=>$email], ['skip'=> $pag-1,'limit'=>1]));
         if(count($datos[0])<1){
-            return [];
+            $datos = [];
+            $datos['cantidad']=0;
+            return $datos;
         }else{
             $cantidad = $coleccion->count(['correo'=>$email]);
             $datos[0]['cantidad']=$cantidad;
