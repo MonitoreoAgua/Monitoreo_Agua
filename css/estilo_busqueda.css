@@ -7,9 +7,7 @@
 	box-sizing: border-box;
 }
 
-body{
-	/*padding-top: 50px;*/
-}
+
 /*Este es el contenedor principal encargado de dar la forma*/
 .main{
 	height: 1000px;
@@ -17,11 +15,10 @@ body{
 	margin:1% 0% 2% 2%;
 }
 
-
-/*Contenedor del mapa 60% de 1000px y 100 % de 96%*/
 #map {
-	height: 90%;
-	width: 100%;
+	width:100%;
+	height:600px;
+	margin-top: 2%;
 }
 
 /*Usado para sobreponer el boton de pantalla completa sobre el menu del mapa*/
@@ -78,9 +75,6 @@ body{
 }
 
 
-.reset{
-}
-
 /*  */
 #inputFilterRadio{
 	margin-left: 2%;
@@ -88,12 +82,6 @@ body{
 }
 
 
-
-.botonFiltroR{
-/* 	position: absolute;
-left: 58.8%;
-top: 17.5%; */
-}
 
 .btnMitigacion {
 	background-color: buttonface;

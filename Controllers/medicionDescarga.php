@@ -20,6 +20,7 @@
             
             $pagina = isset($_GET['pag']) && $_GET['pag'] > 0?filter_var($_GET['pag'], FILTER_SANITIZE_STRING):1;
             $datosAforo = ver($coleccion, $pagina, $email);
+            // var_dump($datos_aforo);
             $inicio = isset($_GET['ini'])?$_GET['ini']:$pagina;
             $fin = $datosAforo['cantidad']>4?$inicio+4:$datosAforo['cantidad']+1;
             require 'Views/medicionDescarga_ver.php';
@@ -38,10 +39,10 @@
       * Ver
       * */
      function ver($coleccion, $pag, $email){
-        $datos = iterator_to_array($coleccion->find(['correo'=>$email], ['skip'=> $pag-1,'limit'=>1]));
-        if(count($datos[0])<1){
+         $datos = iterator_to_array($coleccion->find(['correo'=>$email], ['skip'=> $pag-1,'limit'=>1]));
+         if(count($datos[0])<1){
             return [];
-        }else{
+        } else {
             $cantidad = $coleccion->count(['correo'=>$email]);
             $datos[0]['cantidad']=$cantidad;
             $datos[0]['fecha']=$datos[0]['fecha']->toDateTime()->format('Y-m-d');

@@ -3,32 +3,20 @@
   $grafica =  $_SERVER['DOCUMENT_ROOT'].$interDir."aguas/";
 ?>
 
-    <!-- Always shows a header, even in smaller screens. -->
-    <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-            <!-- Title -->
-            <img src="/data/monitoreo_logo.png" style="height: 100%; margin-left:-70px; padding-left:0px;"></img>
-            <span class="mdl-layout-title"><a href="/index.php/busqueda" style="text-decoration:none;">Monitoreo de aguas UCR</a></span>
-            
-            <!-- Add spacer, to align navigation to the right -->
-            <div class="mdl-layout-spacer"></div>
-            <!-- Navigation. We hide it in small screens. -->
-            <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a onclick='agregarMail();' class="verAforo mdl-navigation__link" href='/index.php/medicionDescarga?accion=ver&ini=1&pag=1&user=' style='margin-left:20px;'>Aforo</a>
-                <a class="mdl-navigation__link" href='/index.php/listaGraficas'>Gráficas</a>
-                <a class="mdl-navigation__link" href="/index.php/busqueda">Búsqueda</a>
-                <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" onclick="signOut();">
-                    <i class="button-left-icon material-icons">account_circle</i>Cerrar Sesión
-                </button>
-            </nav>
-        </div>
-    </header>
-    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
-        <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="/index.php/listaGraficas">Gráficas</a>
-            <span class="btn-logout mdl-navigation__link" onclick="signOut();">
-            <i class="button-left-icon material-icons">account_circle</i>Cerrar Sesión
-        </span>
+<nav class="navbar navbar-dark navbar-expand-md sticky-top bg-aguas-navbar">
+    <a class="navbar-brand py-0" href="/index.php/busqueda"><img src="/data/monitoreo_logo.png" width="64" height="64"></a>
+    <span class="navbar-text py-0">
+        Monitoreo de aguas UCR
+    </span>
 
-        </nav>
-    </div>
+    <ul class="navbar-nav navbar ml-auto">
+        <li id="navMapa" class="nav-item active"><a href="/index.php/busqueda" class="nav-link py-0">Mapa</a></li>
+        <li id="navAforo" class="nav-item"><a onclick='agregarMail();' href='/index.php/medicionDescarga?accion=ver&ini=1&pag=1&user=' class="nav-link py-0 verAforo">Aforo</a></li>
+        <li id="navGraficas" class="nav-item"><a href='/index.php/listaGraficas' class="nav-link py-0">Gráficas</a></li>
+        <li class="nav-item">
+            <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" onclick="signOut();">
+                <i class="button-left-icon material-icons">account_circle</i>Cerrar Sesión
+            </button>
+        </li>
+    </ul>    
+</nav>

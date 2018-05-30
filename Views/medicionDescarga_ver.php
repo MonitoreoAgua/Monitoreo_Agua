@@ -10,7 +10,7 @@
          <!-- Se carga el cover para control de login mediante firebase -->
          <?php require 'Views/inc/login_cover.php';?>
          <!-- Carga del menú del sitio web -->
-         <?php require 'Views/inc/menu.php'; ?>
+         <?php require 'Views/inc/menu.php';?>
       <div class="container-fluid">
          <br>
          <br>
