@@ -20,6 +20,7 @@
             
             $pagina = isset($_GET['pag']) && $_GET['pag'] > 0?filter_var($_GET['pag'], FILTER_SANITIZE_STRING):1;
             $datosAforo = ver($coleccion, $pagina, $email);
+            // var_dump($datos_aforo);
             $inicio = isset($_GET['ini'])?$_GET['ini']:$pagina;
             $fin = $datosAforo['cantidad']>4?$inicio+4:$datosAforo['cantidad']+1;
             require 'Views/medicionDescarga_ver.php';

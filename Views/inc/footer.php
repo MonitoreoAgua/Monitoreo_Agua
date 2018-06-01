@@ -1,11 +1,9 @@
-<footer class="mdl-mini-footer">
-    <div class="mdl-mini-footer__left-section">
-        <div class="mdl-logo">
-            <a href="index2.php">Monitoreo de aguas UCR</a>
+<footer class="text-muted footer-aguas">
+    <div class="container footer-left-section">
+        <div class="footer-logo">
+            <a href="#">Monitoreo de aguas UCR<a>
         </div>
-        <ul class="mdl-mini-footer__link-list">
-            <li><a href="mailto:monitoreoaguacr@gmail.com">monitoreoaguacr@gmail.com</a></li>
-            <li><a href="#">Términos y Condiciones</a></li>
-        </ul>
+        <a href="mailto:monitoreoaguacr@gmail.com">monitoreoaguacr@gmail.com</a>
+        <a href="#">Términos y condiciones<a>
     </div>
 </footer>
