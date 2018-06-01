@@ -103,5 +103,8 @@ span.navbar-text {
     letter-spacing: .02em;
 }
 
+th.aforoTablaH {
+    border-top: none;
+}
 
 

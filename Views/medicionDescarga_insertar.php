@@ -11,66 +11,69 @@
          <?php require 'Views/inc/login_cover.php';?>
          <!-- Carga del menú del sitio web -->
          <?php require 'Views/inc/menu.php'; ?>
+         <script>
+            document.getElementById('navGraficas').classList.remove("active");
+            document.getElementById('navMapa').classList.remove("active");
+            document.getElementById('navAforo').classList.add("active");
+         </script>
       <div class="container-fluid">
-         <br>
-         <br>
          <br>
          <form class="form-horizontal" action="/index.php/medicionDescarga?accion=insertar&user=<?=$_GET['user']?>" method="post" onsubmit="return fueProcesado()">
             <fieldset>
                <!-- Form Name -->
-               <legend>Insertar Aforo</legend>
+               <legend style="border-bottom: 1px solid #e5e5e5; margin-bottom: 20px;">Insertar Aforo</legend>
                <!-- Text input-->
-               <div class="form-group">
+               <div class="form-group row" style="margin-left: 25%">
                   <input id="correo" type="hidden" name="correo" value="<?=$_GET['user']?>">
-                  <label class="col-md-4 control-label" for="latitud">Latitud</label>  
+                  <label class="col-md-4 col-form-label" for="latitud">Latitud</label>  
                   <div class="col-md-4">
                      <input id="latitud" name="latitud" type="text" placeholder="Latitud" class="form-control input-md" required="">
                   </div>
                </div>
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="longitud">Longitud</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="longitud">Longitud</label>  
                   <div class="col-md-4">
                      <input id="longitud" name="longitud" type="text" placeholder="Longitud" class="form-control input-md" required="">
                   </div>
                </div>               
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="Fecha">Fecha</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="Fecha">Fecha</label>  
                   <div class="col-md-4">
                      <input id="fecha" name="fecha" type="date" placeholder="Fecha" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="tiempoFinal">Tiempo final</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="tiempoFinal">Tiempo final</label>  
                   <div class="col-md-4">
                      <input id="tiempoFinal" name="tiempoFinal" type="time" placeholder="Tiempo final" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="tiempoInicio">Tiempo inicio</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="tiempoInicio">Tiempo inicio</label>  
                   <div class="col-md-4">
                      <input id="tiempoInicio" name="tiempoInicio" type="time" placeholder="Tiempo inicio" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="medicionInicio">Inicio referencia nivel de agua (m)</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="medicionInicio">Inicio referencia nivel de agua (m)</label>  
                   <div class="col-md-4">
                      <input id="medicionInicio" name="medicionInicio" type="number" placeholder="Inicio medición" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="medicionFinal">Final referencia nivel de agua (m)</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="medicionFinal">Final referencia nivel de agua (m)</label>  
                   <div class="col-md-4">
                      <input id="medicionFinal" name="medicionFinal" type="number" placeholder="Final medición" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Select Basic -->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="metodoUsado">Método usado</label>
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="metodoUsado">Método usado</label>
                   <div class="col-md-4">
                      <select id="metodoUsado" name="metodoUsado" class="form-control">
                         <option value="reducido">Punto reducido</option>
@@ -79,29 +82,29 @@
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="metodoMedicion">Método de medición</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="metodoMedicion">Método de medición</label>  
                   <div class="col-md-4">
                      <input id="metodoMedicion" name="metodoMedicion" type="text" placeholder="Método de Médicion" class="form-control input-md" required="">
                   </div>
                </div>
                <!-- Textarea -->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="comments">Comentarios</label>
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="comments">Comentarios</label>
                   <div class="col-md-4">                     
                      <textarea class="form-control" id="comments" name="comments"></textarea>
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="descargaCalculada">Descarga calculada</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="descargaCalculada">Descarga calculada</label>  
                   <div class="col-md-4">
                      <input id="descargaCalculada" name="descargaCalculada" type="number" class="form-control input-md" readonly="readonly" required="" value=0>
                   </div>
                </div>
                <!-- Text input-->
-               <div class="form-group">
-                  <label class="col-md-4 control-label" for="crossDescarga">Área cross seccional</label>  
+               <div class="form-group row" style="margin-left: 25%">
+                  <label class="col-md-4 col-form-label" for="crossDescarga">Área cross seccional</label>  
                   <div class="col-md-4">
                      <input id="crossDescarga" name="crossDescarga" type="number" class="form-control input-md" readonly="readonly" required="" value=0>
                   </div>
@@ -112,25 +115,25 @@
             <table class="table" id="aforoTabla">
                <thead>
                   <tr>
-                     <th>
+                     <th style="border-top: none">
                         Distancia sobre el río (m)
                      </th>
-                     <th>
+                     <th style="border-top: none">
                         Profundidad (m)
                      </th>
-                     <th>
+                     <th style="border-top: none">
                         Velocidad (m/s)
                      </th>
-                     <th>
+                     <th style="border-top: none">
                         Área por sección (m2)
                      </th>
-                     <th>
+                     <th style="border-top: none">
                         Descarga por sección (m3/s)
                      </th>
-                     <th>
+                     <th style="border-top: none">
                         Comentarios
                      </th>
-                     <th>
+                     <th style="border-top: none">
                         Acción
                      </th>
                   </tr>
