@@ -400,6 +400,8 @@ function placeMarker(position, map) {
 		if (cTipos < 1) {
 			ocultarCombobox();
 		}
+	  var posicion = new google.maps.LatLng(nMarcador.getPosition().lat()+(0.12),nMarcador.getPosition().lng());
+    map.setCenter(posicion);
   }
   else {
     window.alert("Ha excedido el límite de banderas por año");
@@ -1441,5 +1443,7 @@ function changeCircleRadius(newRadius) {
   centroidCircle.setRadius(newRadius*1000);
 }
 
-
-
+function agregarMail() {
+    var newHref = $(".verAforo").attr('href');
+    $(".verAforo").attr("href",newHref+email_google);
+}
