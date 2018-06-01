@@ -14,7 +14,7 @@
         <li id="navAforo" class="nav-item"><a onclick='agregarMail();' href='/index.php/medicionDescarga?accion=ver&ini=1&pag=1&user=' class="nav-link py-0 verAforo">Aforo</a></li>
         <li id="navGraficas" class="nav-item"><a href='/index.php/listaGraficas' class="nav-link py-0">Gráficas</a></li>
         <li class="nav-item">
-            <button class="btn-logout background_primario mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" onclick="signOut();">
+            <button class="btn-logout background_primario btn btn-raised btn-seconday" onclick="signOut();">
                 <i class="button-left-icon material-icons">account_circle</i>Cerrar Sesión
             </button>
         </li>
