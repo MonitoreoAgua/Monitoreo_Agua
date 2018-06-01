@@ -6,6 +6,11 @@
 	  }
 	}
 ?>
+<script>
+  document.getElementById('navGraficas').classList.add("active");
+  document.getElementById('navMapa').classList.remove("active");
+  document.getElementById('navAforo').classList.remove("active");
+</script>
 
 <!-- Scripts requeridos -->
 <script src="http://code.jquery.com/jquery-3.2.1.min.js"

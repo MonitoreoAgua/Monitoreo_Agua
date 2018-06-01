@@ -11,6 +11,11 @@
       <!-- Se carga el cover para control de login mediante firebase -->
       <?php require 'Views/inc/login_cover.php';?>
       <?php require 'Views/inc/menu.php'; ?>
+    <script>
+        document.getElementById('navGraficas').classList.remove("active");
+        document.getElementById('navMapa').classList.add("active");
+        document.getElementById('navAforo').classList.remove("active");
+    </script>
 
         <div class="container-fluid">
             <div class="row">

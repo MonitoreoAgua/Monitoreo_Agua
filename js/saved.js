@@ -22,9 +22,6 @@ function strTipoConsulta(tipo) {
 }
 
 function listarGraficos() {
-	document.getElementById('navGraficas').classList.add("active");
-	document.getElementById('navMapa').classList.remove("active");
-	document.getElementById('navAforo').classList.remove("active");
 	var lista = [];
 	console.log(email_google);
 	$.ajax({
